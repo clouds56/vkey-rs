@@ -6,7 +6,7 @@ description = "Virtual Keycodes of Windows, Linux, and MacOS"
 documentation = "https://docs.rs/vkey"
 repository = "https://github.com/clouds56/vkey-rs"
 license = "MIT OR Apache-2.0"
-keywords = ["keyboard", "keycodes", "virtual-keycodes", "hardware", "input", "constants", "convert"]
+keywords = ["keyboard", "keycodes", "virtual-keycodes", "constants", "convert"]
 
 [dependencies]
 bitflags = { version = "2.9.0", optional = true }

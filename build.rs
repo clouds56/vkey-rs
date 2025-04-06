@@ -1,5 +1,6 @@
 use std::borrow::Cow;
 
+#[expect(unused)]
 struct Line<S> {
   pub hut: S,
   pub winput: S,
