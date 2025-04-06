@@ -3,7 +3,8 @@ from pathlib import Path
 from dataclasses import dataclass
 import csv
 
-csv_filename = Path(__file__).parent / '../engine/lazer-core/src/keycodes/convert/convert.csv'
+workspace_dir = Path(__file__).parent.parent
+csv_filename = workspace_dir / 'src/keycodes/convert/convert.csv'
 
 @dataclass
 class Row:
@@ -102,7 +103,7 @@ write_csv(keycodes)
 
 # %%
 keycodes = read_csv()
-with open(Path(__file__).parent / '../engine/lazer-core/src/keycodes/enigo/windows.rs') as rsfile:
+with open(workspace_dir / 'src/keycodes/enigo/windows.rs') as rsfile:
   data = parse_rs_match(rsfile.read(), "Key::")
 
 data = {k.replace("Key::", "Enigo::"):v for k,v in data if "Key::" in k}
@@ -112,7 +113,7 @@ new_keys
 
 # %%
 keycodes = read_csv()
-with open(Path(__file__).parent / '../engine/lazer-core/src/keycodes/enigo/linux.rs') as rsfile:
+with open(workspace_dir / 'src/keycodes/enigo/linux.rs') as rsfile:
   data = parse_rs_match(rsfile.read(), "Key::")
 
 data = {k.replace("Key::", "Enigo::"):v for k,v in data if "Key::" in k}
@@ -124,7 +125,7 @@ new_keys
 # %%
 # https://stackoverflow.com/questions/3202629/where-can-i-find-a-list-of-mac-virtual-key-codes/16125341#16125341
 keycodes = read_csv()
-with open(Path(__file__).parent / '../engine/lazer-core/src/keycodes/enigo/macos.rs') as rsfile:
+with open(workspace_dir / 'src/keycodes/enigo/macos.rs') as rsfile:
   data = parse_rs_match(rsfile.read(), "Key::")
 
 def normalize_v(v: str):
