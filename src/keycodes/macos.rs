@@ -1,5 +1,19 @@
 pub type CGKeyCode = u16;
 
+/*
+     File:       HIToolbox/Events.h
+
+     Contains:   Event Manager Interfaces.
+
+     Copyright:  © 1985-2008 by Apple Computer, Inc., all rights reserved
+
+     Bugs?:      For bug reports, consult the following page on
+                 the World Wide Web:
+
+                     http://developer.apple.com/bugreporter/
+
+*/
+
 /// Key codes for keys that are independent of keyboard layout.
 ///
 /// [Ref](https://github.com/phracker/MacOSX-SDKs/blob/master/MacOSX10.13.sdk/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/HIToolbox.framework/Versions/A/Headers/Events.h)
