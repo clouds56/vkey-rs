@@ -1,6 +1,5 @@
-use std::borrow::Cow;
+use std::{borrow::Cow, path::Path};
 
-#[expect(unused)]
 struct Line<S> {
   pub hut: S,
   pub winput: S,
@@ -73,63 +72,126 @@ fn gen_convert<S1: AsRef<str>, S2: AsRef<str>, I: IntoIterator<Item = (S1, S2)>>
   format!("// This file is auto-generated. Do not edit manually.\n\n{}", generated_code)
 }
 
+
+#[expect(unused)]
+#[derive(Debug, Clone, Copy)]
+enum KeyType {
+  HUT, Winput, WinVk, VkValue, HutKeyboardValue, Enigo, KeySym, CG,
+}
+
+impl KeyType {
+  pub fn name(self) -> &'static str {
+    match self {
+      KeyType::HUT => "Usage",
+      KeyType::Winput => "Vk",
+      KeyType::WinVk => "Vk",
+      KeyType::VkValue => unimplemented!(),
+      KeyType::HutKeyboardValue => unimplemented!(),
+      KeyType::Enigo => "Enigo",
+      KeyType::KeySym => "KeySym",
+      KeyType::CG => "CGKeyCode",
+    }
+  }
+
+  pub fn get_line<'a>(self, line: &'a Line<&'a str>) -> &'a str {
+    match self {
+      KeyType::HUT => line.hut,
+      KeyType::Winput => line.winput,
+      KeyType::WinVk => line.vk,
+      KeyType::VkValue => line.vk_value,
+      KeyType::HutKeyboardValue => line.hut_keyboard_value,
+      KeyType::Enigo => line.enigo,
+      KeyType::KeySym => line.keysym,
+      KeyType::CG => line.cg,
+    }
+  }
+
+  pub fn as_value_prefix(self) -> Option<&'static str> {
+    match self {
+      KeyType::WinVk => Some("keys::"),
+      _ => None,
+    }
+  }
+
+  pub fn as_value_suffix(self) -> Option<&'static str> {
+    match self {
+      KeyType::HUT => Some(".usage()"),
+      KeyType::CG => Some(".into()"),
+      _ => None
+    }
+  }
+}
+
+fn is_valid<S: AsRef<str>>(s: S) -> bool {
+  let s = s.as_ref().trim();
+  !s.is_empty() && !s.starts_with("n!") && !s.starts_with("na!") && !s.starts_with("todo!") && !s.starts_with("none!")
+}
+fn kv_is_valid<K: AsRef<str>, V: AsRef<str>>((k, v): &(K, V)) -> bool {
+  is_valid(k) && is_valid(v) && !k.as_ref().trim().ends_with('*')
+}
+
+struct Gen(KeyType, KeyType);
+
+impl Gen {
+  pub fn build(self, csv: &[Line<&str>]) -> String {
+    let from = self.0;
+    let to = self.1;
+    gen_convert(
+      &gen_template(CONVERT_GENERAL, from.name(), to.name(), to.as_value_prefix(), to.as_value_suffix()),
+      csv.iter().map(|i| (from.get_line(i), to.get_line(i))).filter(kv_is_valid)
+    )
+  }
+}
+
+fn save_file<P: AsRef<Path>, S: AsRef<str>>(filename: P, content: S) -> std::io::Result<()> {
+  let filename = filename.as_ref();
+  let content = content.as_ref();
+  let path = filename.to_path_buf();
+  if content.is_empty() {
+    return Err(std::io::Error::other("Content is empty"));
+  }
+  if path.exists() && !path.is_file() {
+    return Err(std::io::Error::other(format!("{} is not a file", filename.display())));
+  }
+  if path.exists() && !content.is_empty() {
+    let existing_content = std::fs::read_to_string(&path)?;
+    if existing_content == content {
+      return Ok(());
+    }
+  }
+  std::fs::write(path, content)
+}
+
 fn main() {
   let csv_path = "src/keycodes/convert/convert.csv";
-  let output_path = "src/keycodes/convert/";
+  let output_path = "src/keycodes/convert";
+
+  if std::env::var("DOCS_RS").is_ok() {
+    return;
+  }
+
+  println!("cargo:rerun-if-changed=build.rs");
+  println!("cargo:rerun-if-changed={csv_path}");
+  println!("cargo:rerun-if-env-changed=CARGO_FEATURE_GENERATING_CONVERT");
+  if std::env::var("CARGO_FEATURE_GENERATING_CONVERT").is_err() {
+    return;
+  }
 
   let csv_content = std::fs::read_to_string(csv_path).expect("Failed to read convert.csv");
   let csv = csv_content.lines().filter(|i| !i.trim().is_empty())
       .map(|i| i.split(',').collect::<Vec<_>>().into()).collect::<Vec<Line<_>>>();
 
-  fn is_valid<S: AsRef<str>>(s: S) -> bool {
-    let s = s.as_ref().trim();
-    !s.is_empty() && !s.starts_with("n!") && !s.starts_with("na!") && !s.starts_with("todo!") && !s.starts_with("none!")
+  for tuple in [
+    (KeyType::Enigo, KeyType::WinVk),
+    (KeyType::Enigo, KeyType::Winput),
+    (KeyType::Winput, KeyType::HUT),
+    (KeyType::Winput, KeyType::Enigo),
+    (KeyType::Winput, KeyType::CG),
+  ] {
+    let (from, to) = tuple;
+    let filename = format!("generated.{from:?}_to_{to:?}.rs");
+    let content = Gen(from, to).build(&csv);
+    save_file(format!("{output_path}/{filename}"), content)
+      .expect("Failed to write generated.rs");
   }
-  fn kv_is_valid<K: AsRef<str>, V: AsRef<str>>((k, v): &(K, V)) -> bool {
-    is_valid(k) && is_valid(v) && !k.as_ref().trim().ends_with('*')
-  }
-
-  std::fs::write(
-    format!("{output_path}generated.winput_to_hut.rs"),
-    gen_convert(
-      &gen_template(CONVERT_GENERAL, "Vk", "Usage", None, Some(".usage()")),
-      csv.iter().map(|i| (i.winput, i.hut)).filter(kv_is_valid)
-    )
-  ).expect("Failed to write generated.rs");
-
-
-  std::fs::write(
-    format!("{output_path}generated.winput_to_enigo.rs"),
-    gen_convert(
-      &gen_template(CONVERT_GENERAL, "Vk", "Enigo", None, None),
-      csv.iter().map(|i| (i.winput, i.enigo)).filter(kv_is_valid)
-    )
-  ).expect("Failed to write generated.rs");
-
-  std::fs::write(
-    format!("{output_path}generated.enigo_to_winput.rs"),
-    gen_convert(
-      &gen_template(CONVERT_GENERAL, "Enigo", "Vk", None, None),
-      csv.iter().map(|i| (i.enigo, i.winput)).filter(kv_is_valid)
-    )
-  ).expect("Failed to write generated.rs");
-
-  std::fs::write(
-    format!("{output_path}generated.enigo_to_vk.rs"),
-    gen_convert(
-      &gen_template(CONVERT_GENERAL, "Enigo", "Vk", Some("keys::"), None),
-      csv.iter().map(|i| (i.enigo, i.vk)).filter(kv_is_valid)
-    )
-  ).expect("Failed to write generated.rs");
-
-  std::fs::write(
-    format!("{output_path}generated.winput_to_macos.rs"),
-    gen_convert(
-      &gen_template(CONVERT_GENERAL, "Vk", "CGKeyCode", None, Some(".into()")),
-      csv.iter().map(|i| (i.winput, i.cg)).filter(kv_is_valid)
-    )
-  ).expect("Failed to write generated.rs");
-
-  println!("cargo:rerun-if-changed=build.rs");
-  println!("cargo:rerun-if-changed={csv_path}");
 }

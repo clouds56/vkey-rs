@@ -1,6 +1,6 @@
 [package]
 name = "vkey"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 description = "Virtual Keycodes of Windows, Linux, and MacOS"
 documentation = "https://docs.rs/vkey"
@@ -55,6 +55,8 @@ macos = ["dep:core-graphics", "dep:core-foundation"]
 windows = ["dep:windows"]
 enigo = ["dep:enigo"]
 dep_all = ["windows", "macos", "xkeysym"]
+
+generating_convert = []
 
 full = [ "target_all", "mirror_all", "feat_all", "dep_all" ]
 
