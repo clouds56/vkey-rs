@@ -127,6 +127,7 @@ pub fn enigo_to_vk(value: Enigo) -> Option<Vk> {
     Enigo::RShift                            => Vk::RightShift          ,
     Enigo::S                                 => Vk::S                   ,
     Enigo::Scroll                            => Vk::Scroll              ,
+    Enigo::ScrollLock                        => Vk::Scroll             ,
     Enigo::Select                            => Vk::Select              ,
     Enigo::OEM1                              => Vk::Oem1                ,
     Enigo::Space                             => Vk::Space               ,
