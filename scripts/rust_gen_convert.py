@@ -1,69 +1,69 @@
 # %%
 from pathlib import Path
-from dataclasses import dataclass
-import csv
+import polars as pl
 
 workspace_dir = Path(__file__).parent.parent
-csv_filename = workspace_dir / 'src/keycodes/convert/convert.csv'
+csv_filename = workspace_dir / 'src/convert/convert.csv'
+enigo__keycodes_rs = workspace_dir / 'scripts/cache' / 'raw.githubusercontent.com--enigo-rs--enigo--refs--heads--main--src--keycodes.rs'
 
-@dataclass
-class Row:
-  hut:        str = " todo!(HUT)"
-  winput:     str = " na!(Vk)"
-  vk:         str = " todo!(VK_)"
-  vk_value:   str = " n!()"
-  hut_value:  str = " n!()"
-  enigo:      str = " todo!(Enigo)"
-  keysym:     str = " todo!(Keysym)"
-  cg:         str = " todo!(CG)"
-  __empty:    str = " empty!()"
+# %%
+col_map = {
+  "hut":        ";hut::HUT",
+  "winput":     "winput::Vk",
+  "vk":         "windows::VIRTUAL_KEY",
+  "vk_value":   "vkcode",
+  "hut_value":  "hkcode",
+  "enigo":      "enigo::Key",
+  "keysym":     "xkeysym::Keysym",
+  "cg":         "macos::KeyCode",
+}
+col_map_rev = {v: k for k, v in col_map.items()}
+def load_csv(filename: str):
+  df = pl.read_csv(filename)
+  df = df.select([
+    pl.col(col).alias(col_map_rev.get(col.strip(), col.strip())).str.strip_chars(' ') for col in df.columns if col.strip()
+  ])
+  return df
 
-def read_csv(filename = csv_filename):
-  with open(filename) as csvfile:
-    reader = csv.reader(csvfile)
-    keycodes = [Row(*row) if len(row) == len(Row.__dataclass_fields__) else Row(*row[:-1]) for row in reader]
-  return keycodes
-
-def content_of_field(field: str):
-  return field.strip().strip('*')
-
-def normalize_field(field: str):
-  field = field.strip()
-  return field if field.startswith("*") else " " + field
-
-def normalize_field_max_len(field: str, max_len: int):
-  field = normalize_field(field)
-  if max_len < 10:
-    return " " + field + " " * (max_len - len(field) - 1)
-  return field + " " * (max_len - len(field))
-
-def format_csv(rows):
-  has_new_field = any(row._Row__empty.strip() for row in rows)
-  if has_new_field:
-    for row in rows:
-      if not row._Row__empty.strip():
-        row._Row__empty = " empty!()"
-
-  field_max_len = [
-    max(len(normalize_field(getattr(row, field))) for row in rows) for field in Row.__dataclass_fields__.keys()
-  ]
-  field_max_len = [int(k * 1.1 + 2) if k > 10 else k+3 for k in field_max_len]
-  for row in rows:
-    for (field, max_len) in zip(Row.__dataclass_fields__.keys(), field_max_len):
-      setattr(row, field, normalize_field_max_len(getattr(row, field), max_len))
-
-def write_csv(rows, filename = csv_filename):
+def save_csv(df: pl.DataFrame, filename: Path):
+  adj = 0
+  def get_col_name(col: str, length: int):
+    nonlocal adj
+    col_name = col_map.get(col, col)
+    padding = length - len(col_name) + adj
+    adj = min(0, padding)
+    col_name = " " * min(padding, 1) + col_name + " " * (padding - 1)
+    return col_name
   filename = str(filename) + ".new"
-  format_csv(rows)
-  has_new_field = any(row._Row__empty.strip() for row in rows)
-  with open(filename, mode='w', newline='\n') as csvfile:
-    writer = csv.writer(csvfile)
-    for row in rows:
-      writer.writerow([getattr(row, field) for field in Row.__dataclass_fields__.keys()] + [""] * has_new_field)
+  max_col_lengths = df.select([
+    pl.col(col).str.len_chars().max().alias(col) for col in df.columns
+  ]).to_dicts()[0]
+  max_col_lengths = {
+    k: int((v + 1) * 1.1 + 2) if v > 10 else v + 4 for k, v in max_col_lengths.items()
+  }
 
-def parse_rs_match(code: str, starts_with: str = ""):
+  df.select([
+    (pl.col(col).str.pad_end(max_col_lengths[col] - 1 if max_col_lengths[col] >= 10 else max_col_lengths[col] - 2).str.pad_start(max_col_lengths[col])
+      .alias(get_col_name(col, max_col_lengths[col]))) for col in df.columns
+  ]+[pl.lit(None).alias(" ")]).write_csv(filename)
+df = load_csv(csv_filename)
+save_csv(df, csv_filename)
+df
+
+# %%
+def parse_rs_match(code: str, starts_with: str = "", blocking: tuple[str, str] | None = None) -> list[tuple[str, str]]:
   result = []
+  starts = blocking is None
+  indent_of_starts = 0
   for line in code.splitlines():
+    if not starts:
+      if line.strip().startswith(blocking[0]):
+        indent_of_starts = len(line) - len(line.lstrip())
+        starts = True
+      continue
+    elif line.strip().startswith(blocking[1]):
+      if indent_of_starts == len(line) - len(line.lstrip()):
+        break
     if "=>" not in line: continue
     if not line.strip().startswith(starts_with):
       continue
@@ -74,67 +74,9 @@ def parse_rs_match(code: str, starts_with: str = ""):
     else:
       result.append((key.strip(), value.strip()))
   return result
-
-def fill_col(rows: list[Row], data: dict[str, str], key_col: str, value_col: str = "_Row__empty", default_value: str = "empty!()"):
-  visited = set()
-  for row in rows:
-    key = content_of_field(getattr(row, key_col))
-    old_value = content_of_field(getattr(row, value_col))
-    value = data.get(key)
-    if value:
-      if old_value and not old_value.startswith("todo!"):
-        assert content_of_field(value) == old_value, f"Conflict: {key} {old_value} {value}"
-      setattr(row, value_col, value)
-    elif not old_value:
-      setattr(row, value_col, default_value)
-    visited.add(key)
-  new_keys = sorted(set(data.keys()) - visited)
-  for key in new_keys:
-    if '(' in key: continue
-    new_row = Row()
-    setattr(new_row, key_col, key)
-    setattr(new_row, value_col, data[key])
-    rows.append(new_row)
-  return new_keys
-
-# %%
-keycodes = read_csv()
-write_csv(keycodes)
-
-# %%
-keycodes = read_csv()
-with open(workspace_dir / 'src/keycodes/enigo/windows.rs') as rsfile:
-  data = parse_rs_match(rsfile.read(), "Key::")
-
-data = {k.replace("Key::", "Enigo::"):v for k,v in data if "Key::" in k}
-new_keys = fill_col(keycodes, data, "enigo", "vk")
-write_csv(keycodes)
-new_keys
-
-# %%
-keycodes = read_csv()
-with open(workspace_dir / 'src/keycodes/enigo/linux.rs') as rsfile:
-  data = parse_rs_match(rsfile.read(), "Key::")
-
-data = {k.replace("Key::", "Enigo::"):v for k,v in data if "Key::" in k}
-data |= {f"Enigo::Num{i}": f"Keysym::_{i}" for i in range(10)} | {f"Enigo::{chr(X)}": f"Keysym::{chr(X)}" for X in range(ord('A'), ord('Z')+1)}
-new_keys = fill_col(keycodes, data, "enigo", "keysym")
-write_csv(keycodes)
-new_keys
-
-# %%
-# https://stackoverflow.com/questions/3202629/where-can-i-find-a-list-of-mac-virtual-key-codes/16125341#16125341
-keycodes = read_csv()
-with open(workspace_dir / 'src/keycodes/enigo/macos.rs') as rsfile:
-  data = parse_rs_match(rsfile.read(), "Key::")
-
-def normalize_v(v: str):
-  try:     return f"KeyCode::from({int(v)})"
-  except:  return v
-data = {k.replace("Key::", "Enigo::"): normalize_v(v) for k,v in data if "Key::" in k}
-data |= {f"Enigo::Num{i}": f"KeyCodeExt::kVK_ANSI_{i}" for i in range(10)} | {f"Enigo::{chr(X)}": f"KeyCodeExt::kVK_ANSI_{chr(X)}" for X in range(ord('A'), ord('Z')+1)}
-new_keys = fill_col(keycodes, data, "enigo", "cg")
-write_csv(keycodes)
-new_keys
-
-# %%
+with open(enigo__keycodes_rs) as rsfile:
+  content = rsfile.read()
+data = parse_rs_match(content, blocking=('impl From<Key> for xkeysym::Keysym {', '}'))
+key_map_enigo_keysym = {k.replace("Key::", "Enigo::"): v for k,v in data if "Key::" in k and "(" not in k}
+data = parse_rs_match(content, blocking=('impl TryFrom<Key> for windows::Win32::UI::Input::KeyboardAndMouse::VIRTUAL_KEY {', '}'))
+key_map_enigo_vk = {k.replace("Key::", "Enigo::"): v for k,v in data if "Key::" in k and "(" not in k}

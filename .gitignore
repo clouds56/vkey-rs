@@ -1,2 +1,4 @@
 /target
 convert.csv.new
+uv.lock
+.python-version

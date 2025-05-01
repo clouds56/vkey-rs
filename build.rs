@@ -174,7 +174,7 @@ fn generate_rs() {
   println!("cargo:rerun-if-changed={csv_path}");
 
   let csv_content = std::fs::read_to_string(csv_path).expect("Failed to read convert.csv");
-  let csv = csv_content.lines().filter(|i| !i.trim().is_empty())
+  let csv = csv_content.lines().filter(|i| !i.trim().is_empty() && !i.trim().starts_with(";"))
       .map(|i| i.split(',').collect::<Vec<_>>().into()).collect::<Vec<Line<_>>>();
 
   for tuple in [
