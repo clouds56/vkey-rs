@@ -9,6 +9,7 @@ struct Line<S> {
   pub vk_value: S,
   pub hut_keyboard_value: S,
   pub enigo: S,
+  pub enigo_attr: S,
   pub keysym: S,
   pub cg: S,
 }
@@ -23,6 +24,7 @@ impl<T> From<Vec<T>> for Line<T> {
       vk_value: v.next().unwrap(),
       hut_keyboard_value: v.next().unwrap(),
       enigo: v.next().unwrap(),
+      enigo_attr: v.next().unwrap(),
       keysym: v.next().unwrap(),
       cg: v.next().unwrap(),
     }
