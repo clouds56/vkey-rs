@@ -65,10 +65,11 @@ enigo = ["dep:enigo"]
 # enigo should be manually enabled since it depends on `wayland`, `x11rb`, `xdo` or `libei` on linux
 dep_all = ["windows", "macos", "xkeysym", "hut_03", "hut_04"]
 
-generating_convert = []
+generating_convert = ["dep:askama", "dep:regex"]
 
 full = [ "target_all", "mirror_all", "feat_all", "dep_all" ]
 
 [build-dependencies]
+askama = { version = "0.14.0", optional = true }
+regex = { version = "1.11.1", optional = true }
 cfg_aliases = "0.2.1"
-regex = "1.11.1"
