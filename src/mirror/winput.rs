@@ -38,17 +38,17 @@ impl Vk {
   /// ## Example
   ///
   /// ```rust
-  /// use winput::Vk;
+  /// use vkey::mirror::winput::Vk;
   ///
   /// // SAFETY: `0x0d` is a valid Virtual-Key Code.
   /// let vk = unsafe { Vk::from_u8(0x0d) };
-  /// assert_eq!(vk, Vk::Enter);
+  /// assert_eq!(vk, Some(Vk::Enter));
   /// ```
   ///
   /// A safe way to use this function is to convert a Virtual-Key Code into a number.
   ///
   /// ```rust
-  /// use winput::Vk;
+  /// use vkey::mirror::winput::Vk;
   ///
   /// let n = Vk::Escape.into_u8();
   ///
@@ -76,7 +76,7 @@ impl Vk {
   /// ## Example
   ///
   /// ```rust
-  /// use winput::Vk;
+  /// use vkey::mirror::winput::Vk;
   ///
   /// let value = Vk::Enter.into_u8();
   /// assert_eq!(value, 0x0d);

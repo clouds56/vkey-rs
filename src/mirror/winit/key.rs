@@ -1,7 +1,7 @@
 //! Types related to the keyboard.
 #![cfg_attr(feature = "serde", allow(deprecated))] // https://github.com/serde-rs/serde/issues/2195
 
-/**
+/*
  * https://github.com/rust-windowing/winit/blob/cdbdd974fbf79b82b3fb1a4bc84ed717312a3bd2/src/keyboard.rs
  *
  * Apache License
@@ -1767,11 +1767,8 @@ impl NamedKey {
     /// # Examples
     ///
     /// ```
-    /// # #[cfg(web_platform)]
-    /// # wasm_bindgen_test::wasm_bindgen_test_configure!(run_in_browser);
-    /// # #[cfg_attr(web_platform, wasm_bindgen_test::wasm_bindgen_test)]
     /// # fn main() {
-    /// use winit::keyboard::NamedKey;
+    /// use vkey::mirror::winit::NamedKey;
     ///
     /// assert_eq!(NamedKey::Enter.to_text(), Some("\r"));
     /// assert_eq!(NamedKey::F20.to_text(), None);
@@ -1798,7 +1795,7 @@ impl Key {
     /// # wasm_bindgen_test::wasm_bindgen_test_configure!(run_in_browser);
     /// # #[cfg_attr(web_platform, wasm_bindgen_test::wasm_bindgen_test)]
     /// # fn main() {
-    /// use winit::keyboard::{Key, NamedKey};
+    /// use vkey::mirror::winit::{Key, NamedKey};
     ///
     /// assert_eq!(Key::Character("a".into()).to_text(), Some("a"));
     /// assert_eq!(Key::Named(NamedKey::Enter).to_text(), Some("\r"));
