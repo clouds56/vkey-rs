@@ -56,6 +56,7 @@ serde = [ "dep:serde", "smol_str?/serde", "enigo?/serde", "bitflags?/serde" ]
 macos = ["dep:core-graphics", "dep:core-foundation"]
 windows = ["dep:windows"]
 enigo = ["dep:enigo"]
+# enigo should be manually enabled since it depends on `wayland`, `x11rb`, `xdo` or `libei` on linux
 dep_all = ["windows", "macos", "xkeysym", "hut_03", "hut_04"]
 
 generating_convert = []
