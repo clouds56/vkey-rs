@@ -42,14 +42,26 @@ mod filters {
   }
 }
 
+#[derive(Debug, Clone)]
+pub struct Entry<'a, S: 'a> {
+  pub k: S,
+  pub v: S,
+  pub attr_k: Option<S>,
+  pub attr_v: Option<S>,
+  marked: std::marker::PhantomData<&'a ()>,
+}
+
 #[derive(Debug, Clone, askama::Template)]
 #[template(ext = "txt", source = r#"// This file is auto-generated. Do not edit manually.
 
 
 pub fn {{from | lower}}_to_{{to | lower}}(value: {{from}}) -> Option<{{to}}> {
   let result = match value {
-    {% for (k, v) in map -%}
-      {{ k | pad_right(*k_len) }} => {{prefix}}{{ v | pad_right(*v_len) }}{{suffix}},
+    {% for entry in entries -%}
+    {% if let Some(attr) = entry.attr_k -%}
+    {{ attr | indent(4) }}
+    {% endif -%}
+    {{ entry.k | pad_right(*k_len) }} => {{prefix}}{{ entry.v | pad_right(*v_len) }}{{suffix}},
     {% endfor -%}
     _ => return None,
   };
@@ -67,7 +79,7 @@ pub struct GeneralTemplate<'a> {
   pub to: &'a str,
   pub prefix: &'a str,
   pub suffix: &'a str,
-  pub map: Vec<(Cow<'a, str>, Cow<'a, str>)>,
+  pub entries: Vec<Entry<'a, Cow<'a, str>>>,
   pub k_len: usize,
   pub v_len: usize,
 }
@@ -81,26 +93,31 @@ impl<'a> GeneralTemplate<'a> {
       to,
       prefix,
       suffix,
-      map: vec![],
+      entries: vec![],
       k_len: 0,
       v_len: 0,
     }
   }
 
-  pub fn build(self, map: Vec<(Cow<'a, str>, Cow<'a, str>)>) -> String {
+  pub fn build(self, map: Vec<Entry<'a, Cow<'a, str>>>) -> String {
     Self {
-      k_len: map.iter().map(|(k, _)| k.len()).max().unwrap_or(0),
-      v_len: map.iter().map(|(_, v)| v.len()).max().unwrap_or(0),
-      map,
+      k_len: map.iter().map(|e| e.k.len()).max().unwrap_or(0),
+      v_len: map.iter().map(|e| e.v.len()).max().unwrap_or(0),
+      entries: map,
       ..self
     }.render().unwrap()
   }
+}
+
+enum KeySourceType {
+  Dep, Mirror,
 }
 
 #[expect(unused)]
 #[derive(Debug, Clone, Copy)]
 enum KeyType {
   HUT, Winput, WinVk, VkValue, HutKeyboardValue, Enigo, KeySym, CG,
+  EnigoDep, EnigoMirror,
 }
 
 impl KeyType {
@@ -111,7 +128,7 @@ impl KeyType {
       KeyType::WinVk => "Vk",
       KeyType::VkValue => unimplemented!(),
       KeyType::HutKeyboardValue => unimplemented!(),
-      KeyType::Enigo => "Enigo",
+      KeyType::Enigo | KeyType::EnigoDep | KeyType::EnigoMirror => "Enigo",
       KeyType::KeySym => "KeySym",
       KeyType::CG => "CGKeyCode",
     }
@@ -124,9 +141,16 @@ impl KeyType {
       KeyType::WinVk => line.vk,
       KeyType::VkValue => line.vk_value,
       KeyType::HutKeyboardValue => line.hut_keyboard_value,
-      KeyType::Enigo => line.enigo,
+      KeyType::Enigo | KeyType::EnigoDep | KeyType::EnigoMirror => line.enigo,
       KeyType::KeySym => line.keysym,
       KeyType::CG => line.cg,
+    }
+  }
+
+  pub fn get_attr<'a>(self, line: &'a Line<&'a str>) -> Option<&'a str> {
+    match self {
+      KeyType::Enigo | KeyType::EnigoDep | KeyType::EnigoMirror => Some(line.enigo_attr),
+      _ => None,
     }
   }
 
@@ -154,6 +178,14 @@ impl KeyType {
     let s = s.trim_start();
     Cow::Borrowed(s.trim().trim_end_matches("*"))
   }
+
+  pub fn get_attr_unchecked<'a>(self, s: &'a str) -> Option<Cow<'a, str>> {
+    match self {
+      KeyType::EnigoDep => build_attr_for_target_os(s),
+      KeyType::EnigoMirror => build_attr_for_for_target(s),
+      _ => None,
+    }
+  }
 }
 
 
@@ -161,10 +193,27 @@ impl KeyType {
 struct Gen(KeyType, KeyType);
 
 impl Gen {
-  pub fn build_kv<'a>(self, csv: &'a [Line<&'a str>]) -> Vec<(Cow<'a, str>, Cow<'a, str>)> {
+  pub fn build_entry<'a>(self, line: &'a Line<&'a str>) -> Option<Entry<'a, Cow<'a, str>>> {
     let from = self.0;
     let to = self.1;
-    csv.iter().map(|i| (from.get_line(i), to.get_line(i))).filter(|t| self.kv_is_valid(t)).map(|(k, v)| (from.get_content_unchecked(k), to.get_content_unchecked(v))).collect()
+    let k = from.get_line(line);
+    let v = to.get_line(line);
+    if !self.kv_is_valid(&(k, v)) {
+      return None;
+    }
+    let attr = from.get_attr(line);
+    let attr2 = to.get_attr(line);
+    Some(Entry {
+      k: from.get_content_unchecked(k),
+      v: to.get_content_unchecked(v),
+      attr_k: attr.and_then(|i| from.get_attr_unchecked(i)),
+      attr_v: attr2.and_then(|i| to.get_attr_unchecked(i)),
+      marked: std::marker::PhantomData,
+    })
+  }
+
+  pub fn build_kv<'a>(self, csv: &'a [Line<&'a str>]) -> Vec<Entry<'a, Cow<'a, str>>> {
+    csv.iter().filter_map(|line| self.build_entry(line)).collect()
   }
 
   pub fn kv_is_valid<K: AsRef<str>, V: AsRef<str>>(self, (k, v): &(K, V)) -> bool {
@@ -199,6 +248,34 @@ fn save_file<P: AsRef<Path>, S: AsRef<str>>(filename: P, content: S) -> std::io:
   std::fs::write(path, content)
 }
 
+fn build_attr_for_target_os<'a>(a: &'a str) -> Option<Cow<'a, str>> {
+  let a = a.trim();
+  if a.is_empty() {
+    return None;
+  }
+  let a = a.trim_start_matches("#[").trim_end_matches("]");
+  let aa = a.split('|').map(|i| format!("target_os = {:?}", i.trim())).collect::<Vec<_>>();
+  if aa.len() == 1 {
+    Some(Cow::Owned(format!("#[cfg({})]", aa[0])))
+  } else {
+    Some(Cow::Owned(format!("#[cfg(any({}))]", aa.join(", "))))
+  }
+}
+
+fn build_attr_for_for_target<'a>(a: &'a str) -> Option<Cow<'a, str>> {
+  let a = a.trim();
+  if a.is_empty() {
+    return None;
+  }
+  let a = a.trim_start_matches("#[").trim_end_matches("]");
+  let aa = a.split('|').map(|i| format!("for_{}", i.trim())).collect::<Vec<_>>();
+  if aa.len() == 1 {
+    Some(Cow::Owned(format!("#[cfg({})]", aa[0])))
+  } else {
+    Some(Cow::Owned(format!("#[cfg(any({}))]", aa.join(", "))))
+  }
+}
+
 pub fn main() {
   if std::env::var("DOCS_RS").is_ok() {
     return;
@@ -213,10 +290,11 @@ pub fn main() {
       .map(|i| i.split(',').collect::<Vec<_>>().into()).collect::<Vec<Line<_>>>();
 
   for tuple in [
-    (KeyType::Enigo, KeyType::WinVk),
-    (KeyType::Enigo, KeyType::Winput),
+    (KeyType::EnigoMirror, KeyType::WinVk),
+    (KeyType::EnigoDep, KeyType::WinVk),
+    (KeyType::EnigoMirror, KeyType::Winput),
     (KeyType::Winput, KeyType::HUT),
-    (KeyType::Winput, KeyType::Enigo),
+    (KeyType::Winput, KeyType::EnigoMirror),
     (KeyType::Winput, KeyType::CG),
   ] {
     let (from, to) = tuple;

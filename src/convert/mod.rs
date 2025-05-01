@@ -21,13 +21,13 @@ mod generated_winput_to_enigo {
   mod mirror_to_mirror {
     use crate::mirror::winput::Vk;
     use crate::mirror::enigo::Key as Enigo;
-    include!("generated.Winput_to_Enigo.rs");
+    include!("generated.Winput_to_EnigoMirror.rs");
   }
   #[cfg(all(mirror_winput_vk, dep_enigo_windows))]
   mod mirror_to_dep {
     use crate::mirror::winput::Vk;
     use crate::deps::enigo::Key as Enigo;
-    include!("generated.Winput_to_Enigo.rs");
+    include!("generated.Winput_to_EnigoMirror.rs");
   }
 }
 
@@ -36,13 +36,13 @@ mod generated_enigo_to_winput {
   mod mirror_to_mirror {
     use crate::mirror::enigo::Key as Enigo;
     use crate::mirror::winput::Vk;
-    include!("generated.Enigo_to_Winput.rs");
+    include!("generated.EnigoMirror_to_Winput.rs");
   }
   #[cfg(all(dep_enigo_windows, mirror_winput_vk))]
   mod dep_to_mirror {
     use crate::deps::enigo::Key as Enigo;
     use crate::mirror::winput::Vk;
-    include!("generated.Enigo_to_Winput.rs");
+    include!("generated.EnigoMirror_to_Winput.rs");
 
   }
 }
@@ -52,25 +52,25 @@ mod generated_enigo_to_vk {
   mod mirror_to_mirror {
     use crate::mirror::enigo::Key as Enigo;
     use crate::mirror::windows::{self as keys, VIRTUAL_KEY as Vk};
-    include!("generated.Enigo_to_WinVk.rs");
+    include!("generated.EnigoMirror_to_WinVk.rs");
   }
   #[cfg(all(dep_enigo_windows, mirror_windows_vk))]
   mod dep_to_mirror {
     use crate::deps::enigo::Key as Enigo;
     use crate::mirror::windows::{self as keys, VIRTUAL_KEY as Vk};
-    include!("generated.Enigo_to_WinVk.rs");
+    include!("generated.EnigoDep_to_WinVk.rs");
   }
   #[cfg(all(mirror_enigo_windows, dep_windows_vk))]
   mod mirror_to_dep {
     use crate::mirror::enigo::Key as Enigo;
     use crate::deps::windows::{self as keys, VIRTUAL_KEY as Vk};
-    include!("generated.Enigo_to_WinVk.rs");
+    include!("generated.EnigoMirror_to_WinVk.rs");
   }
   #[cfg(all(dep_enigo_windows, dep_windows_vk))]
   mod dep_to_dep {
     use crate::deps::enigo::Key as Enigo;
     use crate::deps::windows::{self as keys, VIRTUAL_KEY as Vk};
-    include!("generated.Enigo_to_WinVk.rs");
+    include!("generated.EnigoDep_to_WinVk.rs");
   }
 }
 
