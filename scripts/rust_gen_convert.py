@@ -11,17 +11,18 @@ enigo__macos_impl_rs = workspace_dir / 'scripts/cache' / 'raw.githubusercontent.
 
 # %%
 columns = [
-  ("hut",        ";hut::HUT"),
-  ("winput",     "winput::Vk"),
-  ("vk",         "windows::VIRTUAL_KEY"),
-  ("vk_value",   "vkcode"),
-  ("hut_value",  "hkcode"),
-  ("enigo_attr", "#[cfg(enigo::Key)]"),
-  ("enigo",      "enigo::Key"),
-  ("keysym",     "xkeysym::Keysym"),
-  ("cg",         "macos::KeyCode"),
+  ("hut",        ";hut::HUT"              , "todo!(HUT)"),
+  ("winput",     "winput::Vk"             , "na!(Vk)"),
+  ("vk",         "windows::VIRTUAL_KEY"   , "todo!(VK_)"),
+  ("vk_value",   "vkcode"                 , "n!()"),
+  ("hut_value",  "hkcode"                 , "n!()"),
+  ("enigo",      "enigo::Key"             , "todo!(Enigo)"),
+  ("enigo_attr", "#[cfg(enigo::Key)]"     , ""),
+  ("keysym",     "xkeysym::Keysym"        , "todo!(Keysym)"),
+  ("cg",         "macos::KeyCode"         , "todo!(CG)"),
 ]
 col_map = {col[0]: col[1] for col in columns}
+col_default = {col[0]: col[2] for col in columns}
 col_map_rev = {col[1]: col[0] for col in columns}
 def load_csv(filename: str):
   df = pl.read_csv(filename)
@@ -51,11 +52,7 @@ def save_csv(df: pl.DataFrame, filename: Path):
     (pl.col(col).str.pad_end(max_col_lengths[col] - 1 if max_col_lengths[col] >= 10 else max_col_lengths[col] - 2).str.pad_start(max_col_lengths[col])
       .alias(get_col_name(col, max_col_lengths[col]))) for col in df.columns
   ]+[pl.lit(None).alias(" ")]).write_csv(filename)
-df = load_csv(csv_filename)
-save_csv(df, csv_filename)
-df
 
-# %%
 def parse_rs_match(code: str, starts_with: str = "", blocking: tuple[str, str] | None = None) -> list[tuple[str, str]]:
   result = []
   starts = blocking is None
@@ -84,62 +81,34 @@ def df_check_key_map(df: pl.DataFrame, df_map: pl.DataFrame):
   col_key = df_map.columns[0]
   col_value = df_map.columns[1]
   col_value_right = f"{col_value}_right"
-  mismatched_keys = df.join(df_map, on=col_key).select([col_key, col_value, col_value_right]).filter(pl.col(col_value).eq(pl.col(col_value_right)).not_())
+  mismatched_keys = df.join(df_map, on=col_key, how="right", nulls_equal=True).select([col_key, col_value, col_value_right]).filter(pl.col(col_value).eq_missing(pl.col(col_value_right)).not_())
   if not mismatched_keys.is_empty():
     print(f"Mismatch found in {col_key} -> {col_value} mapping:")
     print(mismatched_keys)
   return mismatched_keys
 
-def df_insert_key_map(df: pl.DataFrame, df_map: pl.DataFrame, index: int, default: str | None = None, force: bool = False):
+def df_insert_key_map(df: pl.DataFrame, df_map: pl.DataFrame, after: str, default: str | None = None, force: bool = False):
   col_key = df_map.columns[0]
   col_value = df_map.columns[1]
   if default is None:
-    default = f"todo!({col_value})"
-  if force and col_value in df.columns:
-    df = df.drop(col_value)
-  if col_value not in df.columns:
-    df1 = df.join(df_map, on=col_key, how="left").select(col_value).fill_null(pl.lit(default))
-    columns = [pl.col(col) for col in df.columns]
-    columns.insert(index, pl.lit(default))
-    df = df.select(columns).replace_column(index, df1[col_value])
+    default = col_default.get(col_value, f"todo!({col_value})")
+  if not force and col_value in df.columns:
+    return df
+  df1 = df.select(col_key).join(df_map, how="full", on=col_key).select(col_value).fill_null(pl.lit(default))
+  df = df.select(df.columns)
+  if col_value in df.columns:
+    df.replace_column(df.get_column_index(col_value), df1[col_value])
+  else:
+    index = df.get_column_index(after)
+    print(df.columns, after, index)
+    df = df.insert_column(index, df1[col_value])
   return df
 
-with open(enigo__keycodes_rs) as rsfile:
-  content = rsfile.read()
+def df_fill_na(df: pl.DataFrame):
+  return df.select([
+    pl.col(col).fill_null(pl.lit(col_default.get(col, f"todo!({col})"))).alias(col) for col in df.columns
+  ])
 
-data = parse_rs_match(content, blocking=('impl From<Key> for xkeysym::Keysym {', '}'))
-key_map_enigo_keysym = {k.replace("Key::", "Enigo::"): v for k,v in data if "Key::" in k and "(" not in k}
-df_map_enigo_keysym = pl.DataFrame({
-  "enigo": key_map_enigo_keysym.keys(),
-  "keysym": key_map_enigo_keysym.values()
-})
-df_check_key_map(df, df_map_enigo_keysym)
-
-data = parse_rs_match(content, blocking=('impl TryFrom<Key> for windows::Win32::UI::Input::KeyboardAndMouse::VIRTUAL_KEY {', '}'))
-key_map_enigo_vk = {k.replace("Key::", "Enigo::"): v for k,v in data if "Key::" in k and "(" not in k}
-df_map_enigo_vk = pl.DataFrame({
-  "enigo": key_map_enigo_vk.keys(),
-  "vk": key_map_enigo_vk.values()
-})
-df_check_key_map(df, df_map_enigo_vk)
-
-with open(enigo__macos_impl_rs) as rsfile:
-  content = rsfile.read()
-data = parse_rs_match(content, blocking=('impl TryFrom<Key> for core_graphics::event::CGKeyCode {', '}'))
-def fix_macos_impl_value(v: str):
-  if v.startswith("ANSI_"): return "KeyCode::" + v
-  try: return f"KeyCode::from({int(v)})"
-  except: pass
-  return v
-key_map_enigo_cg = {k.replace("Key::", "Enigo::"): fix_macos_impl_value(v) for k,v in data if "Key::" in k and "(" not in k}
-df_map_enigo_cg = pl.DataFrame({
-  "enigo": key_map_enigo_cg.keys(),
-  "cg": key_map_enigo_cg.values()
-})
-df = df_insert_key_map(df, df_map_enigo_cg,index=df.get_column_index("keysym")+1)
-df_check_key_map(df, df_map_enigo_cg)
-
-# %%
 def parse_rs_attr(code: str, line_starts: str = "#[cfg(", line_not_starts: list[str] = ["#[", "//"], blocking: tuple[str, str] | None = None):
   result = []
   starts = blocking is None
@@ -174,6 +143,10 @@ attr_map = {
   '#[cfg(any(target_os = "windows", all(unix, not(target_os = "macos"))))]': 'windows|linux'
 }
 
+# %%
+df = load_csv(csv_filename)
+save_csv(df, csv_filename)
+
 with open(enigo__keycodes_rs) as rsfile:
   content = rsfile.read()
 enigo_attrs = parse_rs_attr(content, blocking=("pub enum Key {", "}"))
@@ -183,12 +156,53 @@ df_map_enigo_attrs = pl.DataFrame({
   "enigo_attr": map_enigo_attrs.values(),
 })
 
-df = df_insert_key_map(df, df_map_enigo_keysym, df.get_column_index("enigo") + 1, default="", force=True)
+df = df_fill_na(df.join(df_map_enigo_attrs.select('enigo'), on="enigo", coalesce=True, how="full", maintain_order="left_right"))
+df = df_insert_key_map(df, df_map_enigo_attrs, after="enigo")
 df_check_key_map(df, df_map_enigo_attrs)
+df
+
+# %%
+with open(enigo__keycodes_rs) as rsfile:
+  content = rsfile.read()
+
+data = parse_rs_match(content, blocking=('impl From<Key> for xkeysym::Keysym {', '}'))
+key_map_enigo_keysym = {k.replace("Key::", "Enigo::"): v for k,v in data if "Key::" in k and "(" not in k}
+df_map_enigo_keysym = pl.DataFrame({
+  "enigo": key_map_enigo_keysym.keys(),
+  "keysym": key_map_enigo_keysym.values()
+})
+df_check_key_map(df, df_map_enigo_keysym)
+
+data = parse_rs_match(content, blocking=('impl TryFrom<Key> for windows::Win32::UI::Input::KeyboardAndMouse::VIRTUAL_KEY {', '}'))
+key_map_enigo_vk = {k.replace("Key::", "Enigo::"): v for k,v in data if "Key::" in k and "(" not in k}
+df_map_enigo_vk = pl.DataFrame({
+  "enigo": key_map_enigo_vk.keys(),
+  "vk": key_map_enigo_vk.values()
+})
+df_check_key_map(df, df_map_enigo_vk)
+
+with open(enigo__macos_impl_rs) as rsfile:
+  content = rsfile.read()
+data = parse_rs_match(content, blocking=('impl TryFrom<Key> for core_graphics::event::CGKeyCode {', '}'))
+def fix_macos_impl_value(v: str):
+  # if v.startswith("ANSI_"): return "KeyCode::" + v
+  if v.startswith("return Err(())"): return None
+  if v.startswith("ANSI_"): return "KeyCodeExt::kVK_ANSI_" + v.removeprefix("ANSI_").title().replace("_", "")
+  try: return f"KeyCode::from({int(v)})"
+  except: pass
+  return v
+key_map_enigo_cg = {k.replace("Key::", "Enigo::"): fix_macos_impl_value(v) for k,v in data if "Key::" in k and "(" not in k} | \
+  {f"Enigo::Num{i}": f"KeyCodeExt::kVK_ANSI_{i}" for i in range(10)} | {f"Enigo::{chr(X)}": f"KeyCodeExt::kVK_ANSI_{chr(X)}" for X in range(ord('A'), ord('Z')+1)}
+
+df_map_enigo_cg = pl.DataFrame({
+  "enigo": key_map_enigo_cg.keys(),
+  "cg": key_map_enigo_cg.values()
+})
+df = df_insert_key_map(df, df_map_enigo_cg, after="keysym", force=True)
+df_check_key_map(df, df_map_enigo_cg)
+df
 
 # %%
 save_csv(df, csv_filename)
 
-# %%
-i
 # %%

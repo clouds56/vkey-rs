@@ -1,5 +1,6 @@
 {
+  "diffEditor.ignoreTrimWhitespace": false,
   "rust-analyzer.cargo.features": [
     "generating_convert"
-  ]
+  ],
 }
