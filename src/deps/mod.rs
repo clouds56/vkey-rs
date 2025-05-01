@@ -1,4 +1,6 @@
+#[cfg(feature = "hut_03")]
 pub use ::hut_03;
+#[cfg(feature = "hut_04")]
 pub use ::hut_04;
 pub use hut_04 as hut;
 

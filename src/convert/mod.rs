@@ -1,12 +1,14 @@
 #![allow(deprecated)]
 
 mod generated_winput_to_hut {
+  #[cfg(all(feature = "mirror_winput_vk", feature = "hut_03"))]
   mod mirror_to_hut_03 {
     use crate::mirror::winput::Vk;
     use crate::deps::hut_03::{AsUsage, Button, Consumer, GenericDesktop, KeyboardKeypad, Usage};
     include!("generated.Winput_to_HUT.rs");
   }
 
+  #[cfg(all(feature = "mirror_winput_vk", feature = "hut_04"))]
   mod mirror_to_hut_04 {
     use crate::mirror::winput::Vk;
     use crate::deps::hut_04::{AsUsage, Button, Consumer, GenericDesktop, KeyboardKeypad, Usage};
