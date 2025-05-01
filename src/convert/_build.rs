@@ -1,5 +1,7 @@
 use std::{borrow::Cow, path::Path};
 
+use askama::Template;
+
 
 struct Line<S> {
   pub hut: S,
@@ -30,51 +32,70 @@ impl<T> From<Vec<T>> for Line<T> {
   }
 }
 
-const CONVERT_GENERAL: &str = r##"
-pub fn {from}_to_{to}(value: {From}) -> Option<{To}> {
+mod filters {
+  pub fn pad_right<T: std::fmt::Display>(s: T, _: &dyn askama::Values, len: usize) -> askama::Result<String> {
+    let mut s = s.to_string();
+    while s.len() < len {
+      s.push(' ');
+    }
+    Ok(s)
+  }
+}
+
+#[derive(Debug, Clone, askama::Template)]
+#[template(ext = "txt", source = r#"// This file is auto-generated. Do not edit manually.
+
+
+pub fn {{from | lower}}_to_{{to | lower}}(value: {{from}}) -> Option<{{to}}> {
   let result = match value {
-    #( $key => {prefix}$value{suffix}, )#
+    {% for (k, v) in map -%}
+      {{ k | pad_right(*k_len) }} => {{prefix}}{{ v | pad_right(*v_len) }}{{suffix}},
+    {% endfor -%}
     _ => return None,
   };
   Some(result)
 }
 
-impl crate::convert::Convert<{From}, {To}> for crate::convert::Converter {
-  fn convert(value: {From}) -> Option<{To}> {
-    {from}_to_{to}(value)
+impl crate::convert::Convert<{{from}}, {{to}}> for crate::convert::Converter {
+  fn convert(value: {{from}}) -> Option<{{to}}> {
+    {{from|lower}}_to_{{to|lower}}(value)
   }
 }
-"##;
-
-fn gen_template(template: &str, from: &str, to: &str, prefix: Option<&str>, suffix: Option<&str>) -> String {
-  template.replace("{from}", &from.to_lowercase()).replace("{to}", &to.to_lowercase())
-    .replace("{From}", from).replace("{To}", to)
-    .replace("{prefix}", prefix.unwrap_or_default()).replace("{suffix}", suffix.unwrap_or_default())
+"#)]
+pub struct GeneralTemplate<'a> {
+  pub from: &'a str,
+  pub to: &'a str,
+  pub prefix: &'a str,
+  pub suffix: &'a str,
+  pub map: Vec<(Cow<'a, str>, Cow<'a, str>)>,
+  pub k_len: usize,
+  pub v_len: usize,
 }
 
-fn gen_convert<S1: AsRef<str>, S2: AsRef<str>, I: IntoIterator<Item = (S1, S2)>>(template: &str, map: I) -> String {
-  fn normalize(s: &str) -> Cow<str> {
-    let s = s.trim_start();
-    if s.contains('*') {
-      s.rsplit('*').next().unwrap();
-      return format!("{}{}", s.trim_end().trim_end_matches('*'), s.rsplit('*').next().unwrap()).into()
+impl<'a> GeneralTemplate<'a> {
+  pub fn create(from: &'a str, to: &'a str, prefix: Option<&'a str>, suffix: Option<&'a str>) -> Self {
+    let prefix = prefix.unwrap_or("");
+    let suffix = suffix.unwrap_or("");
+    Self {
+      from,
+      to,
+      prefix,
+      suffix,
+      map: vec![],
+      k_len: 0,
+      v_len: 0,
     }
-    s.into()
   }
-  let map = map.into_iter().collect::<Vec<_>>();
-  // https://rustexp.lpil.uk/
-  let generated_code = regex::Regex::new(r"\n([ \t]*)#\(([\s\S]*)\)#(\n?)").unwrap().replace_all(template, |caps: &regex::Captures| {
-    let indent = &caps[1];
-    let inner = caps[2].trim();
-    let newline = &caps[3];
-    let content = map.iter().map(|(key, value)| {
-      inner.replace("$key", &normalize(key.as_ref())).replace("$value", &normalize(value.as_ref()))
-    }).collect::<Vec<String>>().join(&format!("{newline}{indent}"));
-    format!("{newline}{indent}{content}{newline}")
-  });
-  format!("// This file is auto-generated. Do not edit manually.\n\n{}", generated_code)
-}
 
+  pub fn build(self, map: Vec<(Cow<'a, str>, Cow<'a, str>)>) -> String {
+    Self {
+      k_len: map.iter().map(|(k, _)| k.len()).max().unwrap_or(0),
+      v_len: map.iter().map(|(_, v)| v.len()).max().unwrap_or(0),
+      map,
+      ..self
+    }.render().unwrap()
+  }
+}
 
 #[expect(unused)]
 #[derive(Debug, Clone, Copy)]
@@ -123,26 +144,39 @@ impl KeyType {
       _ => None
     }
   }
+
+  pub fn is_valid<S: AsRef<str>>(self, s: S) -> bool {
+    let s = s.as_ref().trim();
+    !s.is_empty() && !s.starts_with("n!") && !s.starts_with("na!") && !s.starts_with("todo!") && !s.starts_with("none!")
+  }
+
+  pub fn get_content_unchecked<'a>(self, s: &'a str) -> Cow<'a, str> {
+    let s = s.trim_start();
+    Cow::Borrowed(s.trim().trim_end_matches("*"))
+  }
 }
 
-fn is_valid<S: AsRef<str>>(s: S) -> bool {
-  let s = s.as_ref().trim();
-  !s.is_empty() && !s.starts_with("n!") && !s.starts_with("na!") && !s.starts_with("todo!") && !s.starts_with("none!")
-}
-fn kv_is_valid<K: AsRef<str>, V: AsRef<str>>((k, v): &(K, V)) -> bool {
-  is_valid(k) && is_valid(v) && !k.as_ref().trim().ends_with('*')
-}
 
+#[derive(Debug, Clone, Copy)]
 struct Gen(KeyType, KeyType);
 
 impl Gen {
-  pub fn build(self, csv: &[Line<&str>]) -> String {
+  pub fn build_kv<'a>(self, csv: &'a [Line<&'a str>]) -> Vec<(Cow<'a, str>, Cow<'a, str>)> {
     let from = self.0;
     let to = self.1;
-    gen_convert(
-      &gen_template(CONVERT_GENERAL, from.name(), to.name(), to.as_value_prefix(), to.as_value_suffix()),
-      csv.iter().map(|i| (from.get_line(i), to.get_line(i))).filter(kv_is_valid)
-    )
+    csv.iter().map(|i| (from.get_line(i), to.get_line(i))).filter(|t| self.kv_is_valid(t)).map(|(k, v)| (from.get_content_unchecked(k), to.get_content_unchecked(v))).collect()
+  }
+
+  pub fn kv_is_valid<K: AsRef<str>, V: AsRef<str>>(self, (k, v): &(K, V)) -> bool {
+    self.0.is_valid(k) && self.1.is_valid(v) && !k.as_ref().trim().ends_with('*')
+  }
+
+  pub fn build_general<'a>(self, csv: &'a [Line<&'a str>]) -> String {
+    let from = self.0;
+    let to = self.1;
+    let map = self.build_kv(csv);
+    GeneralTemplate::create(from.name(), to.name(), to.as_value_prefix(), to.as_value_suffix())
+      .build(map)
   }
 }
 
@@ -187,7 +221,7 @@ pub fn main() {
   ] {
     let (from, to) = tuple;
     let filename = format!("generated.{from:?}_to_{to:?}.rs");
-    let content = Gen(from, to).build(&csv);
+    let content = Gen(from, to).build_general(&csv);
     save_file(format!("{output_path}/{filename}"), content)
       .expect("Failed to write generated.rs");
   }
