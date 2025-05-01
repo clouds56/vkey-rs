@@ -154,7 +154,7 @@ pub fn vk_to_usage(value: Vk) -> Option<Usage> {
   Some(result)
 }
 
-impl crate::keycodes::convert::Convert<Vk, Usage> for crate::keycodes::convert::Converter {
+impl crate::convert::Convert<Vk, Usage> for crate::convert::Converter {
   fn convert(value: Vk) -> Option<Usage> {
     vk_to_usage(value)
   }

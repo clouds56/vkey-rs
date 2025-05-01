@@ -90,7 +90,7 @@ pub fn vk_to_cgkeycode(value: Vk) -> Option<CGKeyCode> {
   Some(result)
 }
 
-impl crate::keycodes::convert::Convert<Vk, CGKeyCode> for crate::keycodes::convert::Converter {
+impl crate::convert::Convert<Vk, CGKeyCode> for crate::convert::Converter {
   fn convert(value: Vk) -> Option<CGKeyCode> {
     vk_to_cgkeycode(value)
   }

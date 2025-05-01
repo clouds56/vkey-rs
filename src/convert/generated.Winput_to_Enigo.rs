@@ -168,7 +168,7 @@ pub fn vk_to_enigo(value: Vk) -> Option<Enigo> {
   Some(result)
 }
 
-impl crate::keycodes::convert::Convert<Vk, Enigo> for crate::keycodes::convert::Converter {
+impl crate::convert::Convert<Vk, Enigo> for crate::convert::Converter {
   fn convert(value: Vk) -> Option<Enigo> {
     vk_to_enigo(value)
   }

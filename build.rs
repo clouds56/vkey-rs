@@ -36,7 +36,7 @@ pub fn {from}_to_{to}(value: {From}) -> Option<{To}> {
   Some(result)
 }
 
-impl crate::keycodes::convert::Convert<{From}, {To}> for crate::keycodes::convert::Converter {
+impl crate::convert::Convert<{From}, {To}> for crate::convert::Converter {
   fn convert(value: {From}) -> Option<{To}> {
     {from}_to_{to}(value)
   }
@@ -163,8 +163,8 @@ fn save_file<P: AsRef<Path>, S: AsRef<str>>(filename: P, content: S) -> std::io:
 }
 
 fn main() {
-  let csv_path = "src/keycodes/convert/convert.csv";
-  let output_path = "src/keycodes/convert";
+  let csv_path = "src/convert/convert.csv";
+  let output_path = "src/convert";
 
   if std::env::var("DOCS_RS").is_ok() {
     return;

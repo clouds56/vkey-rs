@@ -12,8 +12,6 @@ pub mod winit;
 pub mod macos;
 pub mod macos_ext;
 
-pub mod convert;
-
 pub use hut::{self, Usage, UsagePage};
 
 pub struct EnigoLike;

@@ -1,4 +1,5 @@
 pub mod keycodes;
+pub mod convert;
 pub mod error;
 
-pub use keycodes::convert::ConvertExt;
+pub use convert::ConvertExt;
