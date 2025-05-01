@@ -505,6 +505,7 @@ name = "vkey"
 version = "0.1.1"
 dependencies = [
  "bitflags",
+ "cfg_aliases",
  "core-foundation",
  "core-graphics",
  "enigo",

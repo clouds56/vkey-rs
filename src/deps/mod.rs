@@ -1,14 +1,14 @@
-#[cfg(feature = "hut_03")]
+#[cfg(dep_hut_03)]
 pub use ::hut_03;
-#[cfg(feature = "hut_04")]
+#[cfg(dep_hut_04)]
 pub use ::hut_04;
 pub use hut_04 as hut;
 
-#[cfg(all(feature = "windows", target_os = "windows"))]
+#[cfg(dep_windows_vk)]
 pub use ::windows::Win32::UI::Input::KeyboardAndMouse::{self as windows, VIRTUAL_KEY};
 
-#[cfg(all(feature = "enigo"))]
+#[cfg(dep_enigo)]
 pub use ::enigo::{self, Key as EnigoKey};
 
-#[cfg(all(feature = "macos", target_os = "macos"))]
+#[cfg(dep_macos)]
 pub use core_graphics::event as macos;

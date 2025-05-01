@@ -63,4 +63,5 @@ generating_convert = []
 full = [ "target_all", "mirror_all", "feat_all", "dep_all" ]
 
 [build-dependencies]
+cfg_aliases = "0.2.1"
 regex = "1.11.1"
