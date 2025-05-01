@@ -35,6 +35,6 @@ pub mod native_code {
     pub use windows::Win32::UI::Input::KeyboardAndMouse::VIRTUAL_KEY as NativeKeyCode;
     #[cfg(not(all(feature = "windows", target_os = "windows")))]
     #[cfg(feature = "mirror_windows_vk")]
-    pub use crate::keycodes::windows::VIRTUAL_KEY as NativeKeyCode;
+    pub use crate::mirror::windows::VIRTUAL_KEY as NativeKeyCode;
   }
 }

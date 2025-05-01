@@ -32,7 +32,7 @@ mod generated_winput_to_hut {
 //! | SHIFT     | VK_SHIFT     0x10  16 |     -
 //! | LBUTTON   | VK_LBUTTON   0x01   1 |     -
 
-  use crate::keycodes::vk::Vk;
+  use crate::mirror::vk::Vk;
   use hut::{AsUsage, Button, Consumer, GenericDesktop, KeyboardKeypad, Usage};
   include!("generated.Winput_to_HUT.rs");
 }
@@ -40,13 +40,13 @@ mod generated_winput_to_hut {
 mod generated_winput_to_enigo {
   #[cfg(all(feature = "mirror_winput_vk", feature = "mirror_enigo"))]
   mod mirror_to_mirror {
-    use crate::keycodes::winput::Vk;
-    use crate::keycodes::enigo::Key as Enigo;
+    use crate::mirror::winput::Vk;
+    use crate::mirror::enigo::Key as Enigo;
     include!("generated.Winput_to_Enigo.rs");
   }
   #[cfg(all(feature = "mirror_winput_vk", feature = "enigo", target_os = "windows"))]
   mod mirror_to_dep {
-    use crate::keycodes::winput::Vk;
+    use crate::mirror::winput::Vk;
     use ::enigo::Key as Enigo;
     include!("generated.Winput_to_Enigo.rs");
   }
@@ -55,14 +55,14 @@ mod generated_winput_to_enigo {
 mod generated_enigo_to_winput {
   #[cfg(all(feature = "mirror_enigo", feature = "mirror_winput_vk"))]
   mod mirror_to_mirror {
-    use crate::keycodes::enigo::Key as Enigo;
-    use crate::keycodes::winput::Vk;
+    use crate::mirror::enigo::Key as Enigo;
+    use crate::mirror::winput::Vk;
     include!("generated.Enigo_to_Winput.rs");
   }
   #[cfg(all(feature = "enigo", feature = "mirror_winput_vk", target_os = "windows"))]
   mod dep_to_mirror {
     use ::enigo::Key as Enigo;
-    use crate::keycodes::winput::Vk;
+    use crate::mirror::winput::Vk;
     include!("generated.Enigo_to_Winput.rs");
 
   }
@@ -71,19 +71,19 @@ mod generated_enigo_to_winput {
 mod generated_enigo_to_vk {
   #[cfg(all(feature = "mirror_enigo", feature = "mirror_windows_vk"))]
   mod mirror_to_mirror {
-    use crate::keycodes::enigo::Key as Enigo;
-    use crate::keycodes::windows::{self as keys, VIRTUAL_KEY as Vk};
+    use crate::mirror::enigo::Key as Enigo;
+    use crate::mirror::windows::{self as keys, VIRTUAL_KEY as Vk};
     include!("generated.Enigo_to_WinVk.rs");
   }
   #[cfg(all(feature = "enigo", feature = "mirror_windows_vk", target_os = "windows"))]
   mod dep_to_mirror {
     use ::enigo::Key as Enigo;
-    use crate::keycodes::windows::{self as keys, VIRTUAL_KEY as Vk};
+    use crate::mirror::windows::{self as keys, VIRTUAL_KEY as Vk};
     include!("generated.Enigo_to_WinVk.rs");
   }
   #[cfg(all(feature = "mirror_enigo", feature = "windows", target_os = "windows"))]
   mod mirror_to_dep {
-    use crate::keycodes::enigo::Key as Enigo;
+    use crate::mirror::enigo::Key as Enigo;
     use ::windows::Win32::UI::Input::KeyboardAndMouse::{self as keys, VIRTUAL_KEY as Vk};
     include!("generated.Enigo_to_WinVk.rs");
   }
@@ -98,13 +98,13 @@ mod generated_enigo_to_vk {
 mod generated_winput_to_cg {
   #[cfg(any(feature = "macos", feature = "mirror_macos"))]
   mod mirror_to_any {
-    use crate::keycodes::winput::Vk;
+    use crate::mirror::winput::Vk;
     #[cfg(all(feature = "macos", target_os = "macos"))]
     use core_graphics::event::KeyCode;
     #[cfg(not(all(feature = "macos", target_os = "macos")))]
     #[cfg(feature = "mirror_macos")]
-    use crate::keycodes::macos::KeyCode;
-    use crate::keycodes::macos_ext::{CGKeyCode, KeyCodeExt};
+    use crate::mirror::macos::KeyCode;
+    use crate::mirror::macos_ext::{CGKeyCode, KeyCodeExt};
     include!("generated.Winput_to_CG.rs");
   }
 }
@@ -123,10 +123,10 @@ pub trait ConvertExt: Sized {
 }
 
 #[cfg(feature = "mirror_winput_vk")]
-impl ConvertExt for crate::keycodes::winput::Vk {}
+impl ConvertExt for crate::mirror::winput::Vk {}
 #[cfg(feature = "mirror_windows_vk")]
-impl ConvertExt for crate::keycodes::windows::VIRTUAL_KEY {}
+impl ConvertExt for crate::mirror::windows::VIRTUAL_KEY {}
 #[cfg(feature = "mirror_enigo")]
-impl ConvertExt for crate::keycodes::enigo::Key {}
+impl ConvertExt for crate::mirror::enigo::Key {}
 #[cfg(feature = "enigo")]
 impl ConvertExt for enigo::Key {}
