@@ -1,4 +1,6 @@
-pub use ::hut::{self, Usage, UsagePage};
+pub use ::hut_03;
+pub use ::hut_04;
+pub use hut_04 as hut;
 
 #[cfg(all(feature = "windows", target_os = "windows"))]
 pub use ::windows::Win32::UI::Input::KeyboardAndMouse::{self as windows, VIRTUAL_KEY};
