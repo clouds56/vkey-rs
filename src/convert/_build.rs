@@ -12,6 +12,7 @@ struct Line<S> {
   pub enigo: S,
   pub enigo_attr: S,
   pub keysym: S,
+  pub keysym_code: S,
   pub cg: S,
   pub cg_code: S,
 }
@@ -28,6 +29,7 @@ impl<T> From<Vec<T>> for Line<T> {
       enigo: v.next().unwrap(),
       enigo_attr: v.next().unwrap(),
       keysym: v.next().unwrap(),
+      keysym_code: v.next().unwrap(),
       cg: v.next().unwrap(),
       cg_code: v.next().unwrap(),
     }
@@ -349,6 +351,7 @@ impl KeyType {
       KeyType::HUT => line.hut_code,
       KeyType::Winput => line.vk_code,
       KeyType::WinVk => line.vk_code,
+      KeyType::Keysym => line.keysym_code,
       KeyType::CG => line.cg_code,
       _ => return None,
     }.into()
@@ -375,6 +378,7 @@ impl KeyType {
       KeyType::HUT => Some("AsUsage::usage_value({})"),
       KeyType::Winput => Some("*{} as u8"),
       KeyType::WinVk => Some("{}.0"),
+      KeyType::Keysym => Some("{}.raw()"),
       KeyType::CG => Some("{}.0"),
       _ => None,
     }
@@ -385,6 +389,7 @@ impl KeyType {
       KeyType::HUT => None,
       KeyType::Winput => Some("unsafe { std::mem::transmute({}) }"),
       KeyType::WinVk => Some("VIRTUAL_KEY({})"),
+      KeyType::Keysym => Some("Keysym::new({})"),
       KeyType::CG => Some("CGKeyCode({})"),
       _ => None,
     }
@@ -395,6 +400,7 @@ impl KeyType {
       KeyType::HUT => Some("u32"),
       KeyType::Winput => Some("u8"),
       KeyType::WinVk => Some("u16"),
+      KeyType::Keysym => Some("u32"),
       KeyType::CG => Some("u16"),
       _ => None,
     }
@@ -405,6 +411,7 @@ impl KeyType {
       KeyType::HUT => false,
       KeyType::Winput => true,
       KeyType::WinVk => true,
+      KeyType::Keysym => true,
       KeyType::CG => true,
       _ => true,
     }
@@ -657,7 +664,7 @@ pub fn main() {
   save_file(format!("{output_path}/generated._index.rs"), index_mod).expect("failed to write index.rs");
 
   let mut index_mod = String::new();
-  for ty in [KeyType::HUT, KeyType::Winput, KeyType::WinVk, KeyType::CG] {
+  for ty in [KeyType::HUT, KeyType::Winput, KeyType::WinVk, KeyType::Keysym, KeyType::CG] {
     let filename = format!("generated.{ty:?}.rs");
     let content = Gen(ty, ty).build_as_code(&csv);
     save_file(format!("{output_path2}/{filename}"), content)

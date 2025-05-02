@@ -37,6 +37,15 @@ mod generated_winvk {
 }
 
 #[allow(unused_imports)]
+mod generated_keysym {
+  #[cfg(dep_xkeysym)]
+  mod dep_1 {
+    use crate::deps::xkeysym::Keysym;
+    include!("generated.Keysym.rs");
+  }
+}
+
+#[allow(unused_imports)]
 mod generated_cg {
   #[cfg(any(dep_macos, mirror_macos))]
   mod mirror_1 {

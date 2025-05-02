@@ -14,6 +14,11 @@ fn main() {
   print_windows(&mut std::io::stdout(), false).ok();
   println!("
 
+============== KEYSYM ===============");
+  print_keysym(&mut file("keysym.txt"), true).ok();
+  print_keysym(&mut std::io::stdout(), false).ok();
+  println!("
+
 ============== MACOS ===============");
   print_macos(&mut file("macos.txt"), true).ok();
   print_macos(&mut std::io::stdout(), false).ok();
@@ -614,6 +619,305 @@ fn print_windows(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()>{
           writeln!(w, "{:35}, 0x{:02X},", "VK_SEPARATOR", keys::VK_SEPARATOR.0)?;
           writeln!(w, "{:35}, 0x{:02X},", "VK_LAUNCH_APP1", keys::VK_LAUNCH_APP1.0)?;
           writeln!(w, "{:35}, 0x{:02X},", "VK_LAUNCH_APP2", keys::VK_LAUNCH_APP2.0)?;
+  Ok(())
+}
+
+
+fn print_keysym(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()>{
+  use vkey::deps::xkeysym::Keysym;
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::XF86_AudioMute", Keysym::XF86_AudioMute.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::XF86_AudioPlay", Keysym::XF86_AudioPlay.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::XF86_AudioNext", Keysym::XF86_AudioNext.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::XF86_AudioPrev", Keysym::XF86_AudioPrev.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::XF86_AudioStop", Keysym::XF86_AudioStop.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::XF86_AudioLowerVolume", Keysym::XF86_AudioLowerVolume.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::XF86_AudioRaiseVolume", Keysym::XF86_AudioRaiseVolume.raw())?;
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::_0", Keysym::_0.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::_1", Keysym::_1.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::_2", Keysym::_2.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::_3", Keysym::_3.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::_4", Keysym::_4.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::_5", Keysym::_5.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::_6", Keysym::_6.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::_7", Keysym::_7.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::_8", Keysym::_8.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::_9", Keysym::_9.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::A", Keysym::A.raw())?;
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::B", Keysym::B.raw())?;
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::C", Keysym::C.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Cancel", Keysym::Cancel.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Caps_Lock", Keysym::Caps_Lock.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Clear", Keysym::Clear.raw())?;
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::D", Keysym::D.raw())?;
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::BackSpace", Keysym::BackSpace.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Delete", Keysym::Delete.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Down", Keysym::Down.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::E", Keysym::E.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::End", Keysym::End.raw())?;
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Escape", Keysym::Escape.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Execute", Keysym::Execute.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F", Keysym::F.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F1", Keysym::F1.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F10", Keysym::F10.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F11", Keysym::F11.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F12", Keysym::F12.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F13", Keysym::F13.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F14", Keysym::F14.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F15", Keysym::F15.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F16", Keysym::F16.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F17", Keysym::F17.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F18", Keysym::F18.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F19", Keysym::F19.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F2", Keysym::F2.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F20", Keysym::F20.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F21", Keysym::F21.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F22", Keysym::F22.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F23", Keysym::F23.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F24", Keysym::F24.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F3", Keysym::F3.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F4", Keysym::F4.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F5", Keysym::F5.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F6", Keysym::F6.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F7", Keysym::F7.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F8", Keysym::F8.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F9", Keysym::F9.raw())?;
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::G", Keysym::G.raw())?;
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::H", Keysym::H.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Help", Keysym::Help.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Home", Keysym::Home.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::I", Keysym::I.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Insert", Keysym::Insert.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::J", Keysym::J.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::K", Keysym::K.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::L", Keysym::L.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Menu", Keysym::Menu.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Alt_L", Keysym::Alt_L.raw())?;
+  if any {writeln!(w, "{:30}, 0x{:04X},", "Keysym::Alt_L*", Keysym::Alt_L.raw())?;}
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Left", Keysym::Left.raw())?;
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Control_L", Keysym::Control_L.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Control_L", Keysym::Control_L.raw())?;
+  if any {writeln!(w, "{:30}, 0x{:04X},", "Keysym::Super_L*", Keysym::Super_L.raw())?;}
+  if any {writeln!(w, "{:30}, 0x{:04X},", "Keysym::Super_L*", Keysym::Super_L.raw())?;}
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Super_L", Keysym::Super_L.raw())?;
+  if any {writeln!(w, "{:30}, 0x{:04X},", "Keysym::Super_L*", Keysym::Super_L.raw())?;}
+  if any {writeln!(w, "{:30}, 0x{:04X},", "Keysym::Super_L*", Keysym::Super_L.raw())?;}
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Shift_L", Keysym::Shift_L.raw())?;
+  if any {writeln!(w, "{:30}, 0x{:04X},", "Keysym::Shift_L*", Keysym::Shift_L.raw())?;}
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::M", Keysym::M.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::N", Keysym::N.raw())?;
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::O", Keysym::O.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::P", Keysym::P.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Page_Down", Keysym::Page_Down.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Page_Up", Keysym::Page_Up.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Pause", Keysym::Pause.raw())?;
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Print", Keysym::Print.raw())?;
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Q", Keysym::Q.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::R", Keysym::R.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Return", Keysym::Return.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Alt_R", Keysym::Alt_R.raw())?;
+  if any {writeln!(w, "{:30}, 0x{:04X},", "Keysym::Alt_R*", Keysym::Alt_R.raw())?;}
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Right", Keysym::Right.raw())?;
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Control_R", Keysym::Control_R.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Super_R", Keysym::Super_R.raw())?;
+  if any {writeln!(w, "{:30}, 0x{:04X},", "Keysym::Super_R*", Keysym::Super_R.raw())?;}
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Shift_R", Keysym::Shift_R.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::S", Keysym::S.raw())?;
+  if any {writeln!(w, "{:30}, 0x{:04X},", "Keysym::Scroll_Lock*", Keysym::Scroll_Lock.raw())?;}
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Scroll_Lock", Keysym::Scroll_Lock.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Select", Keysym::Select.raw())?;
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::space", Keysym::space.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::T", Keysym::T.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Tab", Keysym::Tab.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::U", Keysym::U.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Up", Keysym::Up.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::V", Keysym::V.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::W", Keysym::W.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::X", Keysym::X.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Y", Keysym::Y.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Z", Keysym::Z.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::KP_0", Keysym::KP_0.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::KP_1", Keysym::KP_1.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::KP_2", Keysym::KP_2.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::KP_3", Keysym::KP_3.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::KP_4", Keysym::KP_4.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::KP_5", Keysym::KP_5.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::KP_6", Keysym::KP_6.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::KP_7", Keysym::KP_7.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::KP_8", Keysym::KP_8.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::KP_9", Keysym::KP_9.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::KP_Subtract", Keysym::KP_Subtract.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::KP_Divide", Keysym::KP_Divide.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Num_Lock", Keysym::Num_Lock.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::KP_Decimal", Keysym::KP_Decimal.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::KP_Add", Keysym::KP_Add.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::KP_Multiply", Keysym::KP_Multiply.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F25", Keysym::F25.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F26", Keysym::F26.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F27", Keysym::F27.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F28", Keysym::F28.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F29", Keysym::F29.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F30", Keysym::F30.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F31", Keysym::F31.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F32", Keysym::F32.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F33", Keysym::F33.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F34", Keysym::F34.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::F35", Keysym::F35.raw())?;
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Begin", Keysym::Begin.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Break", Keysym::Break.raw())?;
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Find", Keysym::Find.raw())?;
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Linefeed", Keysym::Linefeed.raw())?;
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::XF86_AudioMicMute", Keysym::XF86_AudioMicMute.raw())?;
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Redo", Keysym::Redo.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::script_switch", Keysym::script_switch.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Shift_Lock", Keysym::Shift_Lock.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Sys_Req", Keysym::Sys_Req.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Undo", Keysym::Undo.raw())?;
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Hangul", Keysym::Hangul.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Kanji", Keysym::Kanji.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Hangul_Hanja", Keysym::Hangul_Hanja.raw())?;
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Mode_switch", Keysym::Mode_switch.raw())?;
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+          writeln!(w, "{:30}, 0x{:04X},", "Keysym::Print", Keysym::Print.raw())?;
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
   Ok(())
 }
 

@@ -22,6 +22,7 @@ columns = [
   ("enigo",      "enigo::Key"             , "todo!(Enigo)"),
   ("enigo_attr", "#[cfg(enigo::Key)]"     , ""),
   ("keysym",     "xkeysym::Keysym"        , "todo!(Keysym)"),
+  ("keysym_value","keysym_code"           , ""),
   ("cg",         "macos::KeyCode"         , "todo!(CG)"),
   ("cg_value",   "cgcode"                 , ""),
 ]
@@ -298,6 +299,16 @@ main_lines.append(f'  println!("\n\n============== {name.upper().replace("_", " 
 main_lines.append(f'  print_{name}(&mut file("{name}.txt"), true).ok();')
 main_lines.append(f'  print_{name}(&mut std::io::stdout(), false).ok();')
 
+name = "keysym"
+lines.append(f"fn print_{name}(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()>" + "{")
+lines.append("  use vkey::deps::xkeysym::Keysym;")
+lines.extend(build_code(df_test, "keysym", "0x{:04X}", value_suffix=".raw()"))
+lines.append("  Ok(())")
+lines.append("}\n\n")
+main_lines.append(f'  println!("\n\n============== {name.upper().replace("_", " ")} ===============");')
+main_lines.append(f'  print_{name}(&mut file("{name}.txt"), true).ok();')
+main_lines.append(f'  print_{name}(&mut std::io::stdout(), false).ok();')
+
 name = "macos"
 lines.append(f"fn print_{name}(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()>" + "{")
 lines.append("  use vkey::mirror::{macos::KeyCode, macos_ext::{CGKeyCode, KeyCodeExt}};")
@@ -325,4 +336,21 @@ with open(workspace_dir / 'scripts/example_gen_numeric.rs', 'w') as f:
 
 # %%
 """
+# %%
+df = load_csv(csv_filename)
+
+numeric_dict = [
+  ("hut", "hut_value", "scripts/cache/numeric/hut_04.txt"),
+  ("vk", "vk_value", "scripts/cache/numeric/windows.txt"),
+  ("keysym", "keysym_value", "scripts/cache/numeric/keysym.txt"),
+  ("cg", "cg_value", "scripts/cache/numeric/macos.txt"),
+]
+
+for col_key, col_code, filename in numeric_dict:
+  code = pl.read_csv(workspace_dir / filename, has_header=False)['column_2'].str.strip_chars(' ').alias(col_code)
+  if col_code in df.columns:
+    df.replace_column(df.get_column_index(col_code), code)
+  else:
+    df.insert_column(df.get_column_index(col_key) + 1, code)
+save_csv(df, csv_filename)
 # %%
