@@ -4,10 +4,10 @@ import polars as pl
 
 workspace_dir = Path(__file__).parent.parent
 csv_filename = workspace_dir / 'src/convert/convert.csv'
-# https://github.com/enigo-rs/enigo/blob/main/src/keycodes.rs
-enigo__keycodes_rs = workspace_dir / 'scripts/cache' / 'raw.githubusercontent.com--enigo-rs--enigo--refs--heads--main--src--keycodes.rs'
-# https://github.com/enigo-rs/enigo/blob/main/src/macos/macos_impl.rs
-enigo__macos_impl_rs = workspace_dir / 'scripts/cache' / 'raw.githubusercontent.com--enigo-rs--enigo--refs--heads--main--src--macos--macos_impl.rs'
+# https://github.com/enigo-rs/enigo/blob/v0.3.0/src/keycodes.rs
+enigo__keycodes_rs = workspace_dir / 'scripts/cache/enigo-0.3.0' / 'raw.githubusercontent.com--enigo-rs--enigo--refs--tags--v0.3.0--src--keycodes.rs'
+# https://github.com/enigo-rs/enigo/blob/v0.3.0/src/macos/macos_impl.rs
+enigo__macos_impl_rs = workspace_dir / 'scripts/cache/enigo-0.3.0' / 'raw.githubusercontent.com--enigo-rs--enigo--refs--tags--v0.3.0--src--macos--macos_impl.rs'
 
 # %%
 columns = [
@@ -157,7 +157,7 @@ df_map_enigo_attrs = pl.DataFrame({
 })
 
 df = df_fill_na(df.join(df_map_enigo_attrs.select('enigo'), on="enigo", coalesce=True, how="full", maintain_order="left_right"))
-df = df_insert_key_map(df, df_map_enigo_attrs, after="enigo")
+df = df_insert_key_map(df, df_map_enigo_attrs, after="enigo", force=True)
 df_check_key_map(df, df_map_enigo_attrs)
 df
 
@@ -198,7 +198,7 @@ df_map_enigo_cg = pl.DataFrame({
   "enigo": key_map_enigo_cg.keys(),
   "cg": key_map_enigo_cg.values()
 })
-df = df_insert_key_map(df, df_map_enigo_cg, after="keysym", force=True)
+df = df_insert_key_map(df, df_map_enigo_cg, after="keysym")
 df_check_key_map(df, df_map_enigo_cg)
 df
 

@@ -126,20 +126,35 @@ pub fn enigo_to_cgkeycode(value: Enigo) -> Option<CGKeyCode> {
     Enigo::Y              => KeyCodeExt::kVK_ANSI_Y             .into(),
     #[cfg(for_windows)]
     Enigo::Z              => KeyCodeExt::kVK_ANSI_Z             .into(),
+    #[cfg(for_windows)]
     Enigo::Numpad0        => KeyCodeExt::kVK_ANSI_Keypad0       .into(),
+    #[cfg(for_windows)]
     Enigo::Numpad1        => KeyCodeExt::kVK_ANSI_Keypad1       .into(),
+    #[cfg(for_windows)]
     Enigo::Numpad2        => KeyCodeExt::kVK_ANSI_Keypad2       .into(),
+    #[cfg(for_windows)]
     Enigo::Numpad3        => KeyCodeExt::kVK_ANSI_Keypad3       .into(),
+    #[cfg(for_windows)]
     Enigo::Numpad4        => KeyCodeExt::kVK_ANSI_Keypad4       .into(),
+    #[cfg(for_windows)]
     Enigo::Numpad5        => KeyCodeExt::kVK_ANSI_Keypad5       .into(),
+    #[cfg(for_windows)]
     Enigo::Numpad6        => KeyCodeExt::kVK_ANSI_Keypad6       .into(),
+    #[cfg(for_windows)]
     Enigo::Numpad7        => KeyCodeExt::kVK_ANSI_Keypad7       .into(),
+    #[cfg(for_windows)]
     Enigo::Numpad8        => KeyCodeExt::kVK_ANSI_Keypad8       .into(),
+    #[cfg(for_windows)]
     Enigo::Numpad9        => KeyCodeExt::kVK_ANSI_Keypad9       .into(),
+    #[cfg(for_windows)]
     Enigo::Subtract       => KeyCodeExt::kVK_ANSI_KeypadMinus   .into(),
+    #[cfg(for_windows)]
     Enigo::Divide         => KeyCodeExt::kVK_ANSI_KeypadDivide  .into(),
+    #[cfg(for_windows)]
     Enigo::Decimal        => KeyCodeExt::kVK_ANSI_KeypadDecimal .into(),
+    #[cfg(for_windows)]
     Enigo::Add            => KeyCodeExt::kVK_ANSI_KeypadPlus    .into(),
+    #[cfg(for_windows)]
     Enigo::Multiply       => KeyCodeExt::kVK_ANSI_KeypadMultiply.into(),
     #[cfg(for_macos)]
     Enigo::Function       => KeyCode::FUNCTION                  .into(),

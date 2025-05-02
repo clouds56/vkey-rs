@@ -223,22 +223,37 @@ pub fn enigo_to_vk(value: Enigo) -> Option<Vk> {
     Enigo::Y                 => Vk::Y               ,
     #[cfg(for_windows)]
     Enigo::Z                 => Vk::Z               ,
+    #[cfg(for_windows)]
     Enigo::Numpad0           => Vk::Numpad0         ,
+    #[cfg(for_windows)]
     Enigo::Numpad1           => Vk::Numpad1         ,
+    #[cfg(for_windows)]
     Enigo::Numpad2           => Vk::Numpad2         ,
+    #[cfg(for_windows)]
     Enigo::Numpad3           => Vk::Numpad3         ,
+    #[cfg(for_windows)]
     Enigo::Numpad4           => Vk::Numpad4         ,
+    #[cfg(for_windows)]
     Enigo::Numpad5           => Vk::Numpad5         ,
+    #[cfg(for_windows)]
     Enigo::Numpad6           => Vk::Numpad6         ,
+    #[cfg(for_windows)]
     Enigo::Numpad7           => Vk::Numpad7         ,
+    #[cfg(for_windows)]
     Enigo::Numpad8           => Vk::Numpad8         ,
+    #[cfg(for_windows)]
     Enigo::Numpad9           => Vk::Numpad9         ,
+    #[cfg(for_windows)]
     Enigo::Subtract          => Vk::Subtract        ,
+    #[cfg(for_windows)]
     Enigo::Divide            => Vk::Divide          ,
     #[cfg(any(for_windows, for_linux))]
     Enigo::Numlock           => Vk::Numlock         ,
+    #[cfg(for_windows)]
     Enigo::Decimal           => Vk::Decimal         ,
+    #[cfg(for_windows)]
     Enigo::Add               => Vk::Add             ,
+    #[cfg(for_windows)]
     Enigo::Multiply          => Vk::Multiply        ,
     #[cfg(for_windows)]
     Enigo::Accept            => Vk::Accept          ,

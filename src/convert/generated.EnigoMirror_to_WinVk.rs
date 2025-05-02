@@ -223,22 +223,37 @@ pub fn enigo_to_vk(value: Enigo) -> Option<Vk> {
     Enigo::Y                            => keys::VK_Y                              ,
     #[cfg(for_windows)]
     Enigo::Z                            => keys::VK_Z                              ,
+    #[cfg(for_windows)]
     Enigo::Numpad0                      => keys::VK_NUMPAD0                        ,
+    #[cfg(for_windows)]
     Enigo::Numpad1                      => keys::VK_NUMPAD1                        ,
+    #[cfg(for_windows)]
     Enigo::Numpad2                      => keys::VK_NUMPAD2                        ,
+    #[cfg(for_windows)]
     Enigo::Numpad3                      => keys::VK_NUMPAD3                        ,
+    #[cfg(for_windows)]
     Enigo::Numpad4                      => keys::VK_NUMPAD4                        ,
+    #[cfg(for_windows)]
     Enigo::Numpad5                      => keys::VK_NUMPAD5                        ,
+    #[cfg(for_windows)]
     Enigo::Numpad6                      => keys::VK_NUMPAD6                        ,
+    #[cfg(for_windows)]
     Enigo::Numpad7                      => keys::VK_NUMPAD7                        ,
+    #[cfg(for_windows)]
     Enigo::Numpad8                      => keys::VK_NUMPAD8                        ,
+    #[cfg(for_windows)]
     Enigo::Numpad9                      => keys::VK_NUMPAD9                        ,
+    #[cfg(for_windows)]
     Enigo::Subtract                     => keys::VK_SUBTRACT                       ,
+    #[cfg(for_windows)]
     Enigo::Divide                       => keys::VK_DIVIDE                         ,
     #[cfg(any(for_windows, for_linux))]
     Enigo::Numlock                      => keys::VK_NUMLOCK                        ,
+    #[cfg(for_windows)]
     Enigo::Decimal                      => keys::VK_DECIMAL                        ,
+    #[cfg(for_windows)]
     Enigo::Add                          => keys::VK_ADD                            ,
+    #[cfg(for_windows)]
     Enigo::Multiply                     => keys::VK_MULTIPLY                       ,
     #[cfg(for_windows)]
     Enigo::None                         => keys::VK__none_                         ,

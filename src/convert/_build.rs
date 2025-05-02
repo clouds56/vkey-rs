@@ -61,6 +61,9 @@ pub fn {{from | lower}}_to_{{to | lower}}(value: {{from}}) -> Option<{{to}}> {
     {% if let Some(attr) = entry.attr_k -%}
     {{ attr | indent(4) }}
     {% endif -%}
+    {% if let Some(attr) = entry.attr_v -%}
+    {{ attr | indent(4) }}
+    {% endif -%}
     {{ entry.k | pad_right(*k_len) }} => {{prefix}}{{ entry.v | pad_right(*v_len) }}{{suffix}},
     {% endfor -%}
     _ => return None,
