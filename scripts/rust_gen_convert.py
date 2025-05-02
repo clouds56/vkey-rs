@@ -9,6 +9,9 @@ enigo__keycodes_rs = workspace_dir / 'scripts/cache/enigo-0.3.0' / 'raw.githubus
 # https://github.com/enigo-rs/enigo/blob/v0.3.0/src/macos/macos_impl.rs
 enigo__macos_impl_rs = workspace_dir / 'scripts/cache/enigo-0.3.0' / 'raw.githubusercontent.com--enigo-rs--enigo--refs--tags--v0.3.0--src--macos--macos_impl.rs'
 
+# https://github.com/microsoft/windows-rs/blob/63/crates/libs/sys/src/Windows/Win32/UI/Input/KeyboardAndMouse/mod.rs
+windows__keyboard_and_mouse = workspace_dir / 'scripts/cache/windows-63' / 'raw.githubusercontent.com--microsoft--windows-rs--refs--tags--63--crates--libs--sys--src--Windows--Win32--UI--Input--KeyboardAndMouse--mod.rs'
+
 # %%
 columns = [
   ("hut",        ";hut::HUT"              , "todo!(HUT)"),
@@ -59,9 +62,11 @@ def save_csv(df: pl.DataFrame, filename: Path):
     pad_left_col(col, max_col_lengths[col]).alias(get_col_name(col, max_col_lengths[col])) for col in df.columns
   ]+[pl.lit(None).alias(" ")]).write_csv(filename)
 
-def parse_rs_match(code: str, starts_with: str = "", blocking: tuple[str, str] | None = None) -> list[tuple[str, str]]:
+def parse_rs_blocking(code: str, blocking: tuple[str, str] | None = None) -> list[str]:
   result = []
-  starts = blocking is None
+  if blocking is None:
+    return code.splitlines()
+  starts = False
   indent_of_starts = 0
   for line in code.splitlines():
     if not starts:
@@ -72,6 +77,12 @@ def parse_rs_match(code: str, starts_with: str = "", blocking: tuple[str, str] |
     elif line.strip().startswith(blocking[1]):
       if indent_of_starts == len(line) - len(line.lstrip()):
         break
+    result.append(line)
+  return result
+
+def parse_rs_match(code: str, starts_with: str = "", blocking: tuple[str, str] | None = None) -> list[tuple[str, str]]:
+  result = []
+  for line in parse_rs_blocking(code, blocking):
     if "=>" not in line: continue
     if not line.strip().startswith(starts_with):
       continue
@@ -83,11 +94,43 @@ def parse_rs_match(code: str, starts_with: str = "", blocking: tuple[str, str] |
       result.append((key.strip(), value.strip()))
   return result
 
+def parse_rs_attr(code: str, line_starts: str = "#[cfg(", line_not_starts: list[str] = ["#[", "//"], blocking: tuple[str, str] | None = None):
+  result = []
+  attr = None
+  for line in parse_rs_blocking(code, blocking):
+    line = line.strip()
+    if len(line) == 0:
+      continue
+    if line.startswith(line_starts):
+      attr = line
+    for i in line_not_starts:
+      if line.startswith(i):
+        break
+    else:
+      result.append((line, attr))
+      attr = None
+  return result
+
+def parse_rs_const(code: str, line_starts: str = "const ", line_contains: str = "=", blocking: tuple[str, str] | None = None) -> list[tuple[str, str]]:
+  result = []
+  for line in parse_rs_blocking(code, blocking):
+    line = line.strip()
+    if line_starts in line and line_contains in line:
+      line = line.removeprefix("pub ").removeprefix("const ")
+      [key, value] = line.split("=", 1)
+      key = key.split(":")[0].strip()
+      value = value.split(";")[0].strip()
+      result.append((key, value))
+  return result
+
 def df_check_key_map(df: pl.DataFrame, df_map: pl.DataFrame):
   col_key = df_map.columns[0]
   col_value = df_map.columns[1]
+  col_key_right = f"{col_key}_right"
   col_value_right = f"{col_value}_right"
-  mismatched_keys = df.join(df_map, on=col_key, how="right", nulls_equal=True).select([col_key, col_value, col_value_right]).filter(pl.col(col_value).eq_missing(pl.col(col_value_right)).not_())
+  mismatched_keys = df.with_columns(
+    pl.col(col_key).str.strip_chars('*').alias("_key"),
+  ).join(df_map, left_on="_key", right_on=col_key, how="right", nulls_equal=True).select([col_key, col_value, col_key_right, col_value_right]).filter(pl.col(col_value).eq_missing(pl.col(col_value_right)).not_())
   if not mismatched_keys.is_empty():
     print(f"Mismatch found in {col_key} -> {col_value} mapping:")
     print(mismatched_keys)
@@ -98,9 +141,11 @@ def df_insert_key_map(df: pl.DataFrame, df_map: pl.DataFrame, after: str, defaul
   col_value = df_map.columns[1]
   if default is None:
     default = col_default.get(col_value, f"todo!({col_value})")
+  if force:
+    print(f"Force insert {col_value} after {after}")
   if not force and col_value in df.columns:
     return df
-  df1 = df.select(col_key).join(df_map, how="full", on=col_key).select(col_value).fill_null(pl.lit(default))
+  df1 = df.select(pl.col(col_key).str.strip_chars('*')).join(df_map, how="full", on=col_key).select(col_value).fill_null(pl.lit(default))
   df = df.select(df.columns)
   if col_value in df.columns:
     df.replace_column(df.get_column_index(col_value), df1[col_value])
@@ -115,32 +160,6 @@ def df_fill_na(df: pl.DataFrame):
     pl.col(col).fill_null(pl.lit(col_default.get(col, f"todo!({col})"))).alias(col) for col in df.columns
   ])
 
-def parse_rs_attr(code: str, line_starts: str = "#[cfg(", line_not_starts: list[str] = ["#[", "//"], blocking: tuple[str, str] | None = None):
-  result = []
-  starts = blocking is None
-  indent_of_starts = 0
-  attr = None
-  for line in code.splitlines():
-    if not starts:
-      if line.strip().startswith(blocking[0]):
-        indent_of_starts = len(line) - len(line.lstrip())
-        starts = True
-      continue
-    elif line.strip().startswith(blocking[1]):
-      if indent_of_starts == len(line) - len(line.lstrip()):
-        break
-    line = line.strip()
-    if len(line) == 0:
-      continue
-    if line.startswith(line_starts):
-      attr = line
-    for i in line_not_starts:
-      if line.startswith(i):
-        break
-    else:
-      result.append((line, attr))
-      attr = None
-  return result
 attr_map = {
   '#[cfg(target_os = "windows")]': 'windows',
   # '#[cfg(target_os = "linux")]': 'linux',
@@ -152,6 +171,19 @@ attr_map = {
 # %%
 df = load_csv(csv_filename)
 save_csv(df, csv_filename)
+
+# %%
+with open(windows__keyboard_and_mouse) as rsfile:
+  content = rsfile.read()
+
+data = parse_rs_const(content, line_starts="pub const VK_", line_contains=": VIRTUAL_KEY =")
+map_vk_values = {k: "0x%02X" % int(v.removesuffix('u16')) for k,v in data}
+df_map_vk_values = pl.DataFrame({
+  "vk": map_vk_values.keys(),
+  "vk_value": map_vk_values.values(),
+})
+df = df_insert_key_map(df, df_map_vk_values, after="vk", force=True)
+df_check_key_map(df, df_map_vk_values)
 
 # %%
 with open(enigo__keycodes_rs) as rsfile:
@@ -166,7 +198,6 @@ df_map_enigo_attrs = pl.DataFrame({
 df = df_fill_na(df.join(df_map_enigo_attrs.select('enigo'), on="enigo", coalesce=True, how="full", maintain_order="left_right"))
 df = df_insert_key_map(df, df_map_enigo_attrs, after="enigo")
 df_check_key_map(df, df_map_enigo_attrs)
-df
 
 # %%
 with open(enigo__keycodes_rs) as rsfile:
@@ -207,7 +238,6 @@ df_map_enigo_cg = pl.DataFrame({
 })
 df = df_insert_key_map(df, df_map_enigo_cg, after="keysym")
 df_check_key_map(df, df_map_enigo_cg)
-df
 
 # %%
 save_csv(df, csv_filename)
@@ -222,35 +252,49 @@ df_test = df.select([
       pl.col(col).str.starts_with("none!"))
   ).then(None).otherwise(pl.col(col)).alias(col) for col in df.columns
 ])
-max_col_lengths = df_test.select([
-  pl.col(col).str.len_chars().max().alias(col) for col in df.columns
-]).to_dicts()[0]
+
+def build_code(df: pl.DataFrame, col: str, format: str, value_prefix: str = "", value_suffix: str = "", default: str | None = "n!()", max_len: int | None = None):
+  result = []
+  max_len = df[col].str.len_chars().max() + 1 if max_len is None else max_len
+  for i in df[col]:
+    i: str | None = i
+    if i is not None:
+      line = f'writeln!(w, "{{:{max_len}}}, {format}", "{i}", {value_prefix}{i.strip('*')}{value_suffix})?;'
+    if i is not None and not i.endswith('*'):
+      result.append("          " + line)
+    elif i is None:
+      result.append(f'  if any {{ writeln!(w, "{{:{max_len}}}, {{}}", "{i}", "{default}")?; }}')
+    else:
+      result.append("  if any {" + line + "}")
+  return result
 
 output_all = False
 
+lines = []
 main_lines = []
 main_lines.append('  let path = &std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("scripts/cache/numeric");')
 main_lines.append('  let file = |name: &str| std::fs::File::create(path.join(name)).unwrap();')
 main_lines.append('  std::fs::create_dir_all(path).unwrap();')
 
-lines = []
-lines.append("fn print_hut_04(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()> {")
+name = "hut_04"
+lines.append(f"fn print_{name}(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()>" + "{")
 lines.append("  use hut_04::{AsUsage, Button, Consumer, GenericDesktop, KeyboardKeypad};")
-for i in df_test["hut"]:
-  max_len = max_col_lengths["hut"] + 1
-  if i is not None:
-    line = f'writeln!(w, "{{:{max_len}}}, 0x{{:X}}", "{i}", {i.strip('*')}.usage_value())?;'
-  if i is not None and not i.endswith('*'):
-    lines.append("          " + line)
-  elif i is None:
-    lines.append(f'  if any {{ writeln!(w, "{{:{max_len}}}, {{}}", "{i}", "n!()")?; }}')
-  else:
-    lines.append("  if any {" + line + "}")
+lines.extend(build_code(df_test, "hut", "0x{:X}", value_suffix=".usage_value()"))
 lines.append("  Ok(())")
-lines.append("}")
-main_lines.append('  println!("============== HUT 04 ===============");')
-main_lines.append('  print_hut_04(&mut file("hut_04.txt"), true).ok();')
-main_lines.append('  print_hut_04(&mut std::io::stdout(), false).ok();')
+lines.append("}\n\n")
+main_lines.append(f'  println!("\n\n============== {name.upper().replace("_", " ")} ===============");')
+main_lines.append(f'  print_{name}(&mut file("{name}.txt"), true).ok();')
+main_lines.append(f'  print_{name}(&mut std::io::stdout(), false).ok();')
+
+name = "windows"
+lines.append(f"fn print_{name}(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()>" + "{")
+lines.append("  use vkey::mirror::windows as keys;")
+lines.extend(build_code(df_test, "vk", "0x{:02X}", value_prefix="keys::", value_suffix=".0"))
+lines.append("  Ok(())")
+lines.append("}\n\n")
+main_lines.append(f'  println!("\n\n============== {name.upper().replace("_", " ")} ===============");')
+main_lines.append(f'  print_{name}(&mut file("{name}.txt"), true).ok();')
+main_lines.append(f'  print_{name}(&mut std::io::stdout(), false).ok();')
 
 with open(workspace_dir / 'scripts/example_gen_numeric.rs', 'w') as f:
   f.write("fn main() {\n")
