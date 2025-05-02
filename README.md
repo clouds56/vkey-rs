@@ -1,6 +1,8 @@
 # VKey
 This crates only contains various types of virtual keycodes, and conversions between them.
 
+This crate is under heavy development, and subject to breaking changes.
+
 - [x] Vk from [winput](https://github.com/gymore-io/winput)
 - [x] VIRTUAL_KEY from [windows](https://github.com/microsoft/windows-rs)
 - [ ] enigo::Key from [enigo](https://github.com/enigo-rs/enigo) (partially done)
