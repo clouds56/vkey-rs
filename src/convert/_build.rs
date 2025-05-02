@@ -109,8 +109,41 @@ impl<'a> GeneralTemplate<'a> {
   }
 }
 
-enum KeySourceType {
-  Dep, Mirror,
+#[derive(Debug, Clone)]
+pub struct ImportEntry {
+  pub gate: &'static str,
+  pub import: &'static str,
+}
+
+impl ImportEntry {
+  pub fn new(gate: &'static str, import: &'static str) -> Self {
+    Self { gate, import }
+  }
+}
+
+#[derive(Debug, Clone, askama::Template)]
+#[template(ext = "txt", source = r#"
+{% for f in from_imports -%}
+{% let i = loop.index -%}
+{% for t in to_imports -%}
+{% let j = loop.index %}
+  #[cfg(all({{f.gate}}, {{t.gate}}))]
+  mod {{from_source|lower}}_to_{{to_source|lower}}_{{i}}_{{j}} {
+    {{f.import|indent(4)}}
+    {{t.import|indent(4)}}
+    include!("{{filename}}");
+  }
+{% endfor -%}
+{% endfor -%}
+"#)]
+pub struct ImportTemplate {
+  pub filename: String,
+  pub from: &'static str,
+  pub to: &'static str,
+  pub from_source: &'static str,
+  pub to_source: &'static str,
+  pub from_imports: Vec<ImportEntry>,
+  pub to_imports: Vec<ImportEntry>,
 }
 
 #[expect(unused)]
@@ -131,6 +164,41 @@ impl KeyType {
       KeyType::Enigo | KeyType::EnigoDep | KeyType::EnigoMirror => "Enigo",
       KeyType::KeySym => "KeySym",
       KeyType::CG => "CGKeyCode",
+    }
+  }
+
+  pub fn import_mirror(self) -> Vec<ImportEntry> {
+    match self {
+      KeyType::Winput => vec![
+        ImportEntry::new("mirror_winput_vk", "use crate::mirror::winput::Vk;"),
+      ],
+      KeyType::WinVk => vec![
+        ImportEntry::new("mirror_windows_vk", "use crate::mirror::windows::{self as keys, VIRTUAL_KEY as Vk};"),
+      ],
+      KeyType::EnigoMirror => vec![
+        ImportEntry::new("mirror_enigo", "use crate::mirror::enigo::Key as Enigo;"),
+      ],
+      KeyType::KeySym => unimplemented!(),
+      KeyType::CG => vec![
+        ImportEntry::new("any(dep_macos, mirror_macos)", "#[cfg(dep_macos)]\nuse crate::deps::macos::KeyCode;\n#[cfg(not(dep_macos))]\n#[cfg(mirror_macos)]\nuse crate::mirror::macos::KeyCode;\nuse crate::mirror::macos_ext::{CGKeyCode, KeyCodeExt};"),
+      ],
+      _ => return vec![],
+    }
+  }
+
+  pub fn import_dep(self) -> Vec<ImportEntry> {
+    match self {
+      KeyType::HUT => vec![
+        ImportEntry::new("dep_hut_04", "use crate::deps::hut_04::{AsUsage, Button, Consumer, GenericDesktop, KeyboardKeypad, Usage};"),
+        ImportEntry::new("dep_hut_03", "use crate::deps::hut_03::{AsUsage, Button, Consumer, GenericDesktop, KeyboardKeypad, Usage};"),
+      ],
+      KeyType::Winput => vec![],
+      KeyType::WinVk => vec![
+        ImportEntry::new("dep_windows_vk", "use crate::deps::windows::{self as keys, VIRTUAL_KEY as Vk};"),
+      ],
+      KeyType::EnigoDep => vec![ImportEntry::new("dep_enigo", "use crate::deps::enigo::Key as Enigo;")],
+      KeyType::KeySym => unimplemented!(),
+      _ => return vec![],
     }
   }
 
@@ -227,6 +295,52 @@ impl Gen {
     GeneralTemplate::create(from.name(), to.name(), to.as_value_prefix(), to.as_value_suffix())
       .build(map)
   }
+
+  pub fn build_imports(self, filename: &str) -> String {
+    let (from, to) = (self.0, self.1);
+    let content = vec![
+      ImportTemplate {
+        filename: filename.to_string(),
+        from: from.name(),
+        to: to.name(),
+        from_source: "mirror",
+        to_source: "mirror",
+        from_imports: from.import_mirror(),
+        to_imports: to.import_mirror(),
+      }.render().unwrap(),
+      ImportTemplate {
+        filename: filename.to_string(),
+        from: from.name(),
+        to: to.name(),
+        from_source: "mirror",
+        to_source: "dep",
+        from_imports: from.import_mirror(),
+        to_imports: to.import_dep(),
+      }.render().unwrap(),
+      ImportTemplate {
+        filename: filename.to_string(),
+        from: from.name(),
+        to: to.name(),
+        from_source: "dep",
+        to_source: "mirror",
+        from_imports: from.import_dep(),
+        to_imports: to.import_mirror(),
+      }.render().unwrap(),
+      ImportTemplate {
+        filename: filename.to_string(),
+        from: from.name(),
+        to: to.name(),
+        from_source: "dep",
+        to_source: "dep",
+        from_imports: from.import_dep(),
+        to_imports: to.import_dep(),
+      }.render().unwrap(),
+    ].into_iter().filter(|i| !i.trim().is_empty()).map(|i| i.trim_end().trim_start_matches('\n').to_string()).collect::<Vec<_>>().join("\n");
+    if content.trim().is_empty() {
+      return String::new();
+    }
+    format!("mod generated_{}_to_{} {{\n  {}\n}}\n\n", format!("{:?}", from).to_lowercase(), format!("{:?}", to).to_lowercase(), content.trim())
+  }
 }
 
 fn save_file<P: AsRef<Path>, S: AsRef<str>>(filename: P, content: S) -> std::io::Result<()> {
@@ -289,12 +403,17 @@ pub fn main() {
   let csv = csv_content.lines().filter(|i| !i.trim().is_empty() && !i.trim().starts_with(";"))
       .map(|i| i.split(',').collect::<Vec<_>>().into()).collect::<Vec<Line<_>>>();
 
+  let mut index_mod = String::new();
   for tuple in [
-    (KeyType::EnigoMirror, KeyType::WinVk),
-    (KeyType::EnigoDep, KeyType::WinVk),
-    (KeyType::EnigoMirror, KeyType::Winput),
     (KeyType::Winput, KeyType::HUT),
     (KeyType::Winput, KeyType::EnigoMirror),
+    (KeyType::Winput, KeyType::EnigoDep),
+    (KeyType::EnigoMirror, KeyType::Winput),
+    (KeyType::EnigoDep, KeyType::Winput),
+    (KeyType::EnigoMirror, KeyType::WinVk),
+    (KeyType::EnigoDep, KeyType::WinVk),
+    (KeyType::EnigoMirror, KeyType::CG),
+    (KeyType::EnigoDep, KeyType::CG),
     (KeyType::Winput, KeyType::CG),
   ] {
     let (from, to) = tuple;
@@ -302,5 +421,9 @@ pub fn main() {
     let content = Gen(from, to).build_general(&csv);
     save_file(format!("{output_path}/{filename}"), content)
       .expect("Failed to write generated.rs");
+
+    let imports_str = Gen(from, to).build_imports(&filename);
+    index_mod.push_str(&imports_str);
   }
+  save_file(format!("{output_path}/generated._index.rs"), index_mod).expect("failed to write index.rs");
 }
