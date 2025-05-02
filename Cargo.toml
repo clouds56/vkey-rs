@@ -17,6 +17,7 @@ exclude = [
 [[example]]
 name = "gen_numeric"
 path = "scripts/example_gen_numeric.rs"
+required-features = ["full"]
 
 [dependencies]
 bitflags = { version = "2.9.0", optional = true }
