@@ -176,14 +176,14 @@ pub struct ConvertImport1Template {
 
 
 pub fn {{ty|lower}}_to_{{code_ty|lower}}(value: &{{ty}}) -> {{code_ty}} {
-  {% if const_check -%}
+  {%- if const_check %}
   #[allow(unused_parens)]
   const {
-    {% for entry in entries -%}
+    {%- for entry in entries %}
     assert!({{to_code_expr.0}}(&{{"{" ~ value_prefix}}{{ entry.0 | pad_right(*k_len) }}{{value_suffix ~ "}"}}){{to_code_expr.1}} == {{entry.1 | hex}});
-    {% endfor -%}
+    {%- endfor %}
   }
-  {% endif -%}
+  {%- endif %}
   {{to_code_expr.0}}value{{to_code_expr.1}}
 }
 
@@ -192,28 +192,29 @@ impl crate::numeric::AsCode<{{ty}}> for crate::numeric::Coder {
   fn as_code(value: &{{ty}}) -> Self::Code {
     {{ty|lower}}_to_{{code_ty|lower}}(value)
   }
+  #[allow(unreachable_patterns)]
   fn from_code(code: Self::Code) -> Option<{{ty}}> {
     match code {
-      {% for entry in entries|unique -%}
+      {%- for entry in entries|unique %}
       {{entry.1 | hex}} => Some({{value_prefix}}{{ entry.0 | pad_right(*k_len) }}{{value_suffix}}),
-      {% endfor -%}
+      {%- endfor %}
       _ => None,
     }
   }
-  {% if let Some(from_code_expr) = from_code_expr -%}
+  {%- if let Some(from_code_expr) = from_code_expr %}
   unsafe fn from_code_unchecked(code: Self::Code) -> {{ty}} {
     {{from_code_expr.0}}code{{from_code_expr.1}}
   }
-  {% endif -%}
+  {%- endif %}
 }
 
 {% if !const_check -%}
 #[test]
 #[allow(unused_parens)]
 fn test_code() {
-  {% for entry in entries -%}
+  {%- for entry in entries %}
   assert!({{to_code_expr.0}}(&{{"{" ~ value_prefix}}{{ entry.0 | pad_right(*k_len) }}{{value_suffix ~ "}"}}){{to_code_expr.1}} == {{entry.1 | hex}});
-  {% endfor -%}
+  {%- endfor %}
 }
 {% endif -%}
 "#)]
@@ -375,7 +376,8 @@ impl KeyType {
   pub fn as_from_code_expr(self) -> Option<&'static str> {
     match self {
       KeyType::HUT => None,
-      KeyType::Winput | KeyType::WinVk => Some("unsafe { crate::numeric::convert_from_code_unchecked({}) }"),
+      KeyType::Winput => Some("unsafe { std::mem::transmute({}) }"),
+      KeyType::WinVk => Some("Vk({})"),
       _ => None,
     }
   }

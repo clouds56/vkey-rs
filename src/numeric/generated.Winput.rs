@@ -164,7 +164,7 @@ pub fn vk_to_u8(value: &Vk) -> u8 {
     assert!(*(&{Vk::Separator       }) as u8 == 0x6C);
     assert!(*(&{Vk::StartApp1       }) as u8 == 0xB6);
     assert!(*(&{Vk::StartApp2       }) as u8 == 0xB7);
-    }
+  }
   *value as u8
 }
 
@@ -173,6 +173,7 @@ impl crate::numeric::AsCode<Vk> for crate::numeric::Coder {
   fn as_code(value: &Vk) -> Self::Code {
     vk_to_u8(value)
   }
+  #[allow(unreachable_patterns)]
   fn from_code(code: Self::Code) -> Option<Vk> {
     match code {
       0x01 => Some(Vk::MouseLeft       ),
@@ -339,7 +340,7 @@ impl crate::numeric::AsCode<Vk> for crate::numeric::Coder {
     }
   }
   unsafe fn from_code_unchecked(code: Self::Code) -> Vk {
-    unsafe { crate::numeric::convert_from_code_unchecked(code) }
+    unsafe { std::mem::transmute(code) }
   }
-  }
+}
 

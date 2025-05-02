@@ -10,6 +10,7 @@ impl crate::numeric::AsCode<Usage> for crate::numeric::Coder {
   fn as_code(value: &Usage) -> Self::Code {
     usage_to_u32(value)
   }
+  #[allow(unreachable_patterns)]
   fn from_code(code: Self::Code) -> Option<Usage> {
     match code {
       0x90001 => Some(Button::Button(1)                                  .usage()),
@@ -158,7 +159,7 @@ impl crate::numeric::AsCode<Usage> for crate::numeric::Coder {
       _ => None,
     }
   }
-  }
+}
 
 #[test]
 #[allow(unused_parens)]
@@ -307,4 +308,4 @@ fn test_code() {
   assert!(AsUsage::usage_value((&{KeyboardKeypad::KeypadPeriodandDelete              .usage()})) == 0x70063);
   assert!(AsUsage::usage_value((&{KeyboardKeypad::KeypadPlus                         .usage()})) == 0x70057);
   assert!(AsUsage::usage_value((&{KeyboardKeypad::KeypadStar                         .usage()})) == 0x70055);
-  }
+}

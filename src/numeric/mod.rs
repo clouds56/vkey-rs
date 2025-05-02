@@ -13,6 +13,7 @@ pub trait AsCode<T> {
   }
 }
 
+#[allow(dead_code)]
 unsafe fn convert_from_code_unchecked<T, C>(code: C) -> T
 where
   Coder: AsCode<T, Code = C>,

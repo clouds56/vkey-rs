@@ -256,7 +256,7 @@ pub fn vk_to_u16(value: &Vk) -> u16 {
     assert!((&{keys::VK_SEPARATOR                      }).0 == 0x6C);
     assert!((&{keys::VK_LAUNCH_APP1                    }).0 == 0xB6);
     assert!((&{keys::VK_LAUNCH_APP2                    }).0 == 0xB7);
-    }
+  }
   value.0
 }
 
@@ -265,6 +265,7 @@ impl crate::numeric::AsCode<Vk> for crate::numeric::Coder {
   fn as_code(value: &Vk) -> Self::Code {
     vk_to_u16(value)
   }
+  #[allow(unreachable_patterns)]
   fn from_code(code: Self::Code) -> Option<Vk> {
     match code {
       0x01 => Some(keys::VK_LBUTTON                        ),
@@ -518,7 +519,7 @@ impl crate::numeric::AsCode<Vk> for crate::numeric::Coder {
     }
   }
   unsafe fn from_code_unchecked(code: Self::Code) -> Vk {
-    unsafe { crate::numeric::convert_from_code_unchecked(code) }
+    Vk(code)
   }
-  }
+}
 
