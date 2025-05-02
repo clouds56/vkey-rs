@@ -34,5 +34,6 @@ pub mod mirror;
 pub mod deps;
 pub mod convert;
 pub mod error;
+pub mod numeric;
 
 pub use convert::ConvertExt;

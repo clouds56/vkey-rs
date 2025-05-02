@@ -1,6 +1,7 @@
 #![allow(deprecated)]
 
-include!("generated._index.rs");
+#[path = "generated._index.rs"]
+pub mod _impls;
 
 pub trait Convert<F, T> {
   fn convert(from: F) -> Option<T>;

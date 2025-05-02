@@ -5,10 +5,10 @@ use askama::Template;
 
 struct Line<S> {
   pub hut: S,
-  pub hut_value: S,
+  pub hut_code: S,
   pub winput: S,
   pub vk: S,
-  pub vk_value: S,
+  pub vk_code: S,
   pub enigo: S,
   pub enigo_attr: S,
   pub keysym: S,
@@ -20,10 +20,10 @@ impl<T> From<Vec<T>> for Line<T> {
     let mut v = v.into_iter();
     Self {
       hut: v.next().unwrap(),
-      hut_value: v.next().unwrap(),
+      hut_code: v.next().unwrap(),
       winput: v.next().unwrap(),
       vk: v.next().unwrap(),
-      vk_value: v.next().unwrap(),
+      vk_code: v.next().unwrap(),
       enigo: v.next().unwrap(),
       enigo_attr: v.next().unwrap(),
       keysym: v.next().unwrap(),
@@ -39,6 +39,10 @@ mod filters {
       s.push(' ');
     }
     Ok(s)
+  }
+
+  pub fn hex<T: std::fmt::Display + std::fmt::UpperHex>(s: T, _: &dyn askama::Values) -> askama::Result<String> {
+    Ok(format!("0x{:02X}", s))
   }
 }
 
@@ -77,7 +81,7 @@ impl crate::convert::Convert<{{from}}, {{to}}> for crate::convert::Converter {
   }
 }
 "#)]
-pub struct GeneralTemplate<'a> {
+pub struct ConvertImplTemplate<'a> {
   pub from: &'a str,
   pub to: &'a str,
   pub prefix: &'a str,
@@ -87,7 +91,7 @@ pub struct GeneralTemplate<'a> {
   pub v_len: usize,
 }
 
-impl<'a> GeneralTemplate<'a> {
+impl<'a> ConvertImplTemplate<'a> {
   pub fn create(from: &'a str, to: &'a str, prefix: Option<&'a str>, suffix: Option<&'a str>) -> Self {
     let prefix = prefix.unwrap_or("");
     let suffix = suffix.unwrap_or("");
@@ -113,12 +117,12 @@ impl<'a> GeneralTemplate<'a> {
 }
 
 #[derive(Debug, Clone)]
-pub struct ImportEntry {
+pub struct ConvertImportEntry {
   pub gate: &'static str,
   pub import: &'static str,
 }
 
-impl ImportEntry {
+impl ConvertImportEntry {
   pub fn new(gate: &'static str, import: &'static str) -> Self {
     Self { gate, import }
   }
@@ -139,67 +143,140 @@ impl ImportEntry {
 {% endfor -%}
 {% endfor -%}
 "#)]
-pub struct ImportTemplate {
+pub struct ConvertImport2Template {
   pub filename: String,
   pub from: &'static str,
   pub to: &'static str,
   pub from_source: &'static str,
   pub to_source: &'static str,
-  pub from_imports: Vec<ImportEntry>,
-  pub to_imports: Vec<ImportEntry>,
+  pub from_imports: Vec<ConvertImportEntry>,
+  pub to_imports: Vec<ConvertImportEntry>,
+}
+
+#[derive(Debug, Clone, askama::Template)]
+#[template(ext = "txt", source = r#"
+{% for f in from_imports -%}
+{% let i = loop.index -%}
+  #[cfg({{f.gate}})]
+  mod {{from_source|lower}}_{{i}} {
+    {{f.import|indent(4)}}
+    include!("{{filename}}");
+  }
+{% endfor -%}
+"#)]
+pub struct ConvertImport1Template {
+  pub filename: String,
+  pub from: &'static str,
+  pub from_source: &'static str,
+  pub from_imports: Vec<ConvertImportEntry>,
+}
+
+#[derive(Debug, Clone, askama::Template)]
+#[template(ext = "txt", source = r#"// This file is auto-generated. Do not edit manually.
+
+
+pub fn {{ty|lower}}_to_{{code_ty|lower}}(value: {{ty}}) -> {{code_ty}} {
+  const {
+    {% for entry in entries -%}
+    assert!({{to_code_prefix}}({{value_prefix}}{{ entry.0 | pad_right(*k_len) }}{{value_suffix}}){{to_code_suffix}} == {{entry.1 | hex}});
+    {% endfor -%}
+  }
+  {{to_code_prefix}}value{{to_code_suffix}}
+}
+"#)]
+pub struct AsCodeImplTemplate<'a> {
+  pub ty: &'a str,
+  pub code_ty: &'a str,
+  pub to_code_prefix: &'a str,
+  pub to_code_suffix: &'a str,
+  pub value_prefix: &'a str,
+  pub value_suffix: &'a str,
+  pub k_len: usize,
+  pub entries: Vec<(Cow<'a, str>, u64)>,
+}
+impl<'a> AsCodeImplTemplate<'a> {
+  pub fn create(from: &'a str, to: &'a str, to_code_expr: Option<&'a str>, prefix: Option<&'a str>, suffix: Option<&'a str>) -> Self {
+    let prefix = prefix.unwrap_or("");
+    let suffix = suffix.unwrap_or("");
+    let to_code_expr = to_code_expr.unwrap_or("{}");
+    let (to_code_prefix, to_code_suffix) = if to_code_expr.contains("{}") {
+      to_code_expr.split_once("{}").unwrap()
+    } else {
+      ("", to_code_expr)
+    };
+    Self {
+      ty: from,
+      code_ty: to,
+      to_code_prefix,
+      to_code_suffix,
+      value_prefix: prefix,
+      value_suffix: suffix,
+      entries: vec![],
+      k_len: 0,
+    }
+  }
+
+  pub fn build(self, map: Vec<(Cow<'a, str>, u64)>) -> String {
+    Self {
+      k_len: map.iter().map(|e| e.0.len()).max().unwrap_or(0),
+      entries: map,
+      ..self
+    }.render().unwrap()
+  }
 }
 
 #[expect(unused)]
 #[derive(Debug, Clone, Copy)]
 enum KeyType {
-  HUT, Winput, WinVk, VkValue, HutValue, Enigo, KeySym, CG,
+  HUT, Winput, WinVk, Enigo, KeySym, CG,
   EnigoDep, EnigoMirror,
 }
 
 impl KeyType {
   pub fn name(self) -> &'static str {
+    const {
+      assert!(true);
+    }
     match self {
       KeyType::HUT => "Usage",
       KeyType::Winput => "Vk",
       KeyType::WinVk => "Vk",
-      KeyType::VkValue => unimplemented!(),
-      KeyType::HutValue => unimplemented!(),
       KeyType::Enigo | KeyType::EnigoDep | KeyType::EnigoMirror => "Enigo",
       KeyType::KeySym => "KeySym",
       KeyType::CG => "CGKeyCode",
     }
   }
 
-  pub fn import_mirror(self) -> Vec<ImportEntry> {
+  pub fn import_mirror(self) -> Vec<ConvertImportEntry> {
     match self {
       KeyType::Winput => vec![
-        ImportEntry::new("mirror_winput_vk", "use crate::mirror::winput::Vk;"),
+        ConvertImportEntry::new("mirror_winput_vk", "use crate::mirror::winput::Vk;"),
       ],
       KeyType::WinVk => vec![
-        ImportEntry::new("mirror_windows_vk", "use crate::mirror::windows::{self as keys, VIRTUAL_KEY as Vk};"),
+        ConvertImportEntry::new("mirror_windows_vk", "use crate::mirror::windows::{self as keys, VIRTUAL_KEY as Vk};"),
       ],
       KeyType::EnigoMirror => vec![
-        ImportEntry::new("mirror_enigo", "use crate::mirror::enigo::Key as Enigo;"),
+        ConvertImportEntry::new("mirror_enigo", "use crate::mirror::enigo::Key as Enigo;"),
       ],
       KeyType::KeySym => unimplemented!(),
       KeyType::CG => vec![
-        ImportEntry::new("any(dep_macos, mirror_macos)", "#[cfg(dep_macos)]\nuse crate::deps::macos::KeyCode;\n#[cfg(not(dep_macos))]\n#[cfg(mirror_macos)]\nuse crate::mirror::macos::KeyCode;\nuse crate::mirror::macos_ext::{CGKeyCode, KeyCodeExt};"),
+        ConvertImportEntry::new("any(dep_macos, mirror_macos)", "#[cfg(dep_macos)]\nuse crate::deps::macos::KeyCode;\n#[cfg(not(dep_macos))]\n#[cfg(mirror_macos)]\nuse crate::mirror::macos::KeyCode;\nuse crate::mirror::macos_ext::{CGKeyCode, KeyCodeExt};"),
       ],
       _ => return vec![],
     }
   }
 
-  pub fn import_dep(self) -> Vec<ImportEntry> {
+  pub fn import_dep(self) -> Vec<ConvertImportEntry> {
     match self {
       KeyType::HUT => vec![
-        ImportEntry::new("dep_hut_04", "use crate::deps::hut_04::{AsUsage, Button, Consumer, GenericDesktop, KeyboardKeypad, Usage};"),
-        ImportEntry::new("dep_hut_03", "use crate::deps::hut_03::{AsUsage, Button, Consumer, GenericDesktop, KeyboardKeypad, Usage};"),
+        ConvertImportEntry::new("dep_hut_04", "use crate::deps::hut_04::{AsUsage, Button, Consumer, GenericDesktop, KeyboardKeypad, Usage};"),
+        ConvertImportEntry::new("dep_hut_03", "use crate::deps::hut_03::{AsUsage, Button, Consumer, GenericDesktop, KeyboardKeypad, Usage};"),
       ],
       KeyType::Winput => vec![],
       KeyType::WinVk => vec![
-        ImportEntry::new("dep_windows_vk", "use crate::deps::windows::{self as keys, VIRTUAL_KEY as Vk};"),
+        ConvertImportEntry::new("dep_windows_vk", "use crate::deps::windows::{self as keys, VIRTUAL_KEY as Vk};"),
       ],
-      KeyType::EnigoDep => vec![ImportEntry::new("dep_enigo", "use crate::deps::enigo::Key as Enigo;")],
+      KeyType::EnigoDep => vec![ConvertImportEntry::new("dep_enigo", "use crate::deps::enigo::Key as Enigo;")],
       KeyType::KeySym => unimplemented!(),
       _ => return vec![],
     }
@@ -210,8 +287,6 @@ impl KeyType {
       KeyType::HUT => line.hut,
       KeyType::Winput => line.winput,
       KeyType::WinVk => line.vk,
-      KeyType::VkValue => line.vk_value,
-      KeyType::HutValue => line.hut_value,
       KeyType::Enigo | KeyType::EnigoDep | KeyType::EnigoMirror => line.enigo,
       KeyType::KeySym => line.keysym,
       KeyType::CG => line.cg,
@@ -223,6 +298,15 @@ impl KeyType {
       KeyType::Enigo | KeyType::EnigoDep | KeyType::EnigoMirror => Some(line.enigo_attr),
       _ => None,
     }
+  }
+
+  pub fn get_code<'a>(self, line: &'a Line<&'a str>) -> Option<&'a str> {
+    match self {
+      KeyType::HUT => line.hut_code,
+      KeyType::Winput => line.vk_code,
+      KeyType::WinVk => line.vk_code,
+      _ => return None,
+    }.into()
   }
 
   pub fn as_value_prefix(self) -> Option<&'static str> {
@@ -240,14 +324,45 @@ impl KeyType {
     }
   }
 
+  pub fn as_code_expr(self) -> Option<&'static str> {
+    match self {
+      KeyType::HUT => Some("AsUsage::usage_value({})"),
+      KeyType::Winput => Some("{} as u8"),
+      KeyType::WinVk => Some("{}.0"),
+      _ => None,
+    }
+  }
+
+  pub fn as_code_type(self) -> Option<&'static str> {
+    match self {
+      KeyType::HUT => Some("u32"),
+      KeyType::Winput => Some("u8"),
+      KeyType::WinVk => Some("u16"),
+      _ => None,
+    }
+  }
+
   pub fn is_valid<S: AsRef<str>>(self, s: S) -> bool {
     let s = s.as_ref().trim();
     !s.is_empty() && !s.starts_with("n!") && !s.starts_with("na!") && !s.starts_with("todo!") && !s.starts_with("none!")
   }
 
-  pub fn get_content_unchecked<'a>(self, s: &'a str) -> Cow<'a, str> {
+  pub fn parse_content_unchecked<'a>(self, s: &'a str) -> Cow<'a, str> {
     let s = s.trim_start();
     Cow::Borrowed(s.trim().trim_end_matches("*"))
+  }
+
+  pub fn parse_code_unchecked<'a>(self, s: &'a str) -> u64 {
+    let s = s.trim_start();
+    let s = s.trim().trim_end_matches("*");
+    if s.is_empty() {
+      return 0;
+    }
+    if s.starts_with("0x") {
+      u64::from_str_radix(&s[2..], 16).unwrap()
+    } else {
+      s.parse::<u64>().unwrap()
+    }
   }
 
   pub fn get_attr_unchecked<'a>(self, s: &'a str) -> Option<Cow<'a, str>> {
@@ -275,8 +390,8 @@ impl Gen {
     let attr = from.get_attr(line);
     let attr2 = to.get_attr(line);
     Some(Entry {
-      k: from.get_content_unchecked(k),
-      v: to.get_content_unchecked(v),
+      k: from.parse_content_unchecked(k),
+      v: to.parse_content_unchecked(v),
       attr_k: attr.and_then(|i| from.get_attr_unchecked(i)),
       attr_v: attr2.and_then(|i| to.get_attr_unchecked(i)),
       marked: std::marker::PhantomData,
@@ -291,18 +406,40 @@ impl Gen {
     self.0.is_valid(k) && self.1.is_valid(v) && !k.as_ref().trim().ends_with('*')
   }
 
-  pub fn build_general<'a>(self, csv: &'a [Line<&'a str>]) -> String {
+  pub fn build_convert_impl<'a>(self, csv: &'a [Line<&'a str>]) -> String {
     let from = self.0;
     let to = self.1;
     let map = self.build_kv(csv);
-    GeneralTemplate::create(from.name(), to.name(), to.as_value_prefix(), to.as_value_suffix())
+    ConvertImplTemplate::create(from.name(), to.name(), to.as_value_prefix(), to.as_value_suffix())
       .build(map)
   }
 
-  pub fn build_imports(self, filename: &str) -> String {
+  pub fn build_imports1(self, filename: &str) -> String {
+    let from = self.0;
+    let content = vec![
+      ConvertImport1Template {
+        filename: filename.to_string(),
+        from: from.name(),
+        from_source: "mirror",
+        from_imports: from.import_mirror(),
+      }.render().unwrap(),
+      ConvertImport1Template {
+        filename: filename.to_string(),
+        from: from.name(),
+        from_source: "dep",
+        from_imports: from.import_dep(),
+      }.render().unwrap(),
+    ].into_iter().filter(|i| !i.trim().is_empty()).map(|i| i.trim_end().trim_start_matches('\n').to_string()).collect::<Vec<_>>().join("\n");
+    if content.trim().is_empty() {
+      return String::new();
+    }
+    format!("mod generated_{} {{\n  {}\n}}\n\n", format!("{:?}", from).to_lowercase(), content.trim())
+  }
+
+  pub fn build_imports2(self, filename: &str) -> String {
     let (from, to) = (self.0, self.1);
     let content = vec![
-      ImportTemplate {
+      ConvertImport2Template {
         filename: filename.to_string(),
         from: from.name(),
         to: to.name(),
@@ -311,7 +448,7 @@ impl Gen {
         from_imports: from.import_mirror(),
         to_imports: to.import_mirror(),
       }.render().unwrap(),
-      ImportTemplate {
+      ConvertImport2Template {
         filename: filename.to_string(),
         from: from.name(),
         to: to.name(),
@@ -320,7 +457,7 @@ impl Gen {
         from_imports: from.import_mirror(),
         to_imports: to.import_dep(),
       }.render().unwrap(),
-      ImportTemplate {
+      ConvertImport2Template {
         filename: filename.to_string(),
         from: from.name(),
         to: to.name(),
@@ -329,7 +466,7 @@ impl Gen {
         from_imports: from.import_dep(),
         to_imports: to.import_mirror(),
       }.render().unwrap(),
-      ImportTemplate {
+      ConvertImport2Template {
         filename: filename.to_string(),
         from: from.name(),
         to: to.name(),
@@ -343,6 +480,24 @@ impl Gen {
       return String::new();
     }
     format!("mod generated_{}_to_{} {{\n  {}\n}}\n\n", format!("{:?}", from).to_lowercase(), format!("{:?}", to).to_lowercase(), content.trim())
+  }
+
+  pub fn build_as_code(self, csv: &[Line<&str>]) -> String {
+    let from = self.0;
+    let to = self.1;
+    let Some(to_type) = to.as_code_type() else {
+      return String::new();
+    };
+    let map = csv.iter().filter_map(|line| {
+      let k = from.get_line(line);
+      let v = to.get_code(line)?;
+      if !self.kv_is_valid(&(k, v)) {
+        return None;
+      }
+      Some((from.parse_content_unchecked(k), to.parse_code_unchecked(v)))
+    }).collect::<Vec<_>>();
+    AsCodeImplTemplate::create(from.name(), to_type, to.as_code_expr(), from.as_value_prefix(), from.as_value_suffix())
+      .build(map)
   }
 }
 
@@ -399,6 +554,7 @@ pub fn main() {
   }
   let csv_path = "src/convert/convert.csv";
   let output_path = "src/convert";
+  let output_path2 = "src/numeric";
 
   println!("cargo:rerun-if-changed={csv_path}");
 
@@ -407,7 +563,7 @@ pub fn main() {
       .map(|i| i.split(',').collect::<Vec<_>>().into()).collect::<Vec<Line<_>>>();
 
   let mut index_mod = String::new();
-  for tuple in [
+  for (from, to) in [
     (KeyType::Winput, KeyType::HUT),
     (KeyType::Winput, KeyType::EnigoMirror),
     (KeyType::Winput, KeyType::EnigoDep),
@@ -419,14 +575,25 @@ pub fn main() {
     (KeyType::EnigoDep, KeyType::CG),
     (KeyType::Winput, KeyType::CG),
   ] {
-    let (from, to) = tuple;
     let filename = format!("generated.{from:?}_to_{to:?}.rs");
-    let content = Gen(from, to).build_general(&csv);
+    let content = Gen(from, to).build_convert_impl(&csv);
     save_file(format!("{output_path}/{filename}"), content)
       .expect("Failed to write generated.rs");
 
-    let imports_str = Gen(from, to).build_imports(&filename);
+    let imports_str = Gen(from, to).build_imports2(&filename);
     index_mod.push_str(&imports_str);
   }
   save_file(format!("{output_path}/generated._index.rs"), index_mod).expect("failed to write index.rs");
+
+  let mut index_mod = String::new();
+  for ty in [KeyType::Winput] {
+    let filename = format!("generated.{ty:?}.rs");
+    let content = Gen(ty, ty).build_as_code(&csv);
+    save_file(format!("{output_path2}/{filename}"), content)
+      .expect("Failed to write generated.rs");
+
+    let imports_str = Gen(ty, ty).build_imports1(&filename);
+    index_mod.push_str(&imports_str);
+  }
+  save_file(format!("{output_path2}/generated._index.rs"), index_mod).expect("failed to write index.rs");
 }
