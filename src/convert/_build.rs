@@ -5,10 +5,10 @@ use askama::Template;
 
 struct Line<S> {
   pub hut: S,
+  pub hut_value: S,
   pub winput: S,
   pub vk: S,
   pub vk_value: S,
-  pub hut_keyboard_value: S,
   pub enigo: S,
   pub enigo_attr: S,
   pub keysym: S,
@@ -20,10 +20,10 @@ impl<T> From<Vec<T>> for Line<T> {
     let mut v = v.into_iter();
     Self {
       hut: v.next().unwrap(),
+      hut_value: v.next().unwrap(),
       winput: v.next().unwrap(),
       vk: v.next().unwrap(),
       vk_value: v.next().unwrap(),
-      hut_keyboard_value: v.next().unwrap(),
       enigo: v.next().unwrap(),
       enigo_attr: v.next().unwrap(),
       keysym: v.next().unwrap(),
@@ -152,7 +152,7 @@ pub struct ImportTemplate {
 #[expect(unused)]
 #[derive(Debug, Clone, Copy)]
 enum KeyType {
-  HUT, Winput, WinVk, VkValue, HutKeyboardValue, Enigo, KeySym, CG,
+  HUT, Winput, WinVk, VkValue, HutValue, Enigo, KeySym, CG,
   EnigoDep, EnigoMirror,
 }
 
@@ -163,7 +163,7 @@ impl KeyType {
       KeyType::Winput => "Vk",
       KeyType::WinVk => "Vk",
       KeyType::VkValue => unimplemented!(),
-      KeyType::HutKeyboardValue => unimplemented!(),
+      KeyType::HutValue => unimplemented!(),
       KeyType::Enigo | KeyType::EnigoDep | KeyType::EnigoMirror => "Enigo",
       KeyType::KeySym => "KeySym",
       KeyType::CG => "CGKeyCode",
@@ -211,7 +211,7 @@ impl KeyType {
       KeyType::Winput => line.winput,
       KeyType::WinVk => line.vk,
       KeyType::VkValue => line.vk_value,
-      KeyType::HutKeyboardValue => line.hut_keyboard_value,
+      KeyType::HutValue => line.hut_value,
       KeyType::Enigo | KeyType::EnigoDep | KeyType::EnigoMirror => line.enigo,
       KeyType::KeySym => line.keysym,
       KeyType::CG => line.cg,

@@ -12,10 +12,10 @@ enigo__macos_impl_rs = workspace_dir / 'scripts/cache/enigo-0.3.0' / 'raw.github
 # %%
 columns = [
   ("hut",        ";hut::HUT"              , "todo!(HUT)"),
+  ("hut_value",  "hkcode"                 , "n!()"),
   ("winput",     "winput::Vk"             , "na!(Vk)"),
   ("vk",         "windows::VIRTUAL_KEY"   , "todo!(VK_)"),
   ("vk_value",   "vkcode"                 , "n!()"),
-  ("hut_value",  "hkcode"                 , "n!()"),
   ("enigo",      "enigo::Key"             , "todo!(Enigo)"),
   ("enigo_attr", "#[cfg(enigo::Key)]"     , ""),
   ("keysym",     "xkeysym::Keysym"        , "todo!(Keysym)"),
@@ -38,8 +38,15 @@ def save_csv(df: pl.DataFrame, filename: Path):
     col_name = col_map.get(col, col)
     padding = length - len(col_name) + adj
     adj = min(0, padding)
-    col_name = " " * min(padding, 1) + col_name + " " * (padding - 1)
+    if col.endswith('code') or col.endswith('_value'):
+      col_name = " " * (padding - 1) + col_name + " " * min(padding, 1)
+    else:
+      col_name = " " * min(padding, 1) + col_name + " " * (padding - 1)
     return col_name
+  def pad_left_col(col: str, length: int):
+    if col.endswith('code') or col.endswith('_value'):
+      return pl.col(col).str.pad_start(length - 1 if length >= 10 else length - 2).str.pad_end(length)
+    return pl.col(col).str.pad_end(length - 1 if length >= 10 else length - 2).str.pad_start(length)
   filename = str(filename) + ".new"
   max_col_lengths = df.select([
     pl.col(col).str.len_chars().max().alias(col) for col in df.columns
@@ -49,8 +56,7 @@ def save_csv(df: pl.DataFrame, filename: Path):
   }
 
   df.select([
-    (pl.col(col).str.pad_end(max_col_lengths[col] - 1 if max_col_lengths[col] >= 10 else max_col_lengths[col] - 2).str.pad_start(max_col_lengths[col])
-      .alias(get_col_name(col, max_col_lengths[col]))) for col in df.columns
+    pad_left_col(col, max_col_lengths[col]).alias(get_col_name(col, max_col_lengths[col])) for col in df.columns
   ]+[pl.lit(None).alias(" ")]).write_csv(filename)
 
 def parse_rs_match(code: str, starts_with: str = "", blocking: tuple[str, str] | None = None) -> list[tuple[str, str]]:
@@ -147,6 +153,7 @@ attr_map = {
 df = load_csv(csv_filename)
 save_csv(df, csv_filename)
 
+# %%
 with open(enigo__keycodes_rs) as rsfile:
   content = rsfile.read()
 enigo_attrs = parse_rs_attr(content, blocking=("pub enum Key {", "}"))
@@ -157,7 +164,7 @@ df_map_enigo_attrs = pl.DataFrame({
 })
 
 df = df_fill_na(df.join(df_map_enigo_attrs.select('enigo'), on="enigo", coalesce=True, how="full", maintain_order="left_right"))
-df = df_insert_key_map(df, df_map_enigo_attrs, after="enigo", force=True)
+df = df_insert_key_map(df, df_map_enigo_attrs, after="enigo")
 df_check_key_map(df, df_map_enigo_attrs)
 df
 
@@ -205,4 +212,61 @@ df
 # %%
 save_csv(df, csv_filename)
 
+# %%
+# set all columns starts with 'todo!', 'na!', 'n!' or 'none!' to None
+df_test = df.select([
+  pl.when(
+    pl.col(col).str.starts_with("todo!").or_(
+      pl.col(col).str.starts_with("na!")).or_(
+      pl.col(col).str.starts_with("n!")).or_(
+      pl.col(col).str.starts_with("none!"))
+  ).then(None).otherwise(pl.col(col)).alias(col) for col in df.columns
+])
+max_col_lengths = df_test.select([
+  pl.col(col).str.len_chars().max().alias(col) for col in df.columns
+]).to_dicts()[0]
+
+output_all = False
+
+main_lines = []
+main_lines.append('  let path = &std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("scripts/cache/numeric");')
+main_lines.append('  let file = |name: &str| std::fs::File::create(path.join(name)).unwrap();')
+main_lines.append('  std::fs::create_dir_all(path).unwrap();')
+
+lines = []
+lines.append("fn print_hut_04(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()> {")
+lines.append("  use hut_04::{AsUsage, Button, Consumer, GenericDesktop, KeyboardKeypad};")
+for i in df_test["hut"]:
+  max_len = max_col_lengths["hut"] + 1
+  if i is not None:
+    line = f'writeln!(w, "{{:{max_len}}}, 0x{{:X}}", "{i}", {i.strip('*')}.usage_value())?;'
+  if i is not None and not i.endswith('*'):
+    lines.append("          " + line)
+  elif i is None:
+    lines.append(f'  if any {{ writeln!(w, "{{:{max_len}}}, {{}}", "{i}", "n!()")?; }}')
+  else:
+    lines.append("  if any {" + line + "}")
+lines.append("  Ok(())")
+lines.append("}")
+main_lines.append('  println!("============== HUT 04 ===============");')
+main_lines.append('  print_hut_04(&mut file("hut_04.txt"), true).ok();')
+main_lines.append('  print_hut_04(&mut std::io::stdout(), false).ok();')
+
+with open(workspace_dir / 'scripts/example_gen_numeric.rs', 'w') as f:
+  f.write("fn main() {\n")
+  for line in main_lines:
+    f.write(line + "\n")
+  f.write("}\n")
+
+  f.write("\n\n")
+  for line in lines:
+    f.write(line + "\n")
+
+# %%
+"""
+# %%
+!cargo run --example gen_numeric
+
+# %%
+"""
 # %%
