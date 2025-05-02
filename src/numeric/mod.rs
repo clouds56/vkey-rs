@@ -8,7 +8,23 @@ pub trait AsCode<T> {
 
   fn as_code(value: &T) -> Self::Code;
   fn from_code(code: Self::Code) -> Option<T>;
-  fn from_code_unchecked(code: Self::Code) -> T;
+  unsafe fn from_code_unchecked(code: Self::Code) -> T {
+    Self::from_code(code).expect("Invalid code")
+  }
+}
+
+unsafe fn convert_from_code_unchecked<T, C>(code: C) -> T
+where
+  Coder: AsCode<T, Code = C>,
+{
+  assert_eq!(
+    std::mem::size_of::<C>(),
+    std::mem::size_of::<T>(),
+    "Size of code and value must be the same"
+  );
+  unsafe {
+    std::ptr::read(&code as *const C as *const T)
+  }
 }
 
 pub trait AsCodeExt: Sized {
@@ -22,8 +38,8 @@ pub trait AsCodeExt: Sized {
   where Coder: AsCode<Self, Code = Self::Code> {
     Coder::from_code(code)
   }
-  fn from_code_unchecked(code: Self::Code) -> Self
+  unsafe fn from_code_unchecked(code: Self::Code) -> Self
   where Coder: AsCode<Self, Code = Self::Code> {
-    Coder::from_code_unchecked(code)
+    unsafe { Coder::from_code_unchecked(code) }
   }
 }

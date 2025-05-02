@@ -156,7 +156,7 @@ pub struct ConvertImport2Template {
 #[derive(Debug, Clone, askama::Template)]
 #[template(ext = "txt", source = r#"
 {% for f in from_imports -%}
-{% let i = loop.index -%}
+{% let i = loop.index %}
   #[cfg({{f.gate}})]
   mod {{from_source|lower}}_{{i}} {
     {{f.import|indent(4)}}
@@ -175,40 +175,79 @@ pub struct ConvertImport1Template {
 #[template(ext = "txt", source = r#"// This file is auto-generated. Do not edit manually.
 
 
-pub fn {{ty|lower}}_to_{{code_ty|lower}}(value: {{ty}}) -> {{code_ty}} {
+pub fn {{ty|lower}}_to_{{code_ty|lower}}(value: &{{ty}}) -> {{code_ty}} {
+  {% if const_check -%}
+  #[allow(unused_parens)]
   const {
     {% for entry in entries -%}
-    assert!({{to_code_prefix}}({{value_prefix}}{{ entry.0 | pad_right(*k_len) }}{{value_suffix}}){{to_code_suffix}} == {{entry.1 | hex}});
+    assert!({{to_code_expr.0}}(&{{"{" ~ value_prefix}}{{ entry.0 | pad_right(*k_len) }}{{value_suffix ~ "}"}}){{to_code_expr.1}} == {{entry.1 | hex}});
     {% endfor -%}
   }
-  {{to_code_prefix}}value{{to_code_suffix}}
+  {% endif -%}
+  {{to_code_expr.0}}value{{to_code_expr.1}}
 }
+
+impl crate::numeric::AsCode<{{ty}}> for crate::numeric::Coder {
+  type Code = {{code_ty}};
+  fn as_code(value: &{{ty}}) -> Self::Code {
+    {{ty|lower}}_to_{{code_ty|lower}}(value)
+  }
+  fn from_code(code: Self::Code) -> Option<{{ty}}> {
+    match code {
+      {% for entry in entries|unique -%}
+      {{entry.1 | hex}} => Some({{value_prefix}}{{ entry.0 | pad_right(*k_len) }}{{value_suffix}}),
+      {% endfor -%}
+      _ => None,
+    }
+  }
+  {% if let Some(from_code_expr) = from_code_expr -%}
+  unsafe fn from_code_unchecked(code: Self::Code) -> {{ty}} {
+    {{from_code_expr.0}}code{{from_code_expr.1}}
+  }
+  {% endif -%}
+}
+
+{% if !const_check -%}
+#[test]
+#[allow(unused_parens)]
+fn test_code() {
+  {% for entry in entries -%}
+  assert!({{to_code_expr.0}}(&{{"{" ~ value_prefix}}{{ entry.0 | pad_right(*k_len) }}{{value_suffix ~ "}"}}){{to_code_expr.1}} == {{entry.1 | hex}});
+  {% endfor -%}
+}
+{% endif -%}
 "#)]
 pub struct AsCodeImplTemplate<'a> {
   pub ty: &'a str,
   pub code_ty: &'a str,
-  pub to_code_prefix: &'a str,
-  pub to_code_suffix: &'a str,
+  pub from_code_expr: Option<(&'a str, &'a str)>,
+  pub to_code_expr: (&'a str, &'a str),
+  pub const_check: bool,
   pub value_prefix: &'a str,
   pub value_suffix: &'a str,
   pub k_len: usize,
   pub entries: Vec<(Cow<'a, str>, u64)>,
 }
 impl<'a> AsCodeImplTemplate<'a> {
-  pub fn create(from: &'a str, to: &'a str, to_code_expr: Option<&'a str>, prefix: Option<&'a str>, suffix: Option<&'a str>) -> Self {
+  fn split_expr(s: &'a str) -> (&'a str, &'a str) {
+    if s.contains("{}") {
+      s.split_once("{}").unwrap()
+    } else {
+      ("", s)
+    }
+  }
+  pub fn create(from: &'a str, to: &'a str, const_check: bool, from_code_expr: Option<&'a str>, to_code_expr: Option<&'a str>, prefix: Option<&'a str>, suffix: Option<&'a str>) -> Self {
     let prefix = prefix.unwrap_or("");
     let suffix = suffix.unwrap_or("");
     let to_code_expr = to_code_expr.unwrap_or("{}");
-    let (to_code_prefix, to_code_suffix) = if to_code_expr.contains("{}") {
-      to_code_expr.split_once("{}").unwrap()
-    } else {
-      ("", to_code_expr)
-    };
+    let to_code_expr = Self::split_expr(to_code_expr);
+    let from_code_expr = from_code_expr.map(Self::split_expr);
     Self {
       ty: from,
       code_ty: to,
-      to_code_prefix,
-      to_code_suffix,
+      const_check,
+      from_code_expr,
+      to_code_expr,
       value_prefix: prefix,
       value_suffix: suffix,
       entries: vec![],
@@ -324,11 +363,19 @@ impl KeyType {
     }
   }
 
-  pub fn as_code_expr(self) -> Option<&'static str> {
+  pub fn as_to_code_expr(self) -> Option<&'static str> {
     match self {
       KeyType::HUT => Some("AsUsage::usage_value({})"),
-      KeyType::Winput => Some("{} as u8"),
+      KeyType::Winput => Some("*{} as u8"),
       KeyType::WinVk => Some("{}.0"),
+      _ => None,
+    }
+  }
+
+  pub fn as_from_code_expr(self) -> Option<&'static str> {
+    match self {
+      KeyType::HUT => None,
+      KeyType::Winput | KeyType::WinVk => Some("unsafe { crate::numeric::convert_from_code_unchecked({}) }"),
       _ => None,
     }
   }
@@ -339,6 +386,15 @@ impl KeyType {
       KeyType::Winput => Some("u8"),
       KeyType::WinVk => Some("u16"),
       _ => None,
+    }
+  }
+
+  pub fn can_const_check(self) -> bool {
+    match self {
+      KeyType::HUT => false,
+      KeyType::Winput => true,
+      KeyType::WinVk => true,
+      _ => false,
     }
   }
 
@@ -433,7 +489,7 @@ impl Gen {
     if content.trim().is_empty() {
       return String::new();
     }
-    format!("mod generated_{} {{\n  {}\n}}\n\n", format!("{:?}", from).to_lowercase(), content.trim())
+    format!("#[allow(unused_imports)]\nmod generated_{} {{\n  {}\n}}\n\n", format!("{:?}", from).to_lowercase(), content.trim())
   }
 
   pub fn build_imports2(self, filename: &str) -> String {
@@ -496,7 +552,7 @@ impl Gen {
       }
       Some((from.parse_content_unchecked(k), to.parse_code_unchecked(v)))
     }).collect::<Vec<_>>();
-    AsCodeImplTemplate::create(from.name(), to_type, to.as_code_expr(), from.as_value_prefix(), from.as_value_suffix())
+    AsCodeImplTemplate::create(from.name(), to_type, from.can_const_check(), to.as_from_code_expr(), to.as_to_code_expr(), from.as_value_prefix(), from.as_value_suffix())
       .build(map)
   }
 }
@@ -586,7 +642,7 @@ pub fn main() {
   save_file(format!("{output_path}/generated._index.rs"), index_mod).expect("failed to write index.rs");
 
   let mut index_mod = String::new();
-  for ty in [KeyType::Winput] {
+  for ty in [KeyType::HUT, KeyType::Winput, KeyType::WinVk] {
     let filename = format!("generated.{ty:?}.rs");
     let content = Gen(ty, ty).build_as_code(&csv);
     save_file(format!("{output_path2}/{filename}"), content)
