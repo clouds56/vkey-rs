@@ -302,7 +302,7 @@ impl KeyType {
       ],
       KeyType::KeySym => unimplemented!(),
       KeyType::CG => vec![
-        ConvertImportEntry::new("any(dep_macos, mirror_macos)", "#[cfg(dep_macos)]\nuse crate::deps::macos::KeyCode;\n#[cfg(not(dep_macos))]\n#[cfg(mirror_macos)]\nuse crate::mirror::macos::KeyCode;\nuse crate::mirror::macos_ext::{CGKeyCode, KeyCodeExt};\nuse crate::convert::Into_;"),
+        ConvertImportEntry::new("any(dep_macos, mirror_macos)", "#[cfg(dep_macos)]\nuse crate::deps::macos::KeyCode;\n#[cfg(not(dep_macos))]\n#[cfg(mirror_macos)]\nuse crate::mirror::macos::KeyCode;\nuse crate::mirror::macos_ext::{CGKeyCode, KeyCodeExt};"),
       ],
       _ => return vec![],
     }
@@ -355,6 +355,7 @@ impl KeyType {
   pub fn as_value_prefix(self) -> Option<&'static str> {
     match self {
       KeyType::WinVk => Some("keys::"),
+      KeyType::CG => Some("CGKeyCode( "),
       _ => None,
     }
   }
@@ -362,7 +363,7 @@ impl KeyType {
   pub fn as_value_suffix(self) -> Option<&'static str> {
     match self {
       KeyType::HUT => Some(".usage()"),
-      KeyType::CG => Some(".into_::<CGKeyCode>()"),
+      KeyType::CG => Some(" )"),
       _ => None
     }
   }
@@ -402,7 +403,8 @@ impl KeyType {
       KeyType::HUT => false,
       KeyType::Winput => true,
       KeyType::WinVk => true,
-      _ => false,
+      KeyType::CG => true,
+      _ => true,
     }
   }
 

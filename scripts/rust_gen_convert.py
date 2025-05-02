@@ -227,7 +227,7 @@ def fix_macos_impl_value(v: str):
   # if v.startswith("ANSI_"): return "KeyCode::" + v
   if v.startswith("return Err(())"): return None
   if v.startswith("ANSI_"): return "KeyCodeExt::kVK_ANSI_" + v.removeprefix("ANSI_").title().replace("_", "")
-  try: return f"CGKeyCode::from({int(v)})"
+  try: return f"CGKeyCode({int(v)}).0"
   except: pass
   return v
 key_map_enigo_cg = {k.replace("Key::", "Enigo::"): fix_macos_impl_value(v) for k,v in data if "Key::" in k and "(" not in k} | \

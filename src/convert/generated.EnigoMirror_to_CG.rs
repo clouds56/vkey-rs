@@ -3,169 +3,169 @@
 
 pub fn enigo_to_cgkeycode(value: Enigo) -> Option<CGKeyCode> {
   let result = match value {
-    Enigo::VolumeMute     => KeyCode::MUTE                      .into_::<CGKeyCode>(),
-    Enigo::VolumeDown     => KeyCode::VOLUME_DOWN               .into_::<CGKeyCode>(),
-    Enigo::VolumeUp       => KeyCode::VOLUME_UP                 .into_::<CGKeyCode>(),
+    Enigo::VolumeMute     => CGKeyCode( KeyCode::MUTE                       ),
+    Enigo::VolumeDown     => CGKeyCode( KeyCode::VOLUME_DOWN                ),
+    Enigo::VolumeUp       => CGKeyCode( KeyCode::VOLUME_UP                  ),
     #[cfg(for_windows)]
-    Enigo::Num0           => KeyCodeExt::kVK_ANSI_0             .into_::<CGKeyCode>(),
+    Enigo::Num0           => CGKeyCode( KeyCodeExt::kVK_ANSI_0              ),
     #[cfg(for_windows)]
-    Enigo::Num1           => KeyCodeExt::kVK_ANSI_1             .into_::<CGKeyCode>(),
+    Enigo::Num1           => CGKeyCode( KeyCodeExt::kVK_ANSI_1              ),
     #[cfg(for_windows)]
-    Enigo::Num2           => KeyCodeExt::kVK_ANSI_2             .into_::<CGKeyCode>(),
+    Enigo::Num2           => CGKeyCode( KeyCodeExt::kVK_ANSI_2              ),
     #[cfg(for_windows)]
-    Enigo::Num3           => KeyCodeExt::kVK_ANSI_3             .into_::<CGKeyCode>(),
+    Enigo::Num3           => CGKeyCode( KeyCodeExt::kVK_ANSI_3              ),
     #[cfg(for_windows)]
-    Enigo::Num4           => KeyCodeExt::kVK_ANSI_4             .into_::<CGKeyCode>(),
+    Enigo::Num4           => CGKeyCode( KeyCodeExt::kVK_ANSI_4              ),
     #[cfg(for_windows)]
-    Enigo::Num5           => KeyCodeExt::kVK_ANSI_5             .into_::<CGKeyCode>(),
+    Enigo::Num5           => CGKeyCode( KeyCodeExt::kVK_ANSI_5              ),
     #[cfg(for_windows)]
-    Enigo::Num6           => KeyCodeExt::kVK_ANSI_6             .into_::<CGKeyCode>(),
+    Enigo::Num6           => CGKeyCode( KeyCodeExt::kVK_ANSI_6              ),
     #[cfg(for_windows)]
-    Enigo::Num7           => KeyCodeExt::kVK_ANSI_7             .into_::<CGKeyCode>(),
+    Enigo::Num7           => CGKeyCode( KeyCodeExt::kVK_ANSI_7              ),
     #[cfg(for_windows)]
-    Enigo::Num8           => KeyCodeExt::kVK_ANSI_8             .into_::<CGKeyCode>(),
+    Enigo::Num8           => CGKeyCode( KeyCodeExt::kVK_ANSI_8              ),
     #[cfg(for_windows)]
-    Enigo::Num9           => KeyCodeExt::kVK_ANSI_9             .into_::<CGKeyCode>(),
+    Enigo::Num9           => CGKeyCode( KeyCodeExt::kVK_ANSI_9              ),
     #[cfg(for_windows)]
-    Enigo::A              => KeyCodeExt::kVK_ANSI_A             .into_::<CGKeyCode>(),
+    Enigo::A              => CGKeyCode( KeyCodeExt::kVK_ANSI_A              ),
     #[cfg(for_windows)]
-    Enigo::B              => KeyCodeExt::kVK_ANSI_B             .into_::<CGKeyCode>(),
+    Enigo::B              => CGKeyCode( KeyCodeExt::kVK_ANSI_B              ),
     #[cfg(for_windows)]
-    Enigo::C              => KeyCodeExt::kVK_ANSI_C             .into_::<CGKeyCode>(),
-    Enigo::CapsLock       => KeyCode::CAPS_LOCK                 .into_::<CGKeyCode>(),
+    Enigo::C              => CGKeyCode( KeyCodeExt::kVK_ANSI_C              ),
+    Enigo::CapsLock       => CGKeyCode( KeyCode::CAPS_LOCK                  ),
     #[cfg(for_windows)]
-    Enigo::D              => KeyCodeExt::kVK_ANSI_D             .into_::<CGKeyCode>(),
-    Enigo::Backspace      => KeyCode::DELETE                    .into_::<CGKeyCode>(),
-    Enigo::Delete         => KeyCode::FORWARD_DELETE            .into_::<CGKeyCode>(),
-    Enigo::DownArrow      => KeyCode::DOWN_ARROW                .into_::<CGKeyCode>(),
+    Enigo::D              => CGKeyCode( KeyCodeExt::kVK_ANSI_D              ),
+    Enigo::Backspace      => CGKeyCode( KeyCode::DELETE                     ),
+    Enigo::Delete         => CGKeyCode( KeyCode::FORWARD_DELETE             ),
+    Enigo::DownArrow      => CGKeyCode( KeyCode::DOWN_ARROW                 ),
     #[cfg(for_windows)]
-    Enigo::E              => KeyCodeExt::kVK_ANSI_E             .into_::<CGKeyCode>(),
-    Enigo::End            => KeyCode::END                       .into_::<CGKeyCode>(),
-    Enigo::Escape         => KeyCode::ESCAPE                    .into_::<CGKeyCode>(),
+    Enigo::E              => CGKeyCode( KeyCodeExt::kVK_ANSI_E              ),
+    Enigo::End            => CGKeyCode( KeyCode::END                        ),
+    Enigo::Escape         => CGKeyCode( KeyCode::ESCAPE                     ),
     #[cfg(for_windows)]
-    Enigo::F              => KeyCodeExt::kVK_ANSI_F             .into_::<CGKeyCode>(),
-    Enigo::F1             => KeyCode::F1                        .into_::<CGKeyCode>(),
-    Enigo::F10            => KeyCode::F10                       .into_::<CGKeyCode>(),
-    Enigo::F11            => KeyCode::F11                       .into_::<CGKeyCode>(),
-    Enigo::F12            => KeyCode::F12                       .into_::<CGKeyCode>(),
-    Enigo::F13            => KeyCode::F13                       .into_::<CGKeyCode>(),
-    Enigo::F14            => KeyCode::F14                       .into_::<CGKeyCode>(),
-    Enigo::F15            => KeyCode::F15                       .into_::<CGKeyCode>(),
-    Enigo::F16            => KeyCode::F16                       .into_::<CGKeyCode>(),
-    Enigo::F17            => KeyCode::F17                       .into_::<CGKeyCode>(),
-    Enigo::F18            => KeyCode::F18                       .into_::<CGKeyCode>(),
-    Enigo::F19            => KeyCode::F19                       .into_::<CGKeyCode>(),
-    Enigo::F2             => KeyCode::F2                        .into_::<CGKeyCode>(),
-    Enigo::F20            => KeyCode::F20                       .into_::<CGKeyCode>(),
-    Enigo::F3             => KeyCode::F3                        .into_::<CGKeyCode>(),
-    Enigo::F4             => KeyCode::F4                        .into_::<CGKeyCode>(),
-    Enigo::F5             => KeyCode::F5                        .into_::<CGKeyCode>(),
-    Enigo::F6             => KeyCode::F6                        .into_::<CGKeyCode>(),
-    Enigo::F7             => KeyCode::F7                        .into_::<CGKeyCode>(),
-    Enigo::F8             => KeyCode::F8                        .into_::<CGKeyCode>(),
-    Enigo::F9             => KeyCode::F9                        .into_::<CGKeyCode>(),
+    Enigo::F              => CGKeyCode( KeyCodeExt::kVK_ANSI_F              ),
+    Enigo::F1             => CGKeyCode( KeyCode::F1                         ),
+    Enigo::F10            => CGKeyCode( KeyCode::F10                        ),
+    Enigo::F11            => CGKeyCode( KeyCode::F11                        ),
+    Enigo::F12            => CGKeyCode( KeyCode::F12                        ),
+    Enigo::F13            => CGKeyCode( KeyCode::F13                        ),
+    Enigo::F14            => CGKeyCode( KeyCode::F14                        ),
+    Enigo::F15            => CGKeyCode( KeyCode::F15                        ),
+    Enigo::F16            => CGKeyCode( KeyCode::F16                        ),
+    Enigo::F17            => CGKeyCode( KeyCode::F17                        ),
+    Enigo::F18            => CGKeyCode( KeyCode::F18                        ),
+    Enigo::F19            => CGKeyCode( KeyCode::F19                        ),
+    Enigo::F2             => CGKeyCode( KeyCode::F2                         ),
+    Enigo::F20            => CGKeyCode( KeyCode::F20                        ),
+    Enigo::F3             => CGKeyCode( KeyCode::F3                         ),
+    Enigo::F4             => CGKeyCode( KeyCode::F4                         ),
+    Enigo::F5             => CGKeyCode( KeyCode::F5                         ),
+    Enigo::F6             => CGKeyCode( KeyCode::F6                         ),
+    Enigo::F7             => CGKeyCode( KeyCode::F7                         ),
+    Enigo::F8             => CGKeyCode( KeyCode::F8                         ),
+    Enigo::F9             => CGKeyCode( KeyCode::F9                         ),
     #[cfg(for_windows)]
-    Enigo::G              => KeyCodeExt::kVK_ANSI_G             .into_::<CGKeyCode>(),
+    Enigo::G              => CGKeyCode( KeyCodeExt::kVK_ANSI_G              ),
     #[cfg(for_windows)]
-    Enigo::H              => KeyCodeExt::kVK_ANSI_H             .into_::<CGKeyCode>(),
-    Enigo::Help           => KeyCode::HELP                      .into_::<CGKeyCode>(),
-    Enigo::Home           => KeyCode::HOME                      .into_::<CGKeyCode>(),
+    Enigo::H              => CGKeyCode( KeyCodeExt::kVK_ANSI_H              ),
+    Enigo::Help           => CGKeyCode( KeyCode::HELP                       ),
+    Enigo::Home           => CGKeyCode( KeyCode::HOME                       ),
     #[cfg(for_windows)]
-    Enigo::I              => KeyCodeExt::kVK_ANSI_I             .into_::<CGKeyCode>(),
+    Enigo::I              => CGKeyCode( KeyCodeExt::kVK_ANSI_I              ),
     #[cfg(for_windows)]
-    Enigo::J              => KeyCodeExt::kVK_ANSI_J             .into_::<CGKeyCode>(),
+    Enigo::J              => CGKeyCode( KeyCodeExt::kVK_ANSI_J              ),
     #[cfg(for_windows)]
-    Enigo::K              => KeyCodeExt::kVK_ANSI_K             .into_::<CGKeyCode>(),
+    Enigo::K              => CGKeyCode( KeyCodeExt::kVK_ANSI_K              ),
     #[cfg(for_windows)]
-    Enigo::L              => KeyCodeExt::kVK_ANSI_L             .into_::<CGKeyCode>(),
-    Enigo::Alt            => KeyCode::OPTION                    .into_::<CGKeyCode>(),
-    Enigo::Option         => KeyCode::OPTION                    .into_::<CGKeyCode>(),
-    Enigo::LeftArrow      => KeyCode::LEFT_ARROW                .into_::<CGKeyCode>(),
-    Enigo::Control        => KeyCode::CONTROL                   .into_::<CGKeyCode>(),
-    Enigo::LControl       => KeyCode::CONTROL                   .into_::<CGKeyCode>(),
-    Enigo::Command        => KeyCode::COMMAND                   .into_::<CGKeyCode>(),
-    Enigo::Meta           => KeyCode::COMMAND                   .into_::<CGKeyCode>(),
-    Enigo::Super          => KeyCode::COMMAND                   .into_::<CGKeyCode>(),
-    Enigo::Windows        => KeyCode::COMMAND                   .into_::<CGKeyCode>(),
-    Enigo::LShift         => KeyCode::SHIFT                     .into_::<CGKeyCode>(),
-    Enigo::Shift          => KeyCode::SHIFT                     .into_::<CGKeyCode>(),
+    Enigo::L              => CGKeyCode( KeyCodeExt::kVK_ANSI_L              ),
+    Enigo::Alt            => CGKeyCode( KeyCode::OPTION                     ),
+    Enigo::Option         => CGKeyCode( KeyCode::OPTION                     ),
+    Enigo::LeftArrow      => CGKeyCode( KeyCode::LEFT_ARROW                 ),
+    Enigo::Control        => CGKeyCode( KeyCode::CONTROL                    ),
+    Enigo::LControl       => CGKeyCode( KeyCode::CONTROL                    ),
+    Enigo::Command        => CGKeyCode( KeyCode::COMMAND                    ),
+    Enigo::Meta           => CGKeyCode( KeyCode::COMMAND                    ),
+    Enigo::Super          => CGKeyCode( KeyCode::COMMAND                    ),
+    Enigo::Windows        => CGKeyCode( KeyCode::COMMAND                    ),
+    Enigo::LShift         => CGKeyCode( KeyCode::SHIFT                      ),
+    Enigo::Shift          => CGKeyCode( KeyCode::SHIFT                      ),
     #[cfg(for_windows)]
-    Enigo::M              => KeyCodeExt::kVK_ANSI_M             .into_::<CGKeyCode>(),
+    Enigo::M              => CGKeyCode( KeyCodeExt::kVK_ANSI_M              ),
     #[cfg(for_windows)]
-    Enigo::N              => KeyCodeExt::kVK_ANSI_N             .into_::<CGKeyCode>(),
+    Enigo::N              => CGKeyCode( KeyCodeExt::kVK_ANSI_N              ),
     #[cfg(for_windows)]
-    Enigo::O              => KeyCodeExt::kVK_ANSI_O             .into_::<CGKeyCode>(),
+    Enigo::O              => CGKeyCode( KeyCodeExt::kVK_ANSI_O              ),
     #[cfg(for_windows)]
-    Enigo::P              => KeyCodeExt::kVK_ANSI_P             .into_::<CGKeyCode>(),
-    Enigo::PageDown       => KeyCode::PAGE_DOWN                 .into_::<CGKeyCode>(),
-    Enigo::PageUp         => KeyCode::PAGE_UP                   .into_::<CGKeyCode>(),
+    Enigo::P              => CGKeyCode( KeyCodeExt::kVK_ANSI_P              ),
+    Enigo::PageDown       => CGKeyCode( KeyCode::PAGE_DOWN                  ),
+    Enigo::PageUp         => CGKeyCode( KeyCode::PAGE_UP                    ),
     #[cfg(for_windows)]
-    Enigo::Q              => KeyCodeExt::kVK_ANSI_Q             .into_::<CGKeyCode>(),
+    Enigo::Q              => CGKeyCode( KeyCodeExt::kVK_ANSI_Q              ),
     #[cfg(for_windows)]
-    Enigo::R              => KeyCodeExt::kVK_ANSI_R             .into_::<CGKeyCode>(),
-    Enigo::Return         => KeyCode::RETURN                    .into_::<CGKeyCode>(),
-    Enigo::RightArrow     => KeyCode::RIGHT_ARROW               .into_::<CGKeyCode>(),
-    Enigo::RControl       => KeyCode::RIGHT_CONTROL             .into_::<CGKeyCode>(),
-    Enigo::RShift         => KeyCode::RIGHT_SHIFT               .into_::<CGKeyCode>(),
+    Enigo::R              => CGKeyCode( KeyCodeExt::kVK_ANSI_R              ),
+    Enigo::Return         => CGKeyCode( KeyCode::RETURN                     ),
+    Enigo::RightArrow     => CGKeyCode( KeyCode::RIGHT_ARROW                ),
+    Enigo::RControl       => CGKeyCode( KeyCode::RIGHT_CONTROL              ),
+    Enigo::RShift         => CGKeyCode( KeyCode::RIGHT_SHIFT                ),
     #[cfg(for_windows)]
-    Enigo::S              => KeyCodeExt::kVK_ANSI_S             .into_::<CGKeyCode>(),
-    Enigo::Space          => KeyCode::SPACE                     .into_::<CGKeyCode>(),
+    Enigo::S              => CGKeyCode( KeyCodeExt::kVK_ANSI_S              ),
+    Enigo::Space          => CGKeyCode( KeyCode::SPACE                      ),
     #[cfg(for_windows)]
-    Enigo::T              => KeyCodeExt::kVK_ANSI_T             .into_::<CGKeyCode>(),
-    Enigo::Tab            => KeyCode::TAB                       .into_::<CGKeyCode>(),
+    Enigo::T              => CGKeyCode( KeyCodeExt::kVK_ANSI_T              ),
+    Enigo::Tab            => CGKeyCode( KeyCode::TAB                        ),
     #[cfg(for_windows)]
-    Enigo::U              => KeyCodeExt::kVK_ANSI_U             .into_::<CGKeyCode>(),
-    Enigo::UpArrow        => KeyCode::UP_ARROW                  .into_::<CGKeyCode>(),
+    Enigo::U              => CGKeyCode( KeyCodeExt::kVK_ANSI_U              ),
+    Enigo::UpArrow        => CGKeyCode( KeyCode::UP_ARROW                   ),
     #[cfg(for_windows)]
-    Enigo::V              => KeyCodeExt::kVK_ANSI_V             .into_::<CGKeyCode>(),
+    Enigo::V              => CGKeyCode( KeyCodeExt::kVK_ANSI_V              ),
     #[cfg(for_windows)]
-    Enigo::W              => KeyCodeExt::kVK_ANSI_W             .into_::<CGKeyCode>(),
+    Enigo::W              => CGKeyCode( KeyCodeExt::kVK_ANSI_W              ),
     #[cfg(for_windows)]
-    Enigo::X              => KeyCodeExt::kVK_ANSI_X             .into_::<CGKeyCode>(),
+    Enigo::X              => CGKeyCode( KeyCodeExt::kVK_ANSI_X              ),
     #[cfg(for_windows)]
-    Enigo::Y              => KeyCodeExt::kVK_ANSI_Y             .into_::<CGKeyCode>(),
+    Enigo::Y              => CGKeyCode( KeyCodeExt::kVK_ANSI_Y              ),
     #[cfg(for_windows)]
-    Enigo::Z              => KeyCodeExt::kVK_ANSI_Z             .into_::<CGKeyCode>(),
+    Enigo::Z              => CGKeyCode( KeyCodeExt::kVK_ANSI_Z              ),
     #[cfg(for_windows)]
-    Enigo::Numpad0        => KeyCodeExt::kVK_ANSI_Keypad0       .into_::<CGKeyCode>(),
+    Enigo::Numpad0        => CGKeyCode( KeyCodeExt::kVK_ANSI_Keypad0        ),
     #[cfg(for_windows)]
-    Enigo::Numpad1        => KeyCodeExt::kVK_ANSI_Keypad1       .into_::<CGKeyCode>(),
+    Enigo::Numpad1        => CGKeyCode( KeyCodeExt::kVK_ANSI_Keypad1        ),
     #[cfg(for_windows)]
-    Enigo::Numpad2        => KeyCodeExt::kVK_ANSI_Keypad2       .into_::<CGKeyCode>(),
+    Enigo::Numpad2        => CGKeyCode( KeyCodeExt::kVK_ANSI_Keypad2        ),
     #[cfg(for_windows)]
-    Enigo::Numpad3        => KeyCodeExt::kVK_ANSI_Keypad3       .into_::<CGKeyCode>(),
+    Enigo::Numpad3        => CGKeyCode( KeyCodeExt::kVK_ANSI_Keypad3        ),
     #[cfg(for_windows)]
-    Enigo::Numpad4        => KeyCodeExt::kVK_ANSI_Keypad4       .into_::<CGKeyCode>(),
+    Enigo::Numpad4        => CGKeyCode( KeyCodeExt::kVK_ANSI_Keypad4        ),
     #[cfg(for_windows)]
-    Enigo::Numpad5        => KeyCodeExt::kVK_ANSI_Keypad5       .into_::<CGKeyCode>(),
+    Enigo::Numpad5        => CGKeyCode( KeyCodeExt::kVK_ANSI_Keypad5        ),
     #[cfg(for_windows)]
-    Enigo::Numpad6        => KeyCodeExt::kVK_ANSI_Keypad6       .into_::<CGKeyCode>(),
+    Enigo::Numpad6        => CGKeyCode( KeyCodeExt::kVK_ANSI_Keypad6        ),
     #[cfg(for_windows)]
-    Enigo::Numpad7        => KeyCodeExt::kVK_ANSI_Keypad7       .into_::<CGKeyCode>(),
+    Enigo::Numpad7        => CGKeyCode( KeyCodeExt::kVK_ANSI_Keypad7        ),
     #[cfg(for_windows)]
-    Enigo::Numpad8        => KeyCodeExt::kVK_ANSI_Keypad8       .into_::<CGKeyCode>(),
+    Enigo::Numpad8        => CGKeyCode( KeyCodeExt::kVK_ANSI_Keypad8        ),
     #[cfg(for_windows)]
-    Enigo::Numpad9        => KeyCodeExt::kVK_ANSI_Keypad9       .into_::<CGKeyCode>(),
+    Enigo::Numpad9        => CGKeyCode( KeyCodeExt::kVK_ANSI_Keypad9        ),
     #[cfg(for_windows)]
-    Enigo::Subtract       => KeyCodeExt::kVK_ANSI_KeypadMinus   .into_::<CGKeyCode>(),
+    Enigo::Subtract       => CGKeyCode( KeyCodeExt::kVK_ANSI_KeypadMinus    ),
     #[cfg(for_windows)]
-    Enigo::Divide         => KeyCodeExt::kVK_ANSI_KeypadDivide  .into_::<CGKeyCode>(),
+    Enigo::Divide         => CGKeyCode( KeyCodeExt::kVK_ANSI_KeypadDivide   ),
     #[cfg(for_windows)]
-    Enigo::Decimal        => KeyCodeExt::kVK_ANSI_KeypadDecimal .into_::<CGKeyCode>(),
+    Enigo::Decimal        => CGKeyCode( KeyCodeExt::kVK_ANSI_KeypadDecimal  ),
     #[cfg(for_windows)]
-    Enigo::Add            => KeyCodeExt::kVK_ANSI_KeypadPlus    .into_::<CGKeyCode>(),
+    Enigo::Add            => CGKeyCode( KeyCodeExt::kVK_ANSI_KeypadPlus     ),
     #[cfg(for_windows)]
-    Enigo::Multiply       => KeyCodeExt::kVK_ANSI_KeypadMultiply.into_::<CGKeyCode>(),
+    Enigo::Multiply       => CGKeyCode( KeyCodeExt::kVK_ANSI_KeypadMultiply ),
     #[cfg(for_macos)]
-    Enigo::Function       => KeyCode::FUNCTION                  .into_::<CGKeyCode>(),
+    Enigo::Function       => CGKeyCode( KeyCode::FUNCTION                   ),
     #[cfg(for_macos)]
-    Enigo::Launchpad      => CGKeyCode::from(131)               .into_::<CGKeyCode>(),
+    Enigo::Launchpad      => CGKeyCode( CGKeyCode(131).0                    ),
     #[cfg(for_macos)]
-    Enigo::MissionControl => CGKeyCode::from(160)               .into_::<CGKeyCode>(),
+    Enigo::MissionControl => CGKeyCode( CGKeyCode(160).0                    ),
     #[cfg(for_macos)]
-    Enigo::RCommand       => KeyCode::RIGHT_COMMAND             .into_::<CGKeyCode>(),
+    Enigo::RCommand       => CGKeyCode( KeyCode::RIGHT_COMMAND              ),
     #[cfg(for_macos)]
-    Enigo::ROption        => KeyCode::RIGHT_OPTION              .into_::<CGKeyCode>(),
+    Enigo::ROption        => CGKeyCode( KeyCode::RIGHT_OPTION               ),
     _ => return None,
   };
   Some(result)

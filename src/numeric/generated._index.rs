@@ -46,7 +46,6 @@ mod generated_cg {
     #[cfg(mirror_macos)]
     use crate::mirror::macos::KeyCode;
     use crate::mirror::macos_ext::{CGKeyCode, KeyCodeExt};
-    use crate::convert::Into_;
     include!("generated.CG.rs");
   }
 }

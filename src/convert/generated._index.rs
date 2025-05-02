@@ -90,7 +90,6 @@ mod generated_enigomirror_to_cg {
     #[cfg(mirror_macos)]
     use crate::mirror::macos::KeyCode;
     use crate::mirror::macos_ext::{CGKeyCode, KeyCodeExt};
-    use crate::convert::Into_;
     include!("generated.EnigoMirror_to_CG.rs");
   }
 }
@@ -105,7 +104,6 @@ mod generated_enigodep_to_cg {
     #[cfg(mirror_macos)]
     use crate::mirror::macos::KeyCode;
     use crate::mirror::macos_ext::{CGKeyCode, KeyCodeExt};
-    use crate::convert::Into_;
     include!("generated.EnigoDep_to_CG.rs");
   }
 }
@@ -120,7 +118,6 @@ mod generated_winput_to_cg {
     #[cfg(mirror_macos)]
     use crate::mirror::macos::KeyCode;
     use crate::mirror::macos_ext::{CGKeyCode, KeyCodeExt};
-    use crate::convert::Into_;
     include!("generated.Winput_to_CG.rs");
   }
 }
