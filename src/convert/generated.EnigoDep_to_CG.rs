@@ -78,11 +78,15 @@ pub fn enigo_to_cgkeycode(value: Enigo) -> Option<CGKeyCode> {
     Enigo::K              => CGKeyCode( KeyCodeExt::kVK_ANSI_K              ),
     #[cfg(target_os = "windows")]
     Enigo::L              => CGKeyCode( KeyCodeExt::kVK_ANSI_L              ),
+    #[cfg(any(target_os = "windows", target_os = "linux"))]
+    Enigo::LMenu          => CGKeyCode( KeyCode::OPTION                     ),
     Enigo::Alt            => CGKeyCode( KeyCode::OPTION                     ),
     Enigo::Option         => CGKeyCode( KeyCode::OPTION                     ),
     Enigo::LeftArrow      => CGKeyCode( KeyCode::LEFT_ARROW                 ),
     Enigo::Control        => CGKeyCode( KeyCode::CONTROL                    ),
     Enigo::LControl       => CGKeyCode( KeyCode::CONTROL                    ),
+    #[cfg(target_os = "windows")]
+    Enigo::LWin           => CGKeyCode( KeyCode::COMMAND                    ),
     Enigo::Command        => CGKeyCode( KeyCode::COMMAND                    ),
     Enigo::Meta           => CGKeyCode( KeyCode::COMMAND                    ),
     Enigo::Super          => CGKeyCode( KeyCode::COMMAND                    ),
@@ -104,8 +108,16 @@ pub fn enigo_to_cgkeycode(value: Enigo) -> Option<CGKeyCode> {
     #[cfg(target_os = "windows")]
     Enigo::R              => CGKeyCode( KeyCodeExt::kVK_ANSI_R              ),
     Enigo::Return         => CGKeyCode( KeyCode::RETURN                     ),
+    #[cfg(target_os = "windows")]
+    Enigo::RMenu          => CGKeyCode( KeyCode::RIGHT_OPTION               ),
+    #[cfg(target_os = "macos")]
+    Enigo::ROption        => CGKeyCode( KeyCode::RIGHT_OPTION               ),
     Enigo::RightArrow     => CGKeyCode( KeyCode::RIGHT_ARROW                ),
     Enigo::RControl       => CGKeyCode( KeyCode::RIGHT_CONTROL              ),
+    #[cfg(target_os = "windows")]
+    Enigo::RWin           => CGKeyCode( KeyCode::RIGHT_COMMAND              ),
+    #[cfg(target_os = "macos")]
+    Enigo::RCommand       => CGKeyCode( KeyCode::RIGHT_COMMAND              ),
     Enigo::RShift         => CGKeyCode( KeyCode::RIGHT_SHIFT                ),
     #[cfg(target_os = "windows")]
     Enigo::S              => CGKeyCode( KeyCodeExt::kVK_ANSI_S              ),
@@ -162,10 +174,6 @@ pub fn enigo_to_cgkeycode(value: Enigo) -> Option<CGKeyCode> {
     Enigo::Launchpad      => CGKeyCode( CGKeyCode(131).0                    ),
     #[cfg(target_os = "macos")]
     Enigo::MissionControl => CGKeyCode( CGKeyCode(160).0                    ),
-    #[cfg(target_os = "macos")]
-    Enigo::RCommand       => CGKeyCode( KeyCode::RIGHT_COMMAND              ),
-    #[cfg(target_os = "macos")]
-    Enigo::ROption        => CGKeyCode( KeyCode::RIGHT_OPTION               ),
     _ => return None,
   };
   Some(result)

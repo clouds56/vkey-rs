@@ -260,7 +260,6 @@ def build_code(df: pl.DataFrame, col: str, format: str, value_prefix: str = "", 
   max_len = df[col].str.len_chars().max() + 1 if max_len is None else max_len
   for i in df[col]:
     i: str | None = i
-    print(i)
     if i:
       line = f'writeln!(w, "{{:{max_len}}}, {format},", "{i}", {value_prefix}{i.strip('*')}{value_suffix})?;'
     if i and not i.endswith('*'):

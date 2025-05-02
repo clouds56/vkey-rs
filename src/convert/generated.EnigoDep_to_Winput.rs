@@ -189,12 +189,16 @@ pub fn enigo_to_vk(value: Enigo) -> Option<Vk> {
     Enigo::Return            => Vk::Enter           ,
     #[cfg(target_os = "windows")]
     Enigo::RMenu             => Vk::RightMenu       ,
+    #[cfg(target_os = "macos")]
+    Enigo::ROption           => Vk::RightMenu       ,
     Enigo::RightArrow        => Vk::RightArrow      ,
     #[cfg(target_os = "windows")]
     Enigo::OEM6              => Vk::Oem6            ,
     Enigo::RControl          => Vk::RightControl    ,
     #[cfg(target_os = "windows")]
     Enigo::RWin              => Vk::RightWin        ,
+    #[cfg(target_os = "macos")]
+    Enigo::RCommand          => Vk::RightWin        ,
     Enigo::RShift            => Vk::RightShift      ,
     #[cfg(target_os = "windows")]
     Enigo::S                 => Vk::S               ,

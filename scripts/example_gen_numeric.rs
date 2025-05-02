@@ -115,7 +115,7 @@ fn print_hut_04(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()>{
           writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardLeftAposandDouble", KeyboardKeypad::KeyboardLeftAposandDouble.usage_value())?;
           writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardLeftArrow", KeyboardKeypad::KeyboardLeftArrow.usage_value())?;
           writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardLeftBrace", KeyboardKeypad::KeyboardLeftBrace.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardLeftControl", KeyboardKeypad::KeyboardLeftControl.usage_value())?;
+  if any {writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardLeftControl*", KeyboardKeypad::KeyboardLeftControl.usage_value())?;}
           writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardLeftControl", KeyboardKeypad::KeyboardLeftControl.usage_value())?;
           writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardLeftGUI", KeyboardKeypad::KeyboardLeftGUI.usage_value())?;
   if any {writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardLeftGUI*", KeyboardKeypad::KeyboardLeftGUI.usage_value())?;}
@@ -139,10 +139,12 @@ fn print_hut_04(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()>{
           writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardR", KeyboardKeypad::KeyboardR.usage_value())?;
           writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardReturnEnter", KeyboardKeypad::KeyboardReturnEnter.usage_value())?;
           writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardRightAlt", KeyboardKeypad::KeyboardRightAlt.usage_value())?;
+  if any {writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardRightAlt*", KeyboardKeypad::KeyboardRightAlt.usage_value())?;}
           writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardRightArrow", KeyboardKeypad::KeyboardRightArrow.usage_value())?;
           writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardRightBrace", KeyboardKeypad::KeyboardRightBrace.usage_value())?;
           writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardRightControl", KeyboardKeypad::KeyboardRightControl.usage_value())?;
           writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardRightGUI", KeyboardKeypad::KeyboardRightGUI.usage_value())?;
+  if any {writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardRightGUI*", KeyboardKeypad::KeyboardRightGUI.usage_value())?;}
           writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardRightShift", KeyboardKeypad::KeyboardRightShift.usage_value())?;
           writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardS", KeyboardKeypad::KeyboardS.usage_value())?;
           writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardScrollLock", KeyboardKeypad::KeyboardScrollLock.usage_value())?;
@@ -175,8 +177,6 @@ fn print_hut_04(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()>{
           writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeypadPeriodandDelete", KeyboardKeypad::KeypadPeriodandDelete.usage_value())?;
           writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeypadPlus", KeyboardKeypad::KeypadPlus.usage_value())?;
           writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeypadStar", KeyboardKeypad::KeypadStar.usage_value())?;
-  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
-  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
   if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
   if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
   if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
@@ -410,17 +410,17 @@ fn print_windows(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()>{
           writeln!(w, "{:35}, 0x{:02X},", "VK_L", keys::VK_L.0)?;
           writeln!(w, "{:35}, 0x{:02X},", "VK_LMENU", keys::VK_LMENU.0)?;
           writeln!(w, "{:35}, 0x{:02X},", "VK_MENU", keys::VK_MENU.0)?;
-          writeln!(w, "{:35}, 0x{:02X},", "VK_MENU", keys::VK_MENU.0)?;
+  if any {writeln!(w, "{:35}, 0x{:02X},", "VK_MENU*", keys::VK_MENU.0)?;}
           writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_7", keys::VK_OEM_7.0)?;
           writeln!(w, "{:35}, 0x{:02X},", "VK_LEFT", keys::VK_LEFT.0)?;
           writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_4", keys::VK_OEM_4.0)?;
           writeln!(w, "{:35}, 0x{:02X},", "VK_CONTROL", keys::VK_CONTROL.0)?;
           writeln!(w, "{:35}, 0x{:02X},", "VK_LCONTROL", keys::VK_LCONTROL.0)?;
           writeln!(w, "{:35}, 0x{:02X},", "VK_LWIN", keys::VK_LWIN.0)?;
-          writeln!(w, "{:35}, 0x{:02X},", "VK_LWIN", keys::VK_LWIN.0)?;
-          writeln!(w, "{:35}, 0x{:02X},", "VK_LWIN", keys::VK_LWIN.0)?;
-          writeln!(w, "{:35}, 0x{:02X},", "VK_LWIN", keys::VK_LWIN.0)?;
-          writeln!(w, "{:35}, 0x{:02X},", "VK_LWIN", keys::VK_LWIN.0)?;
+  if any {writeln!(w, "{:35}, 0x{:02X},", "VK_LWIN*", keys::VK_LWIN.0)?;}
+  if any {writeln!(w, "{:35}, 0x{:02X},", "VK_LWIN*", keys::VK_LWIN.0)?;}
+  if any {writeln!(w, "{:35}, 0x{:02X},", "VK_LWIN*", keys::VK_LWIN.0)?;}
+  if any {writeln!(w, "{:35}, 0x{:02X},", "VK_LWIN*", keys::VK_LWIN.0)?;}
           writeln!(w, "{:35}, 0x{:02X},", "VK_LSHIFT", keys::VK_LSHIFT.0)?;
           writeln!(w, "{:35}, 0x{:02X},", "VK_SHIFT", keys::VK_SHIFT.0)?;
           writeln!(w, "{:35}, 0x{:02X},", "VK_M", keys::VK_M.0)?;
@@ -438,10 +438,12 @@ fn print_windows(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()>{
           writeln!(w, "{:35}, 0x{:02X},", "VK_R", keys::VK_R.0)?;
           writeln!(w, "{:35}, 0x{:02X},", "VK_RETURN", keys::VK_RETURN.0)?;
           writeln!(w, "{:35}, 0x{:02X},", "VK_RMENU", keys::VK_RMENU.0)?;
+  if any {writeln!(w, "{:35}, 0x{:02X},", "VK_RMENU*", keys::VK_RMENU.0)?;}
           writeln!(w, "{:35}, 0x{:02X},", "VK_RIGHT", keys::VK_RIGHT.0)?;
           writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_6", keys::VK_OEM_6.0)?;
           writeln!(w, "{:35}, 0x{:02X},", "VK_RCONTROL", keys::VK_RCONTROL.0)?;
           writeln!(w, "{:35}, 0x{:02X},", "VK_RWIN", keys::VK_RWIN.0)?;
+  if any {writeln!(w, "{:35}, 0x{:02X},", "VK_RWIN*", keys::VK_RWIN.0)?;}
           writeln!(w, "{:35}, 0x{:02X},", "VK_RSHIFT", keys::VK_RSHIFT.0)?;
           writeln!(w, "{:35}, 0x{:02X},", "VK_S", keys::VK_S.0)?;
           writeln!(w, "{:35}, 0x{:02X},", "VK_SCROLL", keys::VK_SCROLL.0)?;
@@ -486,8 +488,6 @@ fn print_windows(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()>{
   if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
   if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
           writeln!(w, "{:35}, 0x{:02X},", "VK__none_", keys::VK__none_.0)?;
-  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
-  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
   if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
   if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
   if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
@@ -707,20 +707,20 @@ fn print_macos(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()>{
           writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_J", CGKeyCode::from(KeyCodeExt::kVK_ANSI_J).0)?;
           writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_K", CGKeyCode::from(KeyCodeExt::kVK_ANSI_K).0)?;
           writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_L", CGKeyCode::from(KeyCodeExt::kVK_ANSI_L).0)?;
-  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
-          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::OPTION", CGKeyCode::from(KeyCode::OPTION).0)?;
+  if any {writeln!(w, "{:36}, 0x{:02X},", "KeyCode::OPTION*", CGKeyCode::from(KeyCode::OPTION).0)?;}
+  if any {writeln!(w, "{:36}, 0x{:02X},", "KeyCode::OPTION*", CGKeyCode::from(KeyCode::OPTION).0)?;}
           writeln!(w, "{:36}, 0x{:02X},", "KeyCode::OPTION", CGKeyCode::from(KeyCode::OPTION).0)?;
   if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
           writeln!(w, "{:36}, 0x{:02X},", "KeyCode::LEFT_ARROW", CGKeyCode::from(KeyCode::LEFT_ARROW).0)?;
   if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
           writeln!(w, "{:36}, 0x{:02X},", "KeyCode::CONTROL", CGKeyCode::from(KeyCode::CONTROL).0)?;
           writeln!(w, "{:36}, 0x{:02X},", "KeyCode::CONTROL", CGKeyCode::from(KeyCode::CONTROL).0)?;
-  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any {writeln!(w, "{:36}, 0x{:02X},", "KeyCode::COMMAND*", CGKeyCode::from(KeyCode::COMMAND).0)?;}
+  if any {writeln!(w, "{:36}, 0x{:02X},", "KeyCode::COMMAND*", CGKeyCode::from(KeyCode::COMMAND).0)?;}
           writeln!(w, "{:36}, 0x{:02X},", "KeyCode::COMMAND", CGKeyCode::from(KeyCode::COMMAND).0)?;
-          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::COMMAND", CGKeyCode::from(KeyCode::COMMAND).0)?;
-          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::COMMAND", CGKeyCode::from(KeyCode::COMMAND).0)?;
-          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::COMMAND", CGKeyCode::from(KeyCode::COMMAND).0)?;
-          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::SHIFT", CGKeyCode::from(KeyCode::SHIFT).0)?;
+  if any {writeln!(w, "{:36}, 0x{:02X},", "KeyCode::COMMAND*", CGKeyCode::from(KeyCode::COMMAND).0)?;}
+  if any {writeln!(w, "{:36}, 0x{:02X},", "KeyCode::COMMAND*", CGKeyCode::from(KeyCode::COMMAND).0)?;}
+  if any {writeln!(w, "{:36}, 0x{:02X},", "KeyCode::SHIFT*", CGKeyCode::from(KeyCode::SHIFT).0)?;}
           writeln!(w, "{:36}, 0x{:02X},", "KeyCode::SHIFT", CGKeyCode::from(KeyCode::SHIFT).0)?;
           writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_M", CGKeyCode::from(KeyCodeExt::kVK_ANSI_M).0)?;
           writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_N", CGKeyCode::from(KeyCodeExt::kVK_ANSI_N).0)?;
@@ -736,11 +736,13 @@ fn print_macos(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()>{
           writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_Q", CGKeyCode::from(KeyCodeExt::kVK_ANSI_Q).0)?;
           writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_R", CGKeyCode::from(KeyCodeExt::kVK_ANSI_R).0)?;
           writeln!(w, "{:36}, 0x{:02X},", "KeyCode::RETURN", CGKeyCode::from(KeyCode::RETURN).0)?;
-  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any {writeln!(w, "{:36}, 0x{:02X},", "KeyCode::RIGHT_OPTION*", CGKeyCode::from(KeyCode::RIGHT_OPTION).0)?;}
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::RIGHT_OPTION", CGKeyCode::from(KeyCode::RIGHT_OPTION).0)?;
           writeln!(w, "{:36}, 0x{:02X},", "KeyCode::RIGHT_ARROW", CGKeyCode::from(KeyCode::RIGHT_ARROW).0)?;
   if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
           writeln!(w, "{:36}, 0x{:02X},", "KeyCode::RIGHT_CONTROL", CGKeyCode::from(KeyCode::RIGHT_CONTROL).0)?;
-  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any {writeln!(w, "{:36}, 0x{:02X},", "KeyCode::RIGHT_COMMAND*", CGKeyCode::from(KeyCode::RIGHT_COMMAND).0)?;}
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::RIGHT_COMMAND", CGKeyCode::from(KeyCode::RIGHT_COMMAND).0)?;
           writeln!(w, "{:36}, 0x{:02X},", "KeyCode::RIGHT_SHIFT", CGKeyCode::from(KeyCode::RIGHT_SHIFT).0)?;
           writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_S", CGKeyCode::from(KeyCodeExt::kVK_ANSI_S).0)?;
   if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
@@ -797,17 +799,15 @@ fn print_macos(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()>{
   if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
   if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
   if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
-          writeln!(w, "{:36}, 0x{:02X},", "CGKeyCode::from(131)", CGKeyCode::from(CGKeyCode::from(131)).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "CGKeyCode(131).0", CGKeyCode::from(CGKeyCode(131).0).0)?;
   if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
   if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
   if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
   if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
   if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
-          writeln!(w, "{:36}, 0x{:02X},", "CGKeyCode::from(160)", CGKeyCode::from(CGKeyCode::from(160)).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "CGKeyCode(160).0", CGKeyCode::from(CGKeyCode(160).0).0)?;
   if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
-          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::RIGHT_COMMAND", CGKeyCode::from(KeyCode::RIGHT_COMMAND).0)?;
   if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
-          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::RIGHT_OPTION", CGKeyCode::from(KeyCode::RIGHT_OPTION).0)?;
   if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
   if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
   if any { writeln!(w, "{:36}, {},", "None", "    ")?; }

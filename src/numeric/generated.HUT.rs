@@ -256,7 +256,6 @@ fn test_code() {
   assert!(AsUsage::usage_value((&{KeyboardKeypad::KeyboardLeftArrow                  .usage()})) == 0x70050);
   assert!(AsUsage::usage_value((&{KeyboardKeypad::KeyboardLeftBrace                  .usage()})) == 0x7002F);
   assert!(AsUsage::usage_value((&{KeyboardKeypad::KeyboardLeftControl                .usage()})) == 0x700E0);
-  assert!(AsUsage::usage_value((&{KeyboardKeypad::KeyboardLeftControl                .usage()})) == 0x700E0);
   assert!(AsUsage::usage_value((&{KeyboardKeypad::KeyboardLeftGUI                    .usage()})) == 0x700E3);
   assert!(AsUsage::usage_value((&{KeyboardKeypad::KeyboardLeftShift                  .usage()})) == 0x700E1);
   assert!(AsUsage::usage_value((&{KeyboardKeypad::KeyboardM                          .usage()})) == 0x70010);

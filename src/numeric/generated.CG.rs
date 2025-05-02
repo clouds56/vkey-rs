@@ -58,15 +58,10 @@ pub fn cgkeycode_to_u16(value: &CGKeyCode) -> u16 {
     assert!((&{CGKeyCode( KeyCodeExt::kVK_ANSI_K              )}).0 == 0x28);
     assert!((&{CGKeyCode( KeyCodeExt::kVK_ANSI_L              )}).0 == 0x25);
     assert!((&{CGKeyCode( KeyCode::OPTION                     )}).0 == 0x3A);
-    assert!((&{CGKeyCode( KeyCode::OPTION                     )}).0 == 0x3A);
     assert!((&{CGKeyCode( KeyCode::LEFT_ARROW                 )}).0 == 0x7B);
     assert!((&{CGKeyCode( KeyCode::CONTROL                    )}).0 == 0x3B);
     assert!((&{CGKeyCode( KeyCode::CONTROL                    )}).0 == 0x3B);
     assert!((&{CGKeyCode( KeyCode::COMMAND                    )}).0 == 0x37);
-    assert!((&{CGKeyCode( KeyCode::COMMAND                    )}).0 == 0x37);
-    assert!((&{CGKeyCode( KeyCode::COMMAND                    )}).0 == 0x37);
-    assert!((&{CGKeyCode( KeyCode::COMMAND                    )}).0 == 0x37);
-    assert!((&{CGKeyCode( KeyCode::SHIFT                      )}).0 == 0x38);
     assert!((&{CGKeyCode( KeyCode::SHIFT                      )}).0 == 0x38);
     assert!((&{CGKeyCode( KeyCodeExt::kVK_ANSI_M              )}).0 == 0x2E);
     assert!((&{CGKeyCode( KeyCodeExt::kVK_ANSI_N              )}).0 == 0x2D);
@@ -77,8 +72,10 @@ pub fn cgkeycode_to_u16(value: &CGKeyCode) -> u16 {
     assert!((&{CGKeyCode( KeyCodeExt::kVK_ANSI_Q              )}).0 == 0x0C);
     assert!((&{CGKeyCode( KeyCodeExt::kVK_ANSI_R              )}).0 == 0x0F);
     assert!((&{CGKeyCode( KeyCode::RETURN                     )}).0 == 0x24);
+    assert!((&{CGKeyCode( KeyCode::RIGHT_OPTION               )}).0 == 0x3D);
     assert!((&{CGKeyCode( KeyCode::RIGHT_ARROW                )}).0 == 0x7C);
     assert!((&{CGKeyCode( KeyCode::RIGHT_CONTROL              )}).0 == 0x3E);
+    assert!((&{CGKeyCode( KeyCode::RIGHT_COMMAND              )}).0 == 0x36);
     assert!((&{CGKeyCode( KeyCode::RIGHT_SHIFT                )}).0 == 0x3C);
     assert!((&{CGKeyCode( KeyCodeExt::kVK_ANSI_S              )}).0 == 0x01);
     assert!((&{CGKeyCode( KeyCode::SPACE                      )}).0 == 0x31);
@@ -109,8 +106,6 @@ pub fn cgkeycode_to_u16(value: &CGKeyCode) -> u16 {
     assert!((&{CGKeyCode( KeyCode::FUNCTION                   )}).0 == 0x3F);
     assert!((&{CGKeyCode( CGKeyCode(131).0                    )}).0 == 0x83);
     assert!((&{CGKeyCode( CGKeyCode(160).0                    )}).0 == 0xA0);
-    assert!((&{CGKeyCode( KeyCode::RIGHT_COMMAND              )}).0 == 0x36);
-    assert!((&{CGKeyCode( KeyCode::RIGHT_OPTION               )}).0 == 0x3D);
   }
   value.0
 }
@@ -190,8 +185,10 @@ impl crate::numeric::AsCode<CGKeyCode> for crate::numeric::Coder {
       0x0C => Some(CGKeyCode( KeyCodeExt::kVK_ANSI_Q              )),
       0x0F => Some(CGKeyCode( KeyCodeExt::kVK_ANSI_R              )),
       0x24 => Some(CGKeyCode( KeyCode::RETURN                     )),
+      0x3D => Some(CGKeyCode( KeyCode::RIGHT_OPTION               )),
       0x7C => Some(CGKeyCode( KeyCode::RIGHT_ARROW                )),
       0x3E => Some(CGKeyCode( KeyCode::RIGHT_CONTROL              )),
+      0x36 => Some(CGKeyCode( KeyCode::RIGHT_COMMAND              )),
       0x3C => Some(CGKeyCode( KeyCode::RIGHT_SHIFT                )),
       0x01 => Some(CGKeyCode( KeyCodeExt::kVK_ANSI_S              )),
       0x31 => Some(CGKeyCode( KeyCode::SPACE                      )),
@@ -222,8 +219,6 @@ impl crate::numeric::AsCode<CGKeyCode> for crate::numeric::Coder {
       0x3F => Some(CGKeyCode( KeyCode::FUNCTION                   )),
       0x83 => Some(CGKeyCode( CGKeyCode(131).0                    )),
       0xA0 => Some(CGKeyCode( CGKeyCode(160).0                    )),
-      0x36 => Some(CGKeyCode( KeyCode::RIGHT_COMMAND              )),
-      0x3D => Some(CGKeyCode( KeyCode::RIGHT_OPTION               )),
       _ => None,
     }
   }

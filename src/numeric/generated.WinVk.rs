@@ -93,16 +93,11 @@ pub fn vk_to_u16(value: &Vk) -> u16 {
     assert!((&{keys::VK_L                              }).0 == 0x4C);
     assert!((&{keys::VK_LMENU                          }).0 == 0xA4);
     assert!((&{keys::VK_MENU                           }).0 == 0x12);
-    assert!((&{keys::VK_MENU                           }).0 == 0x12);
     assert!((&{keys::VK_OEM_7                          }).0 == 0xDE);
     assert!((&{keys::VK_LEFT                           }).0 == 0x25);
     assert!((&{keys::VK_OEM_4                          }).0 == 0xDB);
     assert!((&{keys::VK_CONTROL                        }).0 == 0x11);
     assert!((&{keys::VK_LCONTROL                       }).0 == 0xA2);
-    assert!((&{keys::VK_LWIN                           }).0 == 0x5B);
-    assert!((&{keys::VK_LWIN                           }).0 == 0x5B);
-    assert!((&{keys::VK_LWIN                           }).0 == 0x5B);
-    assert!((&{keys::VK_LWIN                           }).0 == 0x5B);
     assert!((&{keys::VK_LWIN                           }).0 == 0x5B);
     assert!((&{keys::VK_LSHIFT                         }).0 == 0xA0);
     assert!((&{keys::VK_SHIFT                          }).0 == 0x10);
