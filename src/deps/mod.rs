@@ -16,3 +16,6 @@ pub use ::enigo::{self, Key as EnigoKey};
 
 #[cfg(dep_macos)]
 pub use core_graphics::event as macos;
+
+#[cfg(dep_xkeysym)]
+pub use xkeysym;

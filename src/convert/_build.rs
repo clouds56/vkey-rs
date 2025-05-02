@@ -270,7 +270,7 @@ impl<'a> AsCodeImplTemplate<'a> {
 #[expect(unused)]
 #[derive(Debug, Clone, Copy)]
 enum KeyType {
-  HUT, Winput, WinVk, Enigo, KeySym, CG,
+  HUT, Winput, WinVk, Enigo, Keysym, CG,
   EnigoDep, EnigoMirror,
 }
 
@@ -282,9 +282,9 @@ impl KeyType {
     match self {
       KeyType::HUT => "Usage",
       KeyType::Winput => "Vk",
-      KeyType::WinVk => "Vk",
+      KeyType::WinVk => "VIRTUAL_KEY",
       KeyType::Enigo | KeyType::EnigoDep | KeyType::EnigoMirror => "Enigo",
-      KeyType::KeySym => "KeySym",
+      KeyType::Keysym => "Keysym",
       KeyType::CG => "CGKeyCode",
     }
   }
@@ -295,12 +295,12 @@ impl KeyType {
         ConvertImportEntry::new("mirror_winput_vk", "use crate::mirror::winput::Vk;"),
       ],
       KeyType::WinVk => vec![
-        ConvertImportEntry::new("mirror_windows_vk", "use crate::mirror::windows::{self as keys, VIRTUAL_KEY as Vk};"),
+        ConvertImportEntry::new("mirror_windows_vk", "use crate::mirror::windows::{self as keys, VIRTUAL_KEY};"),
       ],
       KeyType::EnigoMirror => vec![
         ConvertImportEntry::new("mirror_enigo", "use crate::mirror::enigo::Key as Enigo;"),
       ],
-      KeyType::KeySym => unimplemented!(),
+      KeyType::Keysym => vec![],
       KeyType::CG => vec![
         ConvertImportEntry::new("any(dep_macos, mirror_macos)", "#[cfg(dep_macos)]\nuse crate::deps::macos::KeyCode;\n#[cfg(not(dep_macos))]\n#[cfg(mirror_macos)]\nuse crate::mirror::macos::KeyCode;\nuse crate::mirror::macos_ext::{CGKeyCode, KeyCodeExt};"),
       ],
@@ -316,10 +316,12 @@ impl KeyType {
       ],
       KeyType::Winput => vec![],
       KeyType::WinVk => vec![
-        ConvertImportEntry::new("dep_windows_vk", "use crate::deps::windows::{self as keys, VIRTUAL_KEY as Vk};"),
+        ConvertImportEntry::new("dep_windows_vk", "use crate::deps::windows::{self as keys, VIRTUAL_KEY};"),
       ],
       KeyType::EnigoDep => vec![ConvertImportEntry::new("dep_enigo", "use crate::deps::enigo::Key as Enigo;")],
-      KeyType::KeySym => unimplemented!(),
+      KeyType::Keysym => vec![
+        ConvertImportEntry::new("dep_xkeysym", "use crate::deps::xkeysym::Keysym;"),
+      ],
       _ => return vec![],
     }
   }
@@ -330,7 +332,7 @@ impl KeyType {
       KeyType::Winput => line.winput,
       KeyType::WinVk => line.vk,
       KeyType::Enigo | KeyType::EnigoDep | KeyType::EnigoMirror => line.enigo,
-      KeyType::KeySym => line.keysym,
+      KeyType::Keysym => line.keysym,
       KeyType::CG => line.cg,
     }
   }
@@ -382,7 +384,7 @@ impl KeyType {
     match self {
       KeyType::HUT => None,
       KeyType::Winput => Some("unsafe { std::mem::transmute({}) }"),
-      KeyType::WinVk => Some("Vk({})"),
+      KeyType::WinVk => Some("VIRTUAL_KEY({})"),
       KeyType::CG => Some("CGKeyCode({})"),
       _ => None,
     }
@@ -637,9 +639,12 @@ pub fn main() {
     (KeyType::EnigoDep, KeyType::Winput),
     (KeyType::EnigoMirror, KeyType::WinVk),
     (KeyType::EnigoDep, KeyType::WinVk),
+    (KeyType::EnigoMirror, KeyType::Keysym),
+    (KeyType::EnigoDep, KeyType::Keysym),
     (KeyType::EnigoMirror, KeyType::CG),
     (KeyType::EnigoDep, KeyType::CG),
     (KeyType::Winput, KeyType::CG),
+    (KeyType::Winput, KeyType::Keysym),
   ] {
     let filename = format!("generated.{from:?}_to_{to:?}.rs");
     let content = Gen(from, to).build_convert_impl(&csv);

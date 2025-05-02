@@ -1,7 +1,7 @@
 // This file is auto-generated. Do not edit manually.
 
 
-pub fn enigo_to_vk(value: Enigo) -> Option<Vk> {
+pub fn enigo_to_virtual_key(value: Enigo) -> Option<VIRTUAL_KEY> {
   let result = match value {
     #[cfg(for_windows)]
     Enigo::LButton                      => keys::VK_LBUTTON                        ,
@@ -466,8 +466,8 @@ pub fn enigo_to_vk(value: Enigo) -> Option<Vk> {
   Some(result)
 }
 
-impl crate::convert::Convert<Enigo, Vk> for crate::convert::Converter {
-  fn convert(value: Enigo) -> Option<Vk> {
-    enigo_to_vk(value)
+impl crate::convert::Convert<Enigo, VIRTUAL_KEY> for crate::convert::Converter {
+  fn convert(value: Enigo) -> Option<VIRTUAL_KEY> {
+    enigo_to_virtual_key(value)
   }
 }

@@ -1,7 +1,7 @@
 // This file is auto-generated. Do not edit manually.
 
 
-pub fn vk_to_u16(value: &Vk) -> u16 {
+pub fn virtual_key_to_u16(value: &VIRTUAL_KEY) -> u16 {
   #[allow(unused_parens)]
   const {
     assert!((&{keys::VK_LBUTTON                        }).0 == 0x01);
@@ -255,13 +255,13 @@ pub fn vk_to_u16(value: &Vk) -> u16 {
   value.0
 }
 
-impl crate::numeric::AsCode<Vk> for crate::numeric::Coder {
+impl crate::numeric::AsCode<VIRTUAL_KEY> for crate::numeric::Coder {
   type Code = u16;
-  fn as_code(value: &Vk) -> Self::Code {
-    vk_to_u16(value)
+  fn as_code(value: &VIRTUAL_KEY) -> Self::Code {
+    virtual_key_to_u16(value)
   }
   #[allow(unreachable_patterns)]
-  fn from_code(code: Self::Code) -> Option<Vk> {
+  fn from_code(code: Self::Code) -> Option<VIRTUAL_KEY> {
     match code {
       0x01 => Some(keys::VK_LBUTTON                        ),
       0x02 => Some(keys::VK_RBUTTON                        ),
@@ -513,8 +513,8 @@ impl crate::numeric::AsCode<Vk> for crate::numeric::Coder {
       _ => None,
     }
   }
-  unsafe fn from_code_unchecked(code: Self::Code) -> Vk {
-    Vk(code)
+  unsafe fn from_code_unchecked(code: Self::Code) -> VIRTUAL_KEY {
+    VIRTUAL_KEY(code)
   }
 }
 

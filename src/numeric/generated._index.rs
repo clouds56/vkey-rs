@@ -26,12 +26,12 @@ mod generated_winput {
 mod generated_winvk {
   #[cfg(mirror_windows_vk)]
   mod mirror_1 {
-    use crate::mirror::windows::{self as keys, VIRTUAL_KEY as Vk};
+    use crate::mirror::windows::{self as keys, VIRTUAL_KEY};
     include!("generated.WinVk.rs");
   }
   #[cfg(dep_windows_vk)]
   mod dep_1 {
-    use crate::deps::windows::{self as keys, VIRTUAL_KEY as Vk};
+    use crate::deps::windows::{self as keys, VIRTUAL_KEY};
     include!("generated.WinVk.rs");
   }
 }

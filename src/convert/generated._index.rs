@@ -54,13 +54,13 @@ mod generated_enigomirror_to_winvk {
   #[cfg(all(mirror_enigo, mirror_windows_vk))]
   mod mirror_to_mirror_1_1 {
     use crate::mirror::enigo::Key as Enigo;
-    use crate::mirror::windows::{self as keys, VIRTUAL_KEY as Vk};
+    use crate::mirror::windows::{self as keys, VIRTUAL_KEY};
     include!("generated.EnigoMirror_to_WinVk.rs");
   }
   #[cfg(all(mirror_enigo, dep_windows_vk))]
   mod mirror_to_dep_1_1 {
     use crate::mirror::enigo::Key as Enigo;
-    use crate::deps::windows::{self as keys, VIRTUAL_KEY as Vk};
+    use crate::deps::windows::{self as keys, VIRTUAL_KEY};
     include!("generated.EnigoMirror_to_WinVk.rs");
   }
 }
@@ -69,14 +69,32 @@ mod generated_enigodep_to_winvk {
   #[cfg(all(dep_enigo, mirror_windows_vk))]
   mod dep_to_mirror_1_1 {
     use crate::deps::enigo::Key as Enigo;
-    use crate::mirror::windows::{self as keys, VIRTUAL_KEY as Vk};
+    use crate::mirror::windows::{self as keys, VIRTUAL_KEY};
     include!("generated.EnigoDep_to_WinVk.rs");
   }
   #[cfg(all(dep_enigo, dep_windows_vk))]
   mod dep_to_dep_1_1 {
     use crate::deps::enigo::Key as Enigo;
-    use crate::deps::windows::{self as keys, VIRTUAL_KEY as Vk};
+    use crate::deps::windows::{self as keys, VIRTUAL_KEY};
     include!("generated.EnigoDep_to_WinVk.rs");
+  }
+}
+
+mod generated_enigomirror_to_keysym {
+  #[cfg(all(mirror_enigo, dep_xkeysym))]
+  mod mirror_to_dep_1_1 {
+    use crate::mirror::enigo::Key as Enigo;
+    use crate::deps::xkeysym::Keysym;
+    include!("generated.EnigoMirror_to_Keysym.rs");
+  }
+}
+
+mod generated_enigodep_to_keysym {
+  #[cfg(all(dep_enigo, dep_xkeysym))]
+  mod dep_to_dep_1_1 {
+    use crate::deps::enigo::Key as Enigo;
+    use crate::deps::xkeysym::Keysym;
+    include!("generated.EnigoDep_to_Keysym.rs");
   }
 }
 
@@ -119,6 +137,15 @@ mod generated_winput_to_cg {
     use crate::mirror::macos::KeyCode;
     use crate::mirror::macos_ext::{CGKeyCode, KeyCodeExt};
     include!("generated.Winput_to_CG.rs");
+  }
+}
+
+mod generated_winput_to_keysym {
+  #[cfg(all(mirror_winput_vk, dep_xkeysym))]
+  mod mirror_to_dep_1_1 {
+    use crate::mirror::winput::Vk;
+    use crate::deps::xkeysym::Keysym;
+    include!("generated.Winput_to_Keysym.rs");
   }
 }
 
