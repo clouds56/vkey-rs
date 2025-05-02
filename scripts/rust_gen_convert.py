@@ -15,14 +15,15 @@ windows__keyboard_and_mouse = workspace_dir / 'scripts/cache/windows-63' / 'raw.
 # %%
 columns = [
   ("hut",        ";hut::HUT"              , "todo!(HUT)"),
-  ("hut_value",  "hkcode"                 , "n!()"),
+  ("hut_value",  "hkcode"                 , ""),
   ("winput",     "winput::Vk"             , "na!(Vk)"),
   ("vk",         "windows::VIRTUAL_KEY"   , "todo!(VK_)"),
-  ("vk_value",   "vkcode"                 , "n!()"),
+  ("vk_value",   "vkcode"                 , ""),
   ("enigo",      "enigo::Key"             , "todo!(Enigo)"),
   ("enigo_attr", "#[cfg(enigo::Key)]"     , ""),
   ("keysym",     "xkeysym::Keysym"        , "todo!(Keysym)"),
   ("cg",         "macos::KeyCode"         , "todo!(CG)"),
+  ("cg_value",   "cgcode"                 , ""),
 ]
 col_map = {col[0]: col[1] for col in columns}
 col_default = {col[0]: col[2] for col in columns}
@@ -246,24 +247,26 @@ save_csv(df, csv_filename)
 # set all columns starts with 'todo!', 'na!', 'n!' or 'none!' to None
 df_test = df.select([
   pl.when(
-    pl.col(col).str.starts_with("todo!").or_(
+    pl.col(col).str.strip_chars(' ').str.len_chars().eq(0).or_(
+      pl.col(col).str.starts_with("todo!")).or_(
       pl.col(col).str.starts_with("na!")).or_(
       pl.col(col).str.starts_with("n!")).or_(
       pl.col(col).str.starts_with("none!"))
   ).then(None).otherwise(pl.col(col)).alias(col) for col in df.columns
 ])
 
-def build_code(df: pl.DataFrame, col: str, format: str, value_prefix: str = "", value_suffix: str = "", default: str | None = "n!()", max_len: int | None = None):
+def build_code(df: pl.DataFrame, col: str, format: str, value_prefix: str = "", value_suffix: str = "", default: str | None = "    ", max_len: int | None = None):
   result = []
   max_len = df[col].str.len_chars().max() + 1 if max_len is None else max_len
   for i in df[col]:
     i: str | None = i
-    if i is not None:
-      line = f'writeln!(w, "{{:{max_len}}}, {format}", "{i}", {value_prefix}{i.strip('*')}{value_suffix})?;'
-    if i is not None and not i.endswith('*'):
+    print(i)
+    if i:
+      line = f'writeln!(w, "{{:{max_len}}}, {format},", "{i}", {value_prefix}{i.strip('*')}{value_suffix})?;'
+    if i and not i.endswith('*'):
       result.append("          " + line)
-    elif i is None:
-      result.append(f'  if any {{ writeln!(w, "{{:{max_len}}}, {{}}", "{i}", "{default}")?; }}')
+    elif not i:
+      result.append(f'  if any {{ writeln!(w, "{{:{max_len}}}, {{}},", "{i}", "{default}")?; }}')
     else:
       result.append("  if any {" + line + "}")
   return result
@@ -290,6 +293,16 @@ name = "windows"
 lines.append(f"fn print_{name}(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()>" + "{")
 lines.append("  use vkey::mirror::windows as keys;")
 lines.extend(build_code(df_test, "vk", "0x{:02X}", value_prefix="keys::", value_suffix=".0"))
+lines.append("  Ok(())")
+lines.append("}\n\n")
+main_lines.append(f'  println!("\n\n============== {name.upper().replace("_", " ")} ===============");')
+main_lines.append(f'  print_{name}(&mut file("{name}.txt"), true).ok();')
+main_lines.append(f'  print_{name}(&mut std::io::stdout(), false).ok();')
+
+name = "macos"
+lines.append(f"fn print_{name}(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()>" + "{")
+lines.append("  use vkey::mirror::{macos::KeyCode, macos_ext::{CGKeyCode, KeyCodeExt}};")
+lines.extend(build_code(df_test, "cg", "0x{:02X}", value_prefix="CGKeyCode::from(", value_suffix=").0"))
 lines.append("  Ok(())")
 lines.append("}\n\n")
 main_lines.append(f'  println!("\n\n============== {name.upper().replace("_", " ")} ===============");')

@@ -9,6 +9,15 @@ pub trait Convert<F, T> {
 
 pub struct Converter;
 
+#[allow(dead_code)]
+pub(crate) trait Into_ {
+  fn into_<T>(self) -> T where Self: Into<T> {
+    Into::into(self)
+  }
+}
+
+impl<T> Into_ for T {}
+
 pub trait ConvertExt: Sized {
   fn convert_key<T>(self) -> Option<T>
   where Converter: Convert<Self, T> {

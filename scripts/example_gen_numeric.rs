@@ -12,603 +12,907 @@ fn main() {
 ============== WINDOWS ===============");
   print_windows(&mut file("windows.txt"), true).ok();
   print_windows(&mut std::io::stdout(), false).ok();
+  println!("
+
+============== MACOS ===============");
+  print_macos(&mut file("macos.txt"), true).ok();
+  print_macos(&mut std::io::stdout(), false).ok();
 }
 
 
 fn print_hut_04(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()>{
   use hut_04::{AsUsage, Button, Consumer, GenericDesktop, KeyboardKeypad};
-          writeln!(w, "{:52}, 0x{:X}", "Button::Button(1)", Button::Button(1).usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "Button::Button(2)", Button::Button(2).usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "Button::Button(3)", Button::Button(3).usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "Button::Button(4)", Button::Button(4).usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "Button::Button(5)", Button::Button(5).usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "Consumer::ACBack", Consumer::ACBack.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "Consumer::ACBookmarks", Consumer::ACBookmarks.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "Consumer::ACForward", Consumer::ACForward.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "Consumer::ACHome", Consumer::ACHome.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "Consumer::ACRefresh", Consumer::ACRefresh.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "Consumer::ACSearch", Consumer::ACSearch.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "Consumer::ACStop", Consumer::ACStop.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "Consumer::ALEmailReader", Consumer::ALEmailReader.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "Consumer::MediaSelection", Consumer::MediaSelection.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "Consumer::Mute", Consumer::Mute.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "Consumer::PlayPause", Consumer::PlayPause.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "Consumer::ScanNextTrack", Consumer::ScanNextTrack.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "Consumer::ScanPreviousTrack", Consumer::ScanPreviousTrack.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "Consumer::Stop", Consumer::Stop.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "Consumer::VolumeDecrement", Consumer::VolumeDecrement.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "Consumer::VolumeIncrement", Consumer::VolumeIncrement.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "GenericDesktop::SystemSleep", GenericDesktop::SystemSleep.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::Keyboard0andRightBracket", KeyboardKeypad::Keyboard0andRightBracket.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::Keyboard1andBang", KeyboardKeypad::Keyboard1andBang.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::Keyboard2andAt", KeyboardKeypad::Keyboard2andAt.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::Keyboard3andHash", KeyboardKeypad::Keyboard3andHash.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::Keyboard4andDollar", KeyboardKeypad::Keyboard4andDollar.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::Keyboard5andPercent", KeyboardKeypad::Keyboard5andPercent.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::Keyboard6andCaret", KeyboardKeypad::Keyboard6andCaret.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::Keyboard7andAmpersand", KeyboardKeypad::Keyboard7andAmpersand.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::Keyboard8andStar", KeyboardKeypad::Keyboard8andStar.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::Keyboard9andLeftBracket", KeyboardKeypad::Keyboard9andLeftBracket.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardA", KeyboardKeypad::KeyboardA.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardApplication", KeyboardKeypad::KeyboardApplication.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardB", KeyboardKeypad::KeyboardB.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardBackslashandPipe", KeyboardKeypad::KeyboardBackslashandPipe.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardC", KeyboardKeypad::KeyboardC.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardCancel", KeyboardKeypad::KeyboardCancel.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardCapsLock", KeyboardKeypad::KeyboardCapsLock.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardClear", KeyboardKeypad::KeyboardClear.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardCommaandLessThan", KeyboardKeypad::KeyboardCommaandLessThan.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardD", KeyboardKeypad::KeyboardD.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardDashandUnderscore", KeyboardKeypad::KeyboardDashandUnderscore.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardDelete", KeyboardKeypad::KeyboardDelete.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardDeleteForward", KeyboardKeypad::KeyboardDeleteForward.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardDownArrow", KeyboardKeypad::KeyboardDownArrow.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardE", KeyboardKeypad::KeyboardE.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardEnd", KeyboardKeypad::KeyboardEnd.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardEqualsandPlus", KeyboardKeypad::KeyboardEqualsandPlus.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardEscape", KeyboardKeypad::KeyboardEscape.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardExecute", KeyboardKeypad::KeyboardExecute.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardF", KeyboardKeypad::KeyboardF.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardF1", KeyboardKeypad::KeyboardF1.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardF10", KeyboardKeypad::KeyboardF10.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardF11", KeyboardKeypad::KeyboardF11.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardF12", KeyboardKeypad::KeyboardF12.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardF13", KeyboardKeypad::KeyboardF13.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardF14", KeyboardKeypad::KeyboardF14.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardF15", KeyboardKeypad::KeyboardF15.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardF16", KeyboardKeypad::KeyboardF16.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardF17", KeyboardKeypad::KeyboardF17.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardF18", KeyboardKeypad::KeyboardF18.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardF19", KeyboardKeypad::KeyboardF19.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardF2", KeyboardKeypad::KeyboardF2.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardF20", KeyboardKeypad::KeyboardF20.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardF21", KeyboardKeypad::KeyboardF21.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardF22", KeyboardKeypad::KeyboardF22.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardF23", KeyboardKeypad::KeyboardF23.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardF24", KeyboardKeypad::KeyboardF24.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardF3", KeyboardKeypad::KeyboardF3.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardF4", KeyboardKeypad::KeyboardF4.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardF5", KeyboardKeypad::KeyboardF5.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardF6", KeyboardKeypad::KeyboardF6.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardF7", KeyboardKeypad::KeyboardF7.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardF8", KeyboardKeypad::KeyboardF8.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardF9", KeyboardKeypad::KeyboardF9.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardForwardSlashandQuestionMark", KeyboardKeypad::KeyboardForwardSlashandQuestionMark.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardG", KeyboardKeypad::KeyboardG.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardGraveAccentandTilde", KeyboardKeypad::KeyboardGraveAccentandTilde.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardH", KeyboardKeypad::KeyboardH.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardHelp", KeyboardKeypad::KeyboardHelp.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardHome", KeyboardKeypad::KeyboardHome.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardI", KeyboardKeypad::KeyboardI.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardInsert", KeyboardKeypad::KeyboardInsert.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardJ", KeyboardKeypad::KeyboardJ.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardK", KeyboardKeypad::KeyboardK.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardL", KeyboardKeypad::KeyboardL.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardLeftAlt", KeyboardKeypad::KeyboardLeftAlt.usage_value())?;
-  if any {writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardLeftAlt*", KeyboardKeypad::KeyboardLeftAlt.usage_value())?;}
-  if any {writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardLeftAlt*", KeyboardKeypad::KeyboardLeftAlt.usage_value())?;}
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardLeftAposandDouble", KeyboardKeypad::KeyboardLeftAposandDouble.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardLeftArrow", KeyboardKeypad::KeyboardLeftArrow.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardLeftBrace", KeyboardKeypad::KeyboardLeftBrace.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardLeftControl", KeyboardKeypad::KeyboardLeftControl.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardLeftControl", KeyboardKeypad::KeyboardLeftControl.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardLeftGUI", KeyboardKeypad::KeyboardLeftGUI.usage_value())?;
-  if any {writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardLeftGUI*", KeyboardKeypad::KeyboardLeftGUI.usage_value())?;}
-  if any {writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardLeftGUI*", KeyboardKeypad::KeyboardLeftGUI.usage_value())?;}
-  if any {writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardLeftGUI*", KeyboardKeypad::KeyboardLeftGUI.usage_value())?;}
-  if any {writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardLeftGUI*", KeyboardKeypad::KeyboardLeftGUI.usage_value())?;}
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardLeftShift", KeyboardKeypad::KeyboardLeftShift.usage_value())?;
-  if any {writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardLeftShift*", KeyboardKeypad::KeyboardLeftShift.usage_value())?;}
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardM", KeyboardKeypad::KeyboardM.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardN", KeyboardKeypad::KeyboardN.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardNonUSBackslashandPipe", KeyboardKeypad::KeyboardNonUSBackslashandPipe.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardO", KeyboardKeypad::KeyboardO.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardP", KeyboardKeypad::KeyboardP.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardPageDown", KeyboardKeypad::KeyboardPageDown.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardPageUp", KeyboardKeypad::KeyboardPageUp.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardPause", KeyboardKeypad::KeyboardPause.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardPeriodandGreaterThan", KeyboardKeypad::KeyboardPeriodandGreaterThan.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardPrintScreen", KeyboardKeypad::KeyboardPrintScreen.usage_value())?;
-  if any {writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardPrintScreen*", KeyboardKeypad::KeyboardPrintScreen.usage_value())?;}
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardQ", KeyboardKeypad::KeyboardQ.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardR", KeyboardKeypad::KeyboardR.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardReturnEnter", KeyboardKeypad::KeyboardReturnEnter.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardRightAlt", KeyboardKeypad::KeyboardRightAlt.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardRightArrow", KeyboardKeypad::KeyboardRightArrow.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardRightBrace", KeyboardKeypad::KeyboardRightBrace.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardRightControl", KeyboardKeypad::KeyboardRightControl.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardRightGUI", KeyboardKeypad::KeyboardRightGUI.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardRightShift", KeyboardKeypad::KeyboardRightShift.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardS", KeyboardKeypad::KeyboardS.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardScrollLock", KeyboardKeypad::KeyboardScrollLock.usage_value())?;
-  if any {writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardScrollLock*", KeyboardKeypad::KeyboardScrollLock.usage_value())?;}
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardSelect", KeyboardKeypad::KeyboardSelect.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardSemiColonandColon", KeyboardKeypad::KeyboardSemiColonandColon.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardSpacebar", KeyboardKeypad::KeyboardSpacebar.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardT", KeyboardKeypad::KeyboardT.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardTab", KeyboardKeypad::KeyboardTab.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardU", KeyboardKeypad::KeyboardU.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardUpArrow", KeyboardKeypad::KeyboardUpArrow.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardV", KeyboardKeypad::KeyboardV.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardW", KeyboardKeypad::KeyboardW.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardX", KeyboardKeypad::KeyboardX.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardY", KeyboardKeypad::KeyboardY.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeyboardZ", KeyboardKeypad::KeyboardZ.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::Keypad0andInsert", KeyboardKeypad::Keypad0andInsert.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::Keypad1andEnd", KeyboardKeypad::Keypad1andEnd.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::Keypad2andDownArrow", KeyboardKeypad::Keypad2andDownArrow.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::Keypad3andPageDn", KeyboardKeypad::Keypad3andPageDn.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::Keypad4andLeftArrow", KeyboardKeypad::Keypad4andLeftArrow.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::Keypad5", KeyboardKeypad::Keypad5.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::Keypad6andRightArrow", KeyboardKeypad::Keypad6andRightArrow.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::Keypad7andHome", KeyboardKeypad::Keypad7andHome.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::Keypad8andUpArrow", KeyboardKeypad::Keypad8andUpArrow.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::Keypad9andPageUp", KeyboardKeypad::Keypad9andPageUp.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeypadDash", KeyboardKeypad::KeypadDash.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeypadForwardSlash", KeyboardKeypad::KeypadForwardSlash.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeypadNumLockandClear", KeyboardKeypad::KeypadNumLockandClear.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeypadPeriodandDelete", KeyboardKeypad::KeypadPeriodandDelete.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeypadPlus", KeyboardKeypad::KeypadPlus.usage_value())?;
-          writeln!(w, "{:52}, 0x{:X}", "KeyboardKeypad::KeypadStar", KeyboardKeypad::KeypadStar.usage_value())?;
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:52}, {}", "None", "n!()")?; }
+          writeln!(w, "{:52}, 0x{:X},", "Button::Button(1)", Button::Button(1).usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "Button::Button(2)", Button::Button(2).usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "Button::Button(3)", Button::Button(3).usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "Button::Button(4)", Button::Button(4).usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "Button::Button(5)", Button::Button(5).usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "Consumer::ACBack", Consumer::ACBack.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "Consumer::ACBookmarks", Consumer::ACBookmarks.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "Consumer::ACForward", Consumer::ACForward.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "Consumer::ACHome", Consumer::ACHome.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "Consumer::ACRefresh", Consumer::ACRefresh.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "Consumer::ACSearch", Consumer::ACSearch.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "Consumer::ACStop", Consumer::ACStop.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "Consumer::ALEmailReader", Consumer::ALEmailReader.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "Consumer::MediaSelection", Consumer::MediaSelection.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "Consumer::Mute", Consumer::Mute.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "Consumer::PlayPause", Consumer::PlayPause.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "Consumer::ScanNextTrack", Consumer::ScanNextTrack.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "Consumer::ScanPreviousTrack", Consumer::ScanPreviousTrack.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "Consumer::Stop", Consumer::Stop.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "Consumer::VolumeDecrement", Consumer::VolumeDecrement.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "Consumer::VolumeIncrement", Consumer::VolumeIncrement.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "GenericDesktop::SystemSleep", GenericDesktop::SystemSleep.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::Keyboard0andRightBracket", KeyboardKeypad::Keyboard0andRightBracket.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::Keyboard1andBang", KeyboardKeypad::Keyboard1andBang.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::Keyboard2andAt", KeyboardKeypad::Keyboard2andAt.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::Keyboard3andHash", KeyboardKeypad::Keyboard3andHash.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::Keyboard4andDollar", KeyboardKeypad::Keyboard4andDollar.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::Keyboard5andPercent", KeyboardKeypad::Keyboard5andPercent.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::Keyboard6andCaret", KeyboardKeypad::Keyboard6andCaret.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::Keyboard7andAmpersand", KeyboardKeypad::Keyboard7andAmpersand.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::Keyboard8andStar", KeyboardKeypad::Keyboard8andStar.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::Keyboard9andLeftBracket", KeyboardKeypad::Keyboard9andLeftBracket.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardA", KeyboardKeypad::KeyboardA.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardApplication", KeyboardKeypad::KeyboardApplication.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardB", KeyboardKeypad::KeyboardB.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardBackslashandPipe", KeyboardKeypad::KeyboardBackslashandPipe.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardC", KeyboardKeypad::KeyboardC.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardCancel", KeyboardKeypad::KeyboardCancel.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardCapsLock", KeyboardKeypad::KeyboardCapsLock.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardClear", KeyboardKeypad::KeyboardClear.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardCommaandLessThan", KeyboardKeypad::KeyboardCommaandLessThan.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardD", KeyboardKeypad::KeyboardD.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardDashandUnderscore", KeyboardKeypad::KeyboardDashandUnderscore.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardDelete", KeyboardKeypad::KeyboardDelete.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardDeleteForward", KeyboardKeypad::KeyboardDeleteForward.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardDownArrow", KeyboardKeypad::KeyboardDownArrow.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardE", KeyboardKeypad::KeyboardE.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardEnd", KeyboardKeypad::KeyboardEnd.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardEqualsandPlus", KeyboardKeypad::KeyboardEqualsandPlus.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardEscape", KeyboardKeypad::KeyboardEscape.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardExecute", KeyboardKeypad::KeyboardExecute.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardF", KeyboardKeypad::KeyboardF.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardF1", KeyboardKeypad::KeyboardF1.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardF10", KeyboardKeypad::KeyboardF10.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardF11", KeyboardKeypad::KeyboardF11.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardF12", KeyboardKeypad::KeyboardF12.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardF13", KeyboardKeypad::KeyboardF13.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardF14", KeyboardKeypad::KeyboardF14.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardF15", KeyboardKeypad::KeyboardF15.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardF16", KeyboardKeypad::KeyboardF16.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardF17", KeyboardKeypad::KeyboardF17.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardF18", KeyboardKeypad::KeyboardF18.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardF19", KeyboardKeypad::KeyboardF19.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardF2", KeyboardKeypad::KeyboardF2.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardF20", KeyboardKeypad::KeyboardF20.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardF21", KeyboardKeypad::KeyboardF21.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardF22", KeyboardKeypad::KeyboardF22.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardF23", KeyboardKeypad::KeyboardF23.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardF24", KeyboardKeypad::KeyboardF24.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardF3", KeyboardKeypad::KeyboardF3.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardF4", KeyboardKeypad::KeyboardF4.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardF5", KeyboardKeypad::KeyboardF5.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardF6", KeyboardKeypad::KeyboardF6.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardF7", KeyboardKeypad::KeyboardF7.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardF8", KeyboardKeypad::KeyboardF8.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardF9", KeyboardKeypad::KeyboardF9.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardForwardSlashandQuestionMark", KeyboardKeypad::KeyboardForwardSlashandQuestionMark.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardG", KeyboardKeypad::KeyboardG.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardGraveAccentandTilde", KeyboardKeypad::KeyboardGraveAccentandTilde.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardH", KeyboardKeypad::KeyboardH.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardHelp", KeyboardKeypad::KeyboardHelp.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardHome", KeyboardKeypad::KeyboardHome.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardI", KeyboardKeypad::KeyboardI.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardInsert", KeyboardKeypad::KeyboardInsert.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardJ", KeyboardKeypad::KeyboardJ.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardK", KeyboardKeypad::KeyboardK.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardL", KeyboardKeypad::KeyboardL.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardLeftAlt", KeyboardKeypad::KeyboardLeftAlt.usage_value())?;
+  if any {writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardLeftAlt*", KeyboardKeypad::KeyboardLeftAlt.usage_value())?;}
+  if any {writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardLeftAlt*", KeyboardKeypad::KeyboardLeftAlt.usage_value())?;}
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardLeftAposandDouble", KeyboardKeypad::KeyboardLeftAposandDouble.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardLeftArrow", KeyboardKeypad::KeyboardLeftArrow.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardLeftBrace", KeyboardKeypad::KeyboardLeftBrace.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardLeftControl", KeyboardKeypad::KeyboardLeftControl.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardLeftControl", KeyboardKeypad::KeyboardLeftControl.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardLeftGUI", KeyboardKeypad::KeyboardLeftGUI.usage_value())?;
+  if any {writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardLeftGUI*", KeyboardKeypad::KeyboardLeftGUI.usage_value())?;}
+  if any {writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardLeftGUI*", KeyboardKeypad::KeyboardLeftGUI.usage_value())?;}
+  if any {writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardLeftGUI*", KeyboardKeypad::KeyboardLeftGUI.usage_value())?;}
+  if any {writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardLeftGUI*", KeyboardKeypad::KeyboardLeftGUI.usage_value())?;}
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardLeftShift", KeyboardKeypad::KeyboardLeftShift.usage_value())?;
+  if any {writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardLeftShift*", KeyboardKeypad::KeyboardLeftShift.usage_value())?;}
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardM", KeyboardKeypad::KeyboardM.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardN", KeyboardKeypad::KeyboardN.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardNonUSBackslashandPipe", KeyboardKeypad::KeyboardNonUSBackslashandPipe.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardO", KeyboardKeypad::KeyboardO.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardP", KeyboardKeypad::KeyboardP.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardPageDown", KeyboardKeypad::KeyboardPageDown.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardPageUp", KeyboardKeypad::KeyboardPageUp.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardPause", KeyboardKeypad::KeyboardPause.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardPeriodandGreaterThan", KeyboardKeypad::KeyboardPeriodandGreaterThan.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardPrintScreen", KeyboardKeypad::KeyboardPrintScreen.usage_value())?;
+  if any {writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardPrintScreen*", KeyboardKeypad::KeyboardPrintScreen.usage_value())?;}
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardQ", KeyboardKeypad::KeyboardQ.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardR", KeyboardKeypad::KeyboardR.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardReturnEnter", KeyboardKeypad::KeyboardReturnEnter.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardRightAlt", KeyboardKeypad::KeyboardRightAlt.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardRightArrow", KeyboardKeypad::KeyboardRightArrow.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardRightBrace", KeyboardKeypad::KeyboardRightBrace.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardRightControl", KeyboardKeypad::KeyboardRightControl.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardRightGUI", KeyboardKeypad::KeyboardRightGUI.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardRightShift", KeyboardKeypad::KeyboardRightShift.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardS", KeyboardKeypad::KeyboardS.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardScrollLock", KeyboardKeypad::KeyboardScrollLock.usage_value())?;
+  if any {writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardScrollLock*", KeyboardKeypad::KeyboardScrollLock.usage_value())?;}
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardSelect", KeyboardKeypad::KeyboardSelect.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardSemiColonandColon", KeyboardKeypad::KeyboardSemiColonandColon.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardSpacebar", KeyboardKeypad::KeyboardSpacebar.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardT", KeyboardKeypad::KeyboardT.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardTab", KeyboardKeypad::KeyboardTab.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardU", KeyboardKeypad::KeyboardU.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardUpArrow", KeyboardKeypad::KeyboardUpArrow.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardV", KeyboardKeypad::KeyboardV.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardW", KeyboardKeypad::KeyboardW.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardX", KeyboardKeypad::KeyboardX.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardY", KeyboardKeypad::KeyboardY.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeyboardZ", KeyboardKeypad::KeyboardZ.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::Keypad0andInsert", KeyboardKeypad::Keypad0andInsert.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::Keypad1andEnd", KeyboardKeypad::Keypad1andEnd.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::Keypad2andDownArrow", KeyboardKeypad::Keypad2andDownArrow.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::Keypad3andPageDn", KeyboardKeypad::Keypad3andPageDn.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::Keypad4andLeftArrow", KeyboardKeypad::Keypad4andLeftArrow.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::Keypad5", KeyboardKeypad::Keypad5.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::Keypad6andRightArrow", KeyboardKeypad::Keypad6andRightArrow.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::Keypad7andHome", KeyboardKeypad::Keypad7andHome.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::Keypad8andUpArrow", KeyboardKeypad::Keypad8andUpArrow.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::Keypad9andPageUp", KeyboardKeypad::Keypad9andPageUp.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeypadDash", KeyboardKeypad::KeypadDash.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeypadForwardSlash", KeyboardKeypad::KeypadForwardSlash.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeypadNumLockandClear", KeyboardKeypad::KeypadNumLockandClear.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeypadPeriodandDelete", KeyboardKeypad::KeypadPeriodandDelete.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeypadPlus", KeyboardKeypad::KeypadPlus.usage_value())?;
+          writeln!(w, "{:52}, 0x{:X},", "KeyboardKeypad::KeypadStar", KeyboardKeypad::KeypadStar.usage_value())?;
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:52}, {},", "None", "    ")?; }
   Ok(())
 }
 
 
 fn print_windows(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()>{
   use vkey::mirror::windows as keys;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_LBUTTON", keys::VK_LBUTTON.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_RBUTTON", keys::VK_RBUTTON.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_MBUTTON", keys::VK_MBUTTON.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_XBUTTON1", keys::VK_XBUTTON1.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_XBUTTON2", keys::VK_XBUTTON2.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_BROWSER_BACK", keys::VK_BROWSER_BACK.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_BROWSER_FAVORITES", keys::VK_BROWSER_FAVORITES.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_BROWSER_FORWARD", keys::VK_BROWSER_FORWARD.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_BROWSER_HOME", keys::VK_BROWSER_HOME.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_BROWSER_REFRESH", keys::VK_BROWSER_REFRESH.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_BROWSER_SEARCH", keys::VK_BROWSER_SEARCH.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_BROWSER_STOP", keys::VK_BROWSER_STOP.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_LAUNCH_MAIL", keys::VK_LAUNCH_MAIL.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_LAUNCH_MEDIA_SELECT", keys::VK_LAUNCH_MEDIA_SELECT.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_VOLUME_MUTE", keys::VK_VOLUME_MUTE.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_MEDIA_PLAY_PAUSE", keys::VK_MEDIA_PLAY_PAUSE.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_MEDIA_NEXT_TRACK", keys::VK_MEDIA_NEXT_TRACK.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_MEDIA_PREV_TRACK", keys::VK_MEDIA_PREV_TRACK.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_MEDIA_STOP", keys::VK_MEDIA_STOP.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_VOLUME_DOWN", keys::VK_VOLUME_DOWN.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_VOLUME_UP", keys::VK_VOLUME_UP.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_SLEEP", keys::VK_SLEEP.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_0", keys::VK_0.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_1", keys::VK_1.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_2", keys::VK_2.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_3", keys::VK_3.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_4", keys::VK_4.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_5", keys::VK_5.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_6", keys::VK_6.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_7", keys::VK_7.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_8", keys::VK_8.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_9", keys::VK_9.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_A", keys::VK_A.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_APPS", keys::VK_APPS.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_B", keys::VK_B.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_5", keys::VK_OEM_5.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_C", keys::VK_C.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_CANCEL", keys::VK_CANCEL.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_CAPITAL", keys::VK_CAPITAL.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_CLEAR", keys::VK_CLEAR.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_COMMA", keys::VK_OEM_COMMA.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_D", keys::VK_D.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_MINUS", keys::VK_OEM_MINUS.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_BACK", keys::VK_BACK.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_DELETE", keys::VK_DELETE.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_DOWN", keys::VK_DOWN.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_E", keys::VK_E.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_END", keys::VK_END.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_PLUS", keys::VK_OEM_PLUS.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_ESCAPE", keys::VK_ESCAPE.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_EXECUTE", keys::VK_EXECUTE.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_F", keys::VK_F.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_F1", keys::VK_F1.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_F10", keys::VK_F10.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_F11", keys::VK_F11.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_F12", keys::VK_F12.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_F13", keys::VK_F13.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_F14", keys::VK_F14.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_F15", keys::VK_F15.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_F16", keys::VK_F16.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_F17", keys::VK_F17.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_F18", keys::VK_F18.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_F19", keys::VK_F19.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_F2", keys::VK_F2.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_F20", keys::VK_F20.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_F21", keys::VK_F21.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_F22", keys::VK_F22.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_F23", keys::VK_F23.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_F24", keys::VK_F24.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_F3", keys::VK_F3.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_F4", keys::VK_F4.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_F5", keys::VK_F5.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_F6", keys::VK_F6.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_F7", keys::VK_F7.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_F8", keys::VK_F8.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_F9", keys::VK_F9.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_2", keys::VK_OEM_2.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_G", keys::VK_G.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_3", keys::VK_OEM_3.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_H", keys::VK_H.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_HELP", keys::VK_HELP.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_HOME", keys::VK_HOME.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_I", keys::VK_I.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_INSERT", keys::VK_INSERT.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_J", keys::VK_J.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_K", keys::VK_K.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_L", keys::VK_L.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_LMENU", keys::VK_LMENU.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_MENU", keys::VK_MENU.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_MENU", keys::VK_MENU.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_7", keys::VK_OEM_7.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_LEFT", keys::VK_LEFT.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_4", keys::VK_OEM_4.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_CONTROL", keys::VK_CONTROL.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_LCONTROL", keys::VK_LCONTROL.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_LWIN", keys::VK_LWIN.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_LWIN", keys::VK_LWIN.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_LWIN", keys::VK_LWIN.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_LWIN", keys::VK_LWIN.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_LWIN", keys::VK_LWIN.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_LSHIFT", keys::VK_LSHIFT.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_SHIFT", keys::VK_SHIFT.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_M", keys::VK_M.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_N", keys::VK_N.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_102", keys::VK_OEM_102.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_O", keys::VK_O.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_P", keys::VK_P.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_NEXT", keys::VK_NEXT.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_PRIOR", keys::VK_PRIOR.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_PAUSE", keys::VK_PAUSE.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_PERIOD", keys::VK_OEM_PERIOD.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_SNAPSHOT", keys::VK_SNAPSHOT.0)?;
-  if any {writeln!(w, "{:35}, 0x{:02X}", "VK_SNAPSHOT*", keys::VK_SNAPSHOT.0)?;}
-          writeln!(w, "{:35}, 0x{:02X}", "VK_Q", keys::VK_Q.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_R", keys::VK_R.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_RETURN", keys::VK_RETURN.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_RMENU", keys::VK_RMENU.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_RIGHT", keys::VK_RIGHT.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_6", keys::VK_OEM_6.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_RCONTROL", keys::VK_RCONTROL.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_RWIN", keys::VK_RWIN.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_RSHIFT", keys::VK_RSHIFT.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_S", keys::VK_S.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_SCROLL", keys::VK_SCROLL.0)?;
-  if any {writeln!(w, "{:35}, 0x{:02X}", "VK_SCROLL*", keys::VK_SCROLL.0)?;}
-          writeln!(w, "{:35}, 0x{:02X}", "VK_SELECT", keys::VK_SELECT.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_1", keys::VK_OEM_1.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_SPACE", keys::VK_SPACE.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_T", keys::VK_T.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_TAB", keys::VK_TAB.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_U", keys::VK_U.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_UP", keys::VK_UP.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_V", keys::VK_V.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_W", keys::VK_W.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_X", keys::VK_X.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_Y", keys::VK_Y.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_Z", keys::VK_Z.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_NUMPAD0", keys::VK_NUMPAD0.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_NUMPAD1", keys::VK_NUMPAD1.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_NUMPAD2", keys::VK_NUMPAD2.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_NUMPAD3", keys::VK_NUMPAD3.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_NUMPAD4", keys::VK_NUMPAD4.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_NUMPAD5", keys::VK_NUMPAD5.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_NUMPAD6", keys::VK_NUMPAD6.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_NUMPAD7", keys::VK_NUMPAD7.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_NUMPAD8", keys::VK_NUMPAD8.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_NUMPAD9", keys::VK_NUMPAD9.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_SUBTRACT", keys::VK_SUBTRACT.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_DIVIDE", keys::VK_DIVIDE.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_NUMLOCK", keys::VK_NUMLOCK.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_DECIMAL", keys::VK_DECIMAL.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_ADD", keys::VK_ADD.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_MULTIPLY", keys::VK_MULTIPLY.0)?;
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-          writeln!(w, "{:35}, 0x{:02X}", "VK__none_", keys::VK__none_.0)?;
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-  if any { writeln!(w, "{:35}, {}", "None", "n!()")?; }
-          writeln!(w, "{:35}, 0x{:02X}", "VK_ABNT_C1", keys::VK_ABNT_C1.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_ABNT_C2", keys::VK_ABNT_C2.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_ATTN", keys::VK_ATTN.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_CRSEL", keys::VK_CRSEL.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_DBE_ALPHANUMERIC", keys::VK_DBE_ALPHANUMERIC.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_DBE_CODEINPUT", keys::VK_DBE_CODEINPUT.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_DBE_DBCSCHAR", keys::VK_DBE_DBCSCHAR.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_DBE_DETERMINESTRING", keys::VK_DBE_DETERMINESTRING.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_DBE_ENTERDLGCONVERSIONMODE", keys::VK_DBE_ENTERDLGCONVERSIONMODE.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_DBE_ENTERIMECONFIGMODE", keys::VK_DBE_ENTERIMECONFIGMODE.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_DBE_ENTERWORDREGISTERMODE", keys::VK_DBE_ENTERWORDREGISTERMODE.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_DBE_FLUSHSTRING", keys::VK_DBE_FLUSHSTRING.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_DBE_HIRAGANA", keys::VK_DBE_HIRAGANA.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_DBE_KATAKANA", keys::VK_DBE_KATAKANA.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_DBE_NOCODEINPUT", keys::VK_DBE_NOCODEINPUT.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_DBE_NOROMAN", keys::VK_DBE_NOROMAN.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_DBE_ROMAN", keys::VK_DBE_ROMAN.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_DBE_SBCSCHAR", keys::VK_DBE_SBCSCHAR.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_EREOF", keys::VK_EREOF.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_EXSEL", keys::VK_EXSEL.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_GAMEPAD_A", keys::VK_GAMEPAD_A.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_GAMEPAD_B", keys::VK_GAMEPAD_B.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_GAMEPAD_DPAD_DOWN", keys::VK_GAMEPAD_DPAD_DOWN.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_GAMEPAD_DPAD_LEFT", keys::VK_GAMEPAD_DPAD_LEFT.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_GAMEPAD_DPAD_RIGHT", keys::VK_GAMEPAD_DPAD_RIGHT.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_GAMEPAD_DPAD_UP", keys::VK_GAMEPAD_DPAD_UP.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_GAMEPAD_LEFT_SHOULDER", keys::VK_GAMEPAD_LEFT_SHOULDER.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_GAMEPAD_LEFT_THUMBSTICK_BUTTON", keys::VK_GAMEPAD_LEFT_THUMBSTICK_BUTTON.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_GAMEPAD_LEFT_THUMBSTICK_DOWN", keys::VK_GAMEPAD_LEFT_THUMBSTICK_DOWN.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_GAMEPAD_LEFT_THUMBSTICK_LEFT", keys::VK_GAMEPAD_LEFT_THUMBSTICK_LEFT.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_GAMEPAD_LEFT_THUMBSTICK_RIGHT", keys::VK_GAMEPAD_LEFT_THUMBSTICK_RIGHT.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_GAMEPAD_LEFT_THUMBSTICK_UP", keys::VK_GAMEPAD_LEFT_THUMBSTICK_UP.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_GAMEPAD_LEFT_TRIGGER", keys::VK_GAMEPAD_LEFT_TRIGGER.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_GAMEPAD_MENU", keys::VK_GAMEPAD_MENU.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_GAMEPAD_RIGHT_SHOULDER", keys::VK_GAMEPAD_RIGHT_SHOULDER.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_GAMEPAD_RIGHT_THUMBSTICK_BUTTON", keys::VK_GAMEPAD_RIGHT_THUMBSTICK_BUTTON.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_GAMEPAD_RIGHT_THUMBSTICK_DOWN", keys::VK_GAMEPAD_RIGHT_THUMBSTICK_DOWN.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_GAMEPAD_RIGHT_THUMBSTICK_LEFT", keys::VK_GAMEPAD_RIGHT_THUMBSTICK_LEFT.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_GAMEPAD_RIGHT_THUMBSTICK_RIGHT", keys::VK_GAMEPAD_RIGHT_THUMBSTICK_RIGHT.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_GAMEPAD_RIGHT_THUMBSTICK_UP", keys::VK_GAMEPAD_RIGHT_THUMBSTICK_UP.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_GAMEPAD_RIGHT_TRIGGER", keys::VK_GAMEPAD_RIGHT_TRIGGER.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_GAMEPAD_VIEW", keys::VK_GAMEPAD_VIEW.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_GAMEPAD_X", keys::VK_GAMEPAD_X.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_GAMEPAD_Y", keys::VK_GAMEPAD_Y.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_ICO_00", keys::VK_ICO_00.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_ICO_CLEAR", keys::VK_ICO_CLEAR.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_ICO_HELP", keys::VK_ICO_HELP.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_NAVIGATION_ACCEPT", keys::VK_NAVIGATION_ACCEPT.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_NAVIGATION_CANCEL", keys::VK_NAVIGATION_CANCEL.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_NAVIGATION_DOWN", keys::VK_NAVIGATION_DOWN.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_NAVIGATION_LEFT", keys::VK_NAVIGATION_LEFT.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_NAVIGATION_MENU", keys::VK_NAVIGATION_MENU.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_NAVIGATION_RIGHT", keys::VK_NAVIGATION_RIGHT.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_NAVIGATION_UP", keys::VK_NAVIGATION_UP.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_NAVIGATION_VIEW", keys::VK_NAVIGATION_VIEW.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_NONAME", keys::VK_NONAME.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_8", keys::VK_OEM_8.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_ATTN", keys::VK_OEM_ATTN.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_AUTO", keys::VK_OEM_AUTO.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_AX", keys::VK_OEM_AX.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_BACKTAB", keys::VK_OEM_BACKTAB.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_CLEAR", keys::VK_OEM_CLEAR.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_COPY", keys::VK_OEM_COPY.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_CUSEL", keys::VK_OEM_CUSEL.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_ENLW", keys::VK_OEM_ENLW.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_FINISH", keys::VK_OEM_FINISH.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_FJ_JISHO", keys::VK_OEM_FJ_JISHO.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_FJ_LOYA", keys::VK_OEM_FJ_LOYA.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_FJ_MASSHOU", keys::VK_OEM_FJ_MASSHOU.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_FJ_ROYA", keys::VK_OEM_FJ_ROYA.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_FJ_TOUROKU", keys::VK_OEM_FJ_TOUROKU.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_JUMP", keys::VK_OEM_JUMP.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_NEC_EQUAL", keys::VK_OEM_NEC_EQUAL.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_PA1", keys::VK_OEM_PA1.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_PA2", keys::VK_OEM_PA2.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_PA3", keys::VK_OEM_PA3.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_RESET", keys::VK_OEM_RESET.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_OEM_WSCTRL", keys::VK_OEM_WSCTRL.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_PA1", keys::VK_PA1.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_PACKET", keys::VK_PACKET.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_PLAY", keys::VK_PLAY.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_PROCESSKEY", keys::VK_PROCESSKEY.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_ZOOM", keys::VK_ZOOM.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_ACCEPT", keys::VK_ACCEPT.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_CONVERT", keys::VK_CONVERT.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_FINAL", keys::VK_FINAL.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_IME_OFF", keys::VK_IME_OFF.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_IME_ON", keys::VK_IME_ON.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_JUNJA", keys::VK_JUNJA.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_KANA", keys::VK_KANA.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_HANGEUL", keys::VK_HANGEUL.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_HANGUL", keys::VK_HANGUL.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_KANJI", keys::VK_KANJI.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_HANJA", keys::VK_HANJA.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_MODECHANGE", keys::VK_MODECHANGE.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_NONCONVERT", keys::VK_NONCONVERT.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_PRINT", keys::VK_PRINT.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_SEPARATOR", keys::VK_SEPARATOR.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_LAUNCH_APP1", keys::VK_LAUNCH_APP1.0)?;
-          writeln!(w, "{:35}, 0x{:02X}", "VK_LAUNCH_APP2", keys::VK_LAUNCH_APP2.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_LBUTTON", keys::VK_LBUTTON.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_RBUTTON", keys::VK_RBUTTON.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_MBUTTON", keys::VK_MBUTTON.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_XBUTTON1", keys::VK_XBUTTON1.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_XBUTTON2", keys::VK_XBUTTON2.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_BROWSER_BACK", keys::VK_BROWSER_BACK.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_BROWSER_FAVORITES", keys::VK_BROWSER_FAVORITES.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_BROWSER_FORWARD", keys::VK_BROWSER_FORWARD.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_BROWSER_HOME", keys::VK_BROWSER_HOME.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_BROWSER_REFRESH", keys::VK_BROWSER_REFRESH.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_BROWSER_SEARCH", keys::VK_BROWSER_SEARCH.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_BROWSER_STOP", keys::VK_BROWSER_STOP.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_LAUNCH_MAIL", keys::VK_LAUNCH_MAIL.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_LAUNCH_MEDIA_SELECT", keys::VK_LAUNCH_MEDIA_SELECT.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_VOLUME_MUTE", keys::VK_VOLUME_MUTE.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_MEDIA_PLAY_PAUSE", keys::VK_MEDIA_PLAY_PAUSE.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_MEDIA_NEXT_TRACK", keys::VK_MEDIA_NEXT_TRACK.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_MEDIA_PREV_TRACK", keys::VK_MEDIA_PREV_TRACK.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_MEDIA_STOP", keys::VK_MEDIA_STOP.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_VOLUME_DOWN", keys::VK_VOLUME_DOWN.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_VOLUME_UP", keys::VK_VOLUME_UP.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_SLEEP", keys::VK_SLEEP.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_0", keys::VK_0.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_1", keys::VK_1.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_2", keys::VK_2.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_3", keys::VK_3.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_4", keys::VK_4.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_5", keys::VK_5.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_6", keys::VK_6.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_7", keys::VK_7.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_8", keys::VK_8.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_9", keys::VK_9.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_A", keys::VK_A.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_APPS", keys::VK_APPS.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_B", keys::VK_B.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_5", keys::VK_OEM_5.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_C", keys::VK_C.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_CANCEL", keys::VK_CANCEL.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_CAPITAL", keys::VK_CAPITAL.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_CLEAR", keys::VK_CLEAR.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_COMMA", keys::VK_OEM_COMMA.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_D", keys::VK_D.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_MINUS", keys::VK_OEM_MINUS.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_BACK", keys::VK_BACK.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_DELETE", keys::VK_DELETE.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_DOWN", keys::VK_DOWN.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_E", keys::VK_E.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_END", keys::VK_END.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_PLUS", keys::VK_OEM_PLUS.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_ESCAPE", keys::VK_ESCAPE.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_EXECUTE", keys::VK_EXECUTE.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_F", keys::VK_F.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_F1", keys::VK_F1.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_F10", keys::VK_F10.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_F11", keys::VK_F11.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_F12", keys::VK_F12.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_F13", keys::VK_F13.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_F14", keys::VK_F14.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_F15", keys::VK_F15.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_F16", keys::VK_F16.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_F17", keys::VK_F17.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_F18", keys::VK_F18.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_F19", keys::VK_F19.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_F2", keys::VK_F2.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_F20", keys::VK_F20.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_F21", keys::VK_F21.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_F22", keys::VK_F22.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_F23", keys::VK_F23.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_F24", keys::VK_F24.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_F3", keys::VK_F3.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_F4", keys::VK_F4.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_F5", keys::VK_F5.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_F6", keys::VK_F6.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_F7", keys::VK_F7.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_F8", keys::VK_F8.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_F9", keys::VK_F9.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_2", keys::VK_OEM_2.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_G", keys::VK_G.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_3", keys::VK_OEM_3.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_H", keys::VK_H.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_HELP", keys::VK_HELP.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_HOME", keys::VK_HOME.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_I", keys::VK_I.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_INSERT", keys::VK_INSERT.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_J", keys::VK_J.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_K", keys::VK_K.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_L", keys::VK_L.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_LMENU", keys::VK_LMENU.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_MENU", keys::VK_MENU.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_MENU", keys::VK_MENU.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_7", keys::VK_OEM_7.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_LEFT", keys::VK_LEFT.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_4", keys::VK_OEM_4.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_CONTROL", keys::VK_CONTROL.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_LCONTROL", keys::VK_LCONTROL.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_LWIN", keys::VK_LWIN.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_LWIN", keys::VK_LWIN.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_LWIN", keys::VK_LWIN.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_LWIN", keys::VK_LWIN.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_LWIN", keys::VK_LWIN.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_LSHIFT", keys::VK_LSHIFT.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_SHIFT", keys::VK_SHIFT.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_M", keys::VK_M.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_N", keys::VK_N.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_102", keys::VK_OEM_102.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_O", keys::VK_O.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_P", keys::VK_P.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_NEXT", keys::VK_NEXT.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_PRIOR", keys::VK_PRIOR.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_PAUSE", keys::VK_PAUSE.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_PERIOD", keys::VK_OEM_PERIOD.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_SNAPSHOT", keys::VK_SNAPSHOT.0)?;
+  if any {writeln!(w, "{:35}, 0x{:02X},", "VK_SNAPSHOT*", keys::VK_SNAPSHOT.0)?;}
+          writeln!(w, "{:35}, 0x{:02X},", "VK_Q", keys::VK_Q.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_R", keys::VK_R.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_RETURN", keys::VK_RETURN.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_RMENU", keys::VK_RMENU.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_RIGHT", keys::VK_RIGHT.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_6", keys::VK_OEM_6.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_RCONTROL", keys::VK_RCONTROL.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_RWIN", keys::VK_RWIN.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_RSHIFT", keys::VK_RSHIFT.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_S", keys::VK_S.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_SCROLL", keys::VK_SCROLL.0)?;
+  if any {writeln!(w, "{:35}, 0x{:02X},", "VK_SCROLL*", keys::VK_SCROLL.0)?;}
+          writeln!(w, "{:35}, 0x{:02X},", "VK_SELECT", keys::VK_SELECT.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_1", keys::VK_OEM_1.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_SPACE", keys::VK_SPACE.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_T", keys::VK_T.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_TAB", keys::VK_TAB.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_U", keys::VK_U.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_UP", keys::VK_UP.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_V", keys::VK_V.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_W", keys::VK_W.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_X", keys::VK_X.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_Y", keys::VK_Y.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_Z", keys::VK_Z.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_NUMPAD0", keys::VK_NUMPAD0.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_NUMPAD1", keys::VK_NUMPAD1.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_NUMPAD2", keys::VK_NUMPAD2.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_NUMPAD3", keys::VK_NUMPAD3.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_NUMPAD4", keys::VK_NUMPAD4.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_NUMPAD5", keys::VK_NUMPAD5.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_NUMPAD6", keys::VK_NUMPAD6.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_NUMPAD7", keys::VK_NUMPAD7.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_NUMPAD8", keys::VK_NUMPAD8.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_NUMPAD9", keys::VK_NUMPAD9.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_SUBTRACT", keys::VK_SUBTRACT.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_DIVIDE", keys::VK_DIVIDE.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_NUMLOCK", keys::VK_NUMLOCK.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_DECIMAL", keys::VK_DECIMAL.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_ADD", keys::VK_ADD.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_MULTIPLY", keys::VK_MULTIPLY.0)?;
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+          writeln!(w, "{:35}, 0x{:02X},", "VK__none_", keys::VK__none_.0)?;
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:35}, {},", "None", "    ")?; }
+          writeln!(w, "{:35}, 0x{:02X},", "VK_ABNT_C1", keys::VK_ABNT_C1.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_ABNT_C2", keys::VK_ABNT_C2.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_ATTN", keys::VK_ATTN.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_CRSEL", keys::VK_CRSEL.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_DBE_ALPHANUMERIC", keys::VK_DBE_ALPHANUMERIC.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_DBE_CODEINPUT", keys::VK_DBE_CODEINPUT.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_DBE_DBCSCHAR", keys::VK_DBE_DBCSCHAR.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_DBE_DETERMINESTRING", keys::VK_DBE_DETERMINESTRING.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_DBE_ENTERDLGCONVERSIONMODE", keys::VK_DBE_ENTERDLGCONVERSIONMODE.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_DBE_ENTERIMECONFIGMODE", keys::VK_DBE_ENTERIMECONFIGMODE.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_DBE_ENTERWORDREGISTERMODE", keys::VK_DBE_ENTERWORDREGISTERMODE.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_DBE_FLUSHSTRING", keys::VK_DBE_FLUSHSTRING.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_DBE_HIRAGANA", keys::VK_DBE_HIRAGANA.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_DBE_KATAKANA", keys::VK_DBE_KATAKANA.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_DBE_NOCODEINPUT", keys::VK_DBE_NOCODEINPUT.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_DBE_NOROMAN", keys::VK_DBE_NOROMAN.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_DBE_ROMAN", keys::VK_DBE_ROMAN.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_DBE_SBCSCHAR", keys::VK_DBE_SBCSCHAR.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_EREOF", keys::VK_EREOF.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_EXSEL", keys::VK_EXSEL.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_GAMEPAD_A", keys::VK_GAMEPAD_A.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_GAMEPAD_B", keys::VK_GAMEPAD_B.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_GAMEPAD_DPAD_DOWN", keys::VK_GAMEPAD_DPAD_DOWN.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_GAMEPAD_DPAD_LEFT", keys::VK_GAMEPAD_DPAD_LEFT.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_GAMEPAD_DPAD_RIGHT", keys::VK_GAMEPAD_DPAD_RIGHT.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_GAMEPAD_DPAD_UP", keys::VK_GAMEPAD_DPAD_UP.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_GAMEPAD_LEFT_SHOULDER", keys::VK_GAMEPAD_LEFT_SHOULDER.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_GAMEPAD_LEFT_THUMBSTICK_BUTTON", keys::VK_GAMEPAD_LEFT_THUMBSTICK_BUTTON.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_GAMEPAD_LEFT_THUMBSTICK_DOWN", keys::VK_GAMEPAD_LEFT_THUMBSTICK_DOWN.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_GAMEPAD_LEFT_THUMBSTICK_LEFT", keys::VK_GAMEPAD_LEFT_THUMBSTICK_LEFT.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_GAMEPAD_LEFT_THUMBSTICK_RIGHT", keys::VK_GAMEPAD_LEFT_THUMBSTICK_RIGHT.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_GAMEPAD_LEFT_THUMBSTICK_UP", keys::VK_GAMEPAD_LEFT_THUMBSTICK_UP.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_GAMEPAD_LEFT_TRIGGER", keys::VK_GAMEPAD_LEFT_TRIGGER.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_GAMEPAD_MENU", keys::VK_GAMEPAD_MENU.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_GAMEPAD_RIGHT_SHOULDER", keys::VK_GAMEPAD_RIGHT_SHOULDER.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_GAMEPAD_RIGHT_THUMBSTICK_BUTTON", keys::VK_GAMEPAD_RIGHT_THUMBSTICK_BUTTON.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_GAMEPAD_RIGHT_THUMBSTICK_DOWN", keys::VK_GAMEPAD_RIGHT_THUMBSTICK_DOWN.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_GAMEPAD_RIGHT_THUMBSTICK_LEFT", keys::VK_GAMEPAD_RIGHT_THUMBSTICK_LEFT.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_GAMEPAD_RIGHT_THUMBSTICK_RIGHT", keys::VK_GAMEPAD_RIGHT_THUMBSTICK_RIGHT.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_GAMEPAD_RIGHT_THUMBSTICK_UP", keys::VK_GAMEPAD_RIGHT_THUMBSTICK_UP.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_GAMEPAD_RIGHT_TRIGGER", keys::VK_GAMEPAD_RIGHT_TRIGGER.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_GAMEPAD_VIEW", keys::VK_GAMEPAD_VIEW.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_GAMEPAD_X", keys::VK_GAMEPAD_X.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_GAMEPAD_Y", keys::VK_GAMEPAD_Y.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_ICO_00", keys::VK_ICO_00.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_ICO_CLEAR", keys::VK_ICO_CLEAR.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_ICO_HELP", keys::VK_ICO_HELP.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_NAVIGATION_ACCEPT", keys::VK_NAVIGATION_ACCEPT.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_NAVIGATION_CANCEL", keys::VK_NAVIGATION_CANCEL.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_NAVIGATION_DOWN", keys::VK_NAVIGATION_DOWN.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_NAVIGATION_LEFT", keys::VK_NAVIGATION_LEFT.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_NAVIGATION_MENU", keys::VK_NAVIGATION_MENU.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_NAVIGATION_RIGHT", keys::VK_NAVIGATION_RIGHT.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_NAVIGATION_UP", keys::VK_NAVIGATION_UP.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_NAVIGATION_VIEW", keys::VK_NAVIGATION_VIEW.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_NONAME", keys::VK_NONAME.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_8", keys::VK_OEM_8.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_ATTN", keys::VK_OEM_ATTN.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_AUTO", keys::VK_OEM_AUTO.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_AX", keys::VK_OEM_AX.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_BACKTAB", keys::VK_OEM_BACKTAB.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_CLEAR", keys::VK_OEM_CLEAR.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_COPY", keys::VK_OEM_COPY.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_CUSEL", keys::VK_OEM_CUSEL.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_ENLW", keys::VK_OEM_ENLW.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_FINISH", keys::VK_OEM_FINISH.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_FJ_JISHO", keys::VK_OEM_FJ_JISHO.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_FJ_LOYA", keys::VK_OEM_FJ_LOYA.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_FJ_MASSHOU", keys::VK_OEM_FJ_MASSHOU.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_FJ_ROYA", keys::VK_OEM_FJ_ROYA.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_FJ_TOUROKU", keys::VK_OEM_FJ_TOUROKU.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_JUMP", keys::VK_OEM_JUMP.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_NEC_EQUAL", keys::VK_OEM_NEC_EQUAL.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_PA1", keys::VK_OEM_PA1.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_PA2", keys::VK_OEM_PA2.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_PA3", keys::VK_OEM_PA3.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_RESET", keys::VK_OEM_RESET.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_OEM_WSCTRL", keys::VK_OEM_WSCTRL.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_PA1", keys::VK_PA1.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_PACKET", keys::VK_PACKET.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_PLAY", keys::VK_PLAY.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_PROCESSKEY", keys::VK_PROCESSKEY.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_ZOOM", keys::VK_ZOOM.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_ACCEPT", keys::VK_ACCEPT.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_CONVERT", keys::VK_CONVERT.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_FINAL", keys::VK_FINAL.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_IME_OFF", keys::VK_IME_OFF.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_IME_ON", keys::VK_IME_ON.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_JUNJA", keys::VK_JUNJA.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_KANA", keys::VK_KANA.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_HANGEUL", keys::VK_HANGEUL.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_HANGUL", keys::VK_HANGUL.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_KANJI", keys::VK_KANJI.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_HANJA", keys::VK_HANJA.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_MODECHANGE", keys::VK_MODECHANGE.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_NONCONVERT", keys::VK_NONCONVERT.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_PRINT", keys::VK_PRINT.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_SEPARATOR", keys::VK_SEPARATOR.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_LAUNCH_APP1", keys::VK_LAUNCH_APP1.0)?;
+          writeln!(w, "{:35}, 0x{:02X},", "VK_LAUNCH_APP2", keys::VK_LAUNCH_APP2.0)?;
+  Ok(())
+}
+
+
+fn print_macos(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()>{
+  use vkey::mirror::{macos::KeyCode, macos_ext::{CGKeyCode, KeyCodeExt}};
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::MUTE", CGKeyCode::from(KeyCode::MUTE).0)?;
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::VOLUME_DOWN", CGKeyCode::from(KeyCode::VOLUME_DOWN).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::VOLUME_UP", CGKeyCode::from(KeyCode::VOLUME_UP).0)?;
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_0", CGKeyCode::from(KeyCodeExt::kVK_ANSI_0).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_1", CGKeyCode::from(KeyCodeExt::kVK_ANSI_1).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_2", CGKeyCode::from(KeyCodeExt::kVK_ANSI_2).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_3", CGKeyCode::from(KeyCodeExt::kVK_ANSI_3).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_4", CGKeyCode::from(KeyCodeExt::kVK_ANSI_4).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_5", CGKeyCode::from(KeyCodeExt::kVK_ANSI_5).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_6", CGKeyCode::from(KeyCodeExt::kVK_ANSI_6).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_7", CGKeyCode::from(KeyCodeExt::kVK_ANSI_7).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_8", CGKeyCode::from(KeyCodeExt::kVK_ANSI_8).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_9", CGKeyCode::from(KeyCodeExt::kVK_ANSI_9).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_A", CGKeyCode::from(KeyCodeExt::kVK_ANSI_A).0)?;
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_B", CGKeyCode::from(KeyCodeExt::kVK_ANSI_B).0)?;
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_C", CGKeyCode::from(KeyCodeExt::kVK_ANSI_C).0)?;
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::CAPS_LOCK", CGKeyCode::from(KeyCode::CAPS_LOCK).0)?;
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_D", CGKeyCode::from(KeyCodeExt::kVK_ANSI_D).0)?;
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::DELETE", CGKeyCode::from(KeyCode::DELETE).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::FORWARD_DELETE", CGKeyCode::from(KeyCode::FORWARD_DELETE).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::DOWN_ARROW", CGKeyCode::from(KeyCode::DOWN_ARROW).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_E", CGKeyCode::from(KeyCodeExt::kVK_ANSI_E).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::END", CGKeyCode::from(KeyCode::END).0)?;
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::ESCAPE", CGKeyCode::from(KeyCode::ESCAPE).0)?;
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_F", CGKeyCode::from(KeyCodeExt::kVK_ANSI_F).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::F1", CGKeyCode::from(KeyCode::F1).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::F10", CGKeyCode::from(KeyCode::F10).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::F11", CGKeyCode::from(KeyCode::F11).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::F12", CGKeyCode::from(KeyCode::F12).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::F13", CGKeyCode::from(KeyCode::F13).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::F14", CGKeyCode::from(KeyCode::F14).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::F15", CGKeyCode::from(KeyCode::F15).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::F16", CGKeyCode::from(KeyCode::F16).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::F17", CGKeyCode::from(KeyCode::F17).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::F18", CGKeyCode::from(KeyCode::F18).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::F19", CGKeyCode::from(KeyCode::F19).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::F2", CGKeyCode::from(KeyCode::F2).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::F20", CGKeyCode::from(KeyCode::F20).0)?;
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::F3", CGKeyCode::from(KeyCode::F3).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::F4", CGKeyCode::from(KeyCode::F4).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::F5", CGKeyCode::from(KeyCode::F5).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::F6", CGKeyCode::from(KeyCode::F6).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::F7", CGKeyCode::from(KeyCode::F7).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::F8", CGKeyCode::from(KeyCode::F8).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::F9", CGKeyCode::from(KeyCode::F9).0)?;
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_G", CGKeyCode::from(KeyCodeExt::kVK_ANSI_G).0)?;
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_H", CGKeyCode::from(KeyCodeExt::kVK_ANSI_H).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::HELP", CGKeyCode::from(KeyCode::HELP).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::HOME", CGKeyCode::from(KeyCode::HOME).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_I", CGKeyCode::from(KeyCodeExt::kVK_ANSI_I).0)?;
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_J", CGKeyCode::from(KeyCodeExt::kVK_ANSI_J).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_K", CGKeyCode::from(KeyCodeExt::kVK_ANSI_K).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_L", CGKeyCode::from(KeyCodeExt::kVK_ANSI_L).0)?;
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::OPTION", CGKeyCode::from(KeyCode::OPTION).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::OPTION", CGKeyCode::from(KeyCode::OPTION).0)?;
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::LEFT_ARROW", CGKeyCode::from(KeyCode::LEFT_ARROW).0)?;
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::CONTROL", CGKeyCode::from(KeyCode::CONTROL).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::CONTROL", CGKeyCode::from(KeyCode::CONTROL).0)?;
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::COMMAND", CGKeyCode::from(KeyCode::COMMAND).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::COMMAND", CGKeyCode::from(KeyCode::COMMAND).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::COMMAND", CGKeyCode::from(KeyCode::COMMAND).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::COMMAND", CGKeyCode::from(KeyCode::COMMAND).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::SHIFT", CGKeyCode::from(KeyCode::SHIFT).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::SHIFT", CGKeyCode::from(KeyCode::SHIFT).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_M", CGKeyCode::from(KeyCodeExt::kVK_ANSI_M).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_N", CGKeyCode::from(KeyCodeExt::kVK_ANSI_N).0)?;
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_O", CGKeyCode::from(KeyCodeExt::kVK_ANSI_O).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_P", CGKeyCode::from(KeyCodeExt::kVK_ANSI_P).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::PAGE_DOWN", CGKeyCode::from(KeyCode::PAGE_DOWN).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::PAGE_UP", CGKeyCode::from(KeyCode::PAGE_UP).0)?;
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_Q", CGKeyCode::from(KeyCodeExt::kVK_ANSI_Q).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_R", CGKeyCode::from(KeyCodeExt::kVK_ANSI_R).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::RETURN", CGKeyCode::from(KeyCode::RETURN).0)?;
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::RIGHT_ARROW", CGKeyCode::from(KeyCode::RIGHT_ARROW).0)?;
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::RIGHT_CONTROL", CGKeyCode::from(KeyCode::RIGHT_CONTROL).0)?;
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::RIGHT_SHIFT", CGKeyCode::from(KeyCode::RIGHT_SHIFT).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_S", CGKeyCode::from(KeyCodeExt::kVK_ANSI_S).0)?;
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::SPACE", CGKeyCode::from(KeyCode::SPACE).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_T", CGKeyCode::from(KeyCodeExt::kVK_ANSI_T).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::TAB", CGKeyCode::from(KeyCode::TAB).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_U", CGKeyCode::from(KeyCodeExt::kVK_ANSI_U).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::UP_ARROW", CGKeyCode::from(KeyCode::UP_ARROW).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_V", CGKeyCode::from(KeyCodeExt::kVK_ANSI_V).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_W", CGKeyCode::from(KeyCodeExt::kVK_ANSI_W).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_X", CGKeyCode::from(KeyCodeExt::kVK_ANSI_X).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_Y", CGKeyCode::from(KeyCodeExt::kVK_ANSI_Y).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_Z", CGKeyCode::from(KeyCodeExt::kVK_ANSI_Z).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_Keypad0", CGKeyCode::from(KeyCodeExt::kVK_ANSI_Keypad0).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_Keypad1", CGKeyCode::from(KeyCodeExt::kVK_ANSI_Keypad1).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_Keypad2", CGKeyCode::from(KeyCodeExt::kVK_ANSI_Keypad2).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_Keypad3", CGKeyCode::from(KeyCodeExt::kVK_ANSI_Keypad3).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_Keypad4", CGKeyCode::from(KeyCodeExt::kVK_ANSI_Keypad4).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_Keypad5", CGKeyCode::from(KeyCodeExt::kVK_ANSI_Keypad5).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_Keypad6", CGKeyCode::from(KeyCodeExt::kVK_ANSI_Keypad6).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_Keypad7", CGKeyCode::from(KeyCodeExt::kVK_ANSI_Keypad7).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_Keypad8", CGKeyCode::from(KeyCodeExt::kVK_ANSI_Keypad8).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_Keypad9", CGKeyCode::from(KeyCodeExt::kVK_ANSI_Keypad9).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_KeypadMinus", CGKeyCode::from(KeyCodeExt::kVK_ANSI_KeypadMinus).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_KeypadDivide", CGKeyCode::from(KeyCodeExt::kVK_ANSI_KeypadDivide).0)?;
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_KeypadDecimal", CGKeyCode::from(KeyCodeExt::kVK_ANSI_KeypadDecimal).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_KeypadPlus", CGKeyCode::from(KeyCodeExt::kVK_ANSI_KeypadPlus).0)?;
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCodeExt::kVK_ANSI_KeypadMultiply", CGKeyCode::from(KeyCodeExt::kVK_ANSI_KeypadMultiply).0)?;
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::FUNCTION", CGKeyCode::from(KeyCode::FUNCTION).0)?;
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+          writeln!(w, "{:36}, 0x{:02X},", "CGKeyCode::from(131)", CGKeyCode::from(CGKeyCode::from(131)).0)?;
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+          writeln!(w, "{:36}, 0x{:02X},", "CGKeyCode::from(160)", CGKeyCode::from(CGKeyCode::from(160)).0)?;
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::RIGHT_COMMAND", CGKeyCode::from(KeyCode::RIGHT_COMMAND).0)?;
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+          writeln!(w, "{:36}, 0x{:02X},", "KeyCode::RIGHT_OPTION", CGKeyCode::from(KeyCode::RIGHT_OPTION).0)?;
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
   Ok(())
 }
 

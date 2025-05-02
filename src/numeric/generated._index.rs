@@ -36,3 +36,18 @@ mod generated_winvk {
   }
 }
 
+#[allow(unused_imports)]
+mod generated_cg {
+  #[cfg(any(dep_macos, mirror_macos))]
+  mod mirror_1 {
+    #[cfg(dep_macos)]
+    use crate::deps::macos::KeyCode;
+    #[cfg(not(dep_macos))]
+    #[cfg(mirror_macos)]
+    use crate::mirror::macos::KeyCode;
+    use crate::mirror::macos_ext::{CGKeyCode, KeyCodeExt};
+    use crate::convert::Into_;
+    include!("generated.CG.rs");
+  }
+}
+

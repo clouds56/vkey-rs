@@ -13,6 +13,7 @@ struct Line<S> {
   pub enigo_attr: S,
   pub keysym: S,
   pub cg: S,
+  pub cg_code: S,
 }
 
 impl<T> From<Vec<T>> for Line<T> {
@@ -28,6 +29,7 @@ impl<T> From<Vec<T>> for Line<T> {
       enigo_attr: v.next().unwrap(),
       keysym: v.next().unwrap(),
       cg: v.next().unwrap(),
+      cg_code: v.next().unwrap(),
     }
   }
 }
@@ -300,7 +302,7 @@ impl KeyType {
       ],
       KeyType::KeySym => unimplemented!(),
       KeyType::CG => vec![
-        ConvertImportEntry::new("any(dep_macos, mirror_macos)", "#[cfg(dep_macos)]\nuse crate::deps::macos::KeyCode;\n#[cfg(not(dep_macos))]\n#[cfg(mirror_macos)]\nuse crate::mirror::macos::KeyCode;\nuse crate::mirror::macos_ext::{CGKeyCode, KeyCodeExt};"),
+        ConvertImportEntry::new("any(dep_macos, mirror_macos)", "#[cfg(dep_macos)]\nuse crate::deps::macos::KeyCode;\n#[cfg(not(dep_macos))]\n#[cfg(mirror_macos)]\nuse crate::mirror::macos::KeyCode;\nuse crate::mirror::macos_ext::{CGKeyCode, KeyCodeExt};\nuse crate::convert::Into_;"),
       ],
       _ => return vec![],
     }
@@ -345,6 +347,7 @@ impl KeyType {
       KeyType::HUT => line.hut_code,
       KeyType::Winput => line.vk_code,
       KeyType::WinVk => line.vk_code,
+      KeyType::CG => line.cg_code,
       _ => return None,
     }.into()
   }
@@ -359,7 +362,7 @@ impl KeyType {
   pub fn as_value_suffix(self) -> Option<&'static str> {
     match self {
       KeyType::HUT => Some(".usage()"),
-      KeyType::CG => Some(".into()"),
+      KeyType::CG => Some(".into_::<CGKeyCode>()"),
       _ => None
     }
   }
@@ -369,6 +372,7 @@ impl KeyType {
       KeyType::HUT => Some("AsUsage::usage_value({})"),
       KeyType::Winput => Some("*{} as u8"),
       KeyType::WinVk => Some("{}.0"),
+      KeyType::CG => Some("{}.0"),
       _ => None,
     }
   }
@@ -378,6 +382,7 @@ impl KeyType {
       KeyType::HUT => None,
       KeyType::Winput => Some("unsafe { std::mem::transmute({}) }"),
       KeyType::WinVk => Some("Vk({})"),
+      KeyType::CG => Some("CGKeyCode({})"),
       _ => None,
     }
   }
@@ -387,6 +392,7 @@ impl KeyType {
       KeyType::HUT => Some("u32"),
       KeyType::Winput => Some("u8"),
       KeyType::WinVk => Some("u16"),
+      KeyType::CG => Some("u16"),
       _ => None,
     }
   }
@@ -644,7 +650,7 @@ pub fn main() {
   save_file(format!("{output_path}/generated._index.rs"), index_mod).expect("failed to write index.rs");
 
   let mut index_mod = String::new();
-  for ty in [KeyType::HUT, KeyType::Winput, KeyType::WinVk] {
+  for ty in [KeyType::HUT, KeyType::Winput, KeyType::WinVk, KeyType::CG] {
     let filename = format!("generated.{ty:?}.rs");
     let content = Gen(ty, ty).build_as_code(&csv);
     save_file(format!("{output_path2}/{filename}"), content)
