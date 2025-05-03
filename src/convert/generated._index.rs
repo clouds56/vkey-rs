@@ -1,3 +1,6 @@
+// This file is auto-generated. Do not edit manually.
+#![allow(unused_imports)]
+
 mod generated_hut_to_winput {
   #[cfg(all(dep_hut_04, mirror_winput_vk))]
   mod dep_to_mirror_1_1 {

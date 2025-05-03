@@ -635,6 +635,12 @@ fn build_attr_for_for_target<'a>(a: &'a str) -> Option<Cow<'a, str>> {
   }
 }
 
+const INDEX_MOD_HEADER: &str = r#"
+// This file is auto-generated. Do not edit manually.
+#![allow(unused_imports)]
+
+"#;
+
 pub fn main() {
   if std::env::var("DOCS_RS").is_ok() {
     return;
@@ -649,7 +655,7 @@ pub fn main() {
   let csv = csv_content.lines().filter(|i| !i.trim().is_empty() && !i.trim().starts_with(";"))
       .map(|i| i.split(',').collect::<Vec<_>>().into()).collect::<Vec<Line<_>>>();
 
-  let mut index_mod = String::new();
+  let mut index_mod = INDEX_MOD_HEADER.trim_start().to_string();
   for (from, to) in [
     (KeyType::HUT, KeyType::Winput),
 
@@ -682,7 +688,7 @@ pub fn main() {
   }
   save_file(format!("{output_path}/generated._index.rs"), index_mod).expect("failed to write index.rs");
 
-  let mut index_mod = String::new();
+  let mut index_mod = INDEX_MOD_HEADER.trim_start().to_string();
   for ty in [KeyType::HUT, KeyType::Winput, KeyType::WinVk, KeyType::WinScan, KeyType::Keysym, KeyType::CG] {
     let filename = format!("generated.{ty:?}.rs");
     let content = Gen(ty, ty).build_as_code(&csv);

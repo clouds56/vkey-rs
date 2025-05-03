@@ -1,3 +1,6 @@
+// This file is auto-generated. Do not edit manually.
+#![allow(unused_imports)]
+
 #[allow(unused_imports)]
 mod generated_hut {
   #[cfg(dep_hut_04)]
