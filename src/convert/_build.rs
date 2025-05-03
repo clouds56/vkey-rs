@@ -80,7 +80,7 @@ pub fn {{from | lower}}_to_{{to | lower}}(value: {{from}}) -> Option<{{to}}> {
     {% if let Some(attr) = entry.attr_v -%}
     {{ attr | indent(4) }}
     {% endif -%}
-    {{ entry.k | pad_right(*k_len) }} => {{ entry.v | pad_right(*v_len) | apply_expr(&value_expr) }},
+    {{ entry.k | pad_right(*k_len) | apply_expr(key_expr) }} => {{ entry.v | pad_right(*v_len) | apply_expr(value_expr) }},
     {% endfor -%}
     _ => return None,
   };
@@ -96,6 +96,7 @@ impl crate::convert::Convert<{{from}}, {{to}}> for crate::convert::Converter {
 pub struct ConvertImplTemplate<'a> {
   pub from: &'a str,
   pub to: &'a str,
+  pub key_expr: RustExpr,
   pub value_expr: RustExpr,
   pub entries: Vec<Entry<'a, Cow<'a, str>>>,
   pub k_len: usize,
@@ -103,11 +104,13 @@ pub struct ConvertImplTemplate<'a> {
 }
 
 impl<'a> ConvertImplTemplate<'a> {
-  pub fn create(from: &'a str, to: &'a str, value_expr: Option<RustExpr>) -> Self {
-    let value_expr = value_expr.unwrap_or(RustExpr("{}"));
+  pub fn create(from: &'a str, to: &'a str, key_expr: Option<RustExpr>, value_expr: Option<RustExpr>) -> Self {
+    let value_expr = value_expr.unwrap_or_else(RustExpr::default);
+    let key_expr = key_expr.unwrap_or_else(RustExpr::default);
     Self {
       from,
       to,
+      key_expr,
       value_expr,
       entries: vec![],
       k_len: 0,
@@ -236,7 +239,7 @@ pub struct AsCodeImplTemplate<'a> {
 }
 impl<'a> AsCodeImplTemplate<'a> {
   pub fn create(from: &'a str, to: KeyCodeInfo, value_expr: Option<RustExpr>) -> Self {
-    let value_expr = value_expr.unwrap_or(RustExpr("{}"));
+    let value_expr = value_expr.unwrap_or_else(RustExpr::default);
     Self {
       ty: from,
       code: to,
@@ -349,12 +352,19 @@ impl KeyType {
     }.into()
   }
 
+  pub fn as_key_expr(self) -> Option<RustExpr> {
+    match (self, self.as_value_expr()) {
+      (KeyType::HUT, Some(v)) | (KeyType::WinVk, Some(v)) => Some(RustExpr::new(format!("k if k == {}", v.0))),
+      (_, v) => v,
+    }
+  }
+
   pub fn as_value_expr(self) -> Option<RustExpr> {
     match self {
-      KeyType::HUT => Some(RustExpr("{}.usage()")),
-      KeyType::WinVk => Some(RustExpr("keys::{}")),
-      KeyType::CG => Some(RustExpr("CGKeyCode( {} )")),
-      KeyType::WinScan => Some(RustExpr("Make1Code( {} )")),
+      KeyType::HUT => Some(RustExpr::new("{}.usage()")),
+      KeyType::WinVk => Some(RustExpr::new("keys::{}")),
+      KeyType::CG => Some(RustExpr::new("CGKeyCode( {} )")),
+      KeyType::WinScan => Some(RustExpr::new("Make1Code( {} )")),
       _ => None,
     }
   }
@@ -396,8 +406,14 @@ impl KeyType {
 }
 
 #[derive(Debug, Clone)]
-pub struct RustExpr(pub &'static str);
+pub struct RustExpr(pub String);
 impl RustExpr {
+  pub fn new<S: ToString>(s: S) -> Self {
+    Self(s.to_string())
+  }
+  pub fn default() -> Self {
+    Self::new("{}")
+  }
   pub fn apply(&self, s: &str) -> String {
     // let (prefix, suffix) = split_expr(self.0);
     // format!("{}{}{}", prefix, s, suffix)
@@ -420,8 +436,8 @@ impl KeyCodeInfo {
     Self {
       ty,
       can_const_check: true,
-      wrap_expr: if wrap.is_empty() { None } else { Some(RustExpr(wrap)) },
-      unwrap_expr: RustExpr(unwrap),
+      wrap_expr: if wrap.is_empty() { None } else { Some(RustExpr::new(wrap)) },
+      unwrap_expr: RustExpr::new(unwrap),
     }
   }
   pub fn set_can_const_check(mut self, can_const_check: bool) -> Self {
@@ -435,7 +451,7 @@ impl TryFrom<KeyType> for KeyCodeInfo {
 
   fn try_from(ty: KeyType) -> Result<Self, Self::Error> {
     match ty {
-      KeyType::HUT => Ok(KeyCodeInfo::new("u32", "", "AsUsage::usage_value({})").set_can_const_check(false)),
+      KeyType::HUT => Ok(KeyCodeInfo::new("u32", "", "{}.usage_value()").set_can_const_check(false)),
       KeyType::Winput => Ok(KeyCodeInfo::new("u8", "unsafe { std::mem::transmute({}) }", "*{} as u8")),
       KeyType::WinVk => Ok(KeyCodeInfo::new("u16", "VIRTUAL_KEY({})", "{}.0")),
       KeyType::WinScan => Ok(KeyCodeInfo::new("u32", "Make1Code({})", "{}.0")),
@@ -481,7 +497,7 @@ impl Gen {
     let from = self.0;
     let to = self.1;
     let map = self.build_kv(csv);
-    ConvertImplTemplate::create(from.name(), to.name(), to.as_value_expr())
+    ConvertImplTemplate::create(from.name(), to.name(), from.as_key_expr(), to.as_value_expr())
       .build(map)
   }
 
@@ -635,9 +651,17 @@ pub fn main() {
 
   let mut index_mod = String::new();
   for (from, to) in [
+    (KeyType::HUT, KeyType::Winput),
+
     (KeyType::Winput, KeyType::HUT),
     (KeyType::Winput, KeyType::EnigoMirror),
     (KeyType::Winput, KeyType::EnigoDep),
+
+    (KeyType::Winput, KeyType::CG),
+    (KeyType::Winput, KeyType::Keysym),
+
+    (KeyType::Winput, KeyType::WinScan),
+    (KeyType::WinVk, KeyType::WinScan),
 
     (KeyType::EnigoMirror, KeyType::Winput),
     (KeyType::EnigoDep, KeyType::Winput),
@@ -647,12 +671,6 @@ pub fn main() {
     (KeyType::EnigoDep, KeyType::Keysym),
     (KeyType::EnigoMirror, KeyType::CG),
     (KeyType::EnigoDep, KeyType::CG),
-
-    (KeyType::Winput, KeyType::CG),
-    (KeyType::Winput, KeyType::Keysym),
-
-    (KeyType::Winput, KeyType::WinScan),
-    // (KeyType::WinVk, KeyType::WinScan),
   ] {
     let filename = format!("generated.{from:?}_to_{to:?}.rs");
     let content = Gen(from, to).build_convert_impl(&csv);

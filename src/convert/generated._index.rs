@@ -1,3 +1,19 @@
+mod generated_hut_to_winput {
+  #[cfg(all(dep_hut_04, mirror_winput_vk))]
+  mod dep_to_mirror_1_1 {
+    use crate::deps::hut_04::{AsUsage, Button, Consumer, GenericDesktop, KeyboardKeypad, Usage};
+    use crate::mirror::winput::Vk;
+    include!("generated.HUT_to_Winput.rs");
+  }
+
+  #[cfg(all(dep_hut_03, mirror_winput_vk))]
+  mod dep_to_mirror_2_1 {
+    use crate::deps::hut_03::{AsUsage, Button, Consumer, GenericDesktop, KeyboardKeypad, Usage};
+    use crate::mirror::winput::Vk;
+    include!("generated.HUT_to_Winput.rs");
+  }
+}
+
 mod generated_winput_to_hut {
   #[cfg(all(mirror_winput_vk, dep_hut_04))]
   mod mirror_to_dep_1_1 {
@@ -29,6 +45,53 @@ mod generated_winput_to_enigodep {
     use crate::mirror::winput::Vk;
     use crate::deps::enigo::Key as Enigo;
     include!("generated.Winput_to_EnigoDep.rs");
+  }
+}
+
+mod generated_winput_to_cg {
+  #[cfg(all(mirror_winput_vk, any(dep_macos, mirror_macos)))]
+  mod mirror_to_mirror_1_1 {
+    use crate::mirror::winput::Vk;
+    #[cfg(dep_macos)]
+    use crate::deps::macos::KeyCode;
+    #[cfg(not(dep_macos))]
+    #[cfg(mirror_macos)]
+    use crate::mirror::macos::KeyCode;
+    use crate::mirror::macos_ext::{CGKeyCode, KeyCodeExt};
+    include!("generated.Winput_to_CG.rs");
+  }
+}
+
+mod generated_winput_to_keysym {
+  #[cfg(all(mirror_winput_vk, dep_xkeysym))]
+  mod mirror_to_dep_1_1 {
+    use crate::mirror::winput::Vk;
+    use crate::deps::xkeysym::Keysym;
+    include!("generated.Winput_to_Keysym.rs");
+  }
+}
+
+mod generated_winput_to_winscan {
+  #[cfg(all(mirror_winput_vk, dep_make1))]
+  mod mirror_to_dep_1_1 {
+    use crate::mirror::winput::Vk;
+    use crate::mirror::make1::Make1Code;
+    include!("generated.Winput_to_WinScan.rs");
+  }
+}
+
+mod generated_winvk_to_winscan {
+  #[cfg(all(mirror_windows_vk, dep_make1))]
+  mod mirror_to_dep_1_1 {
+    use crate::mirror::windows::{self as keys, VIRTUAL_KEY};
+    use crate::mirror::make1::Make1Code;
+    include!("generated.WinVk_to_WinScan.rs");
+  }
+  #[cfg(all(dep_windows_vk, dep_make1))]
+  mod dep_to_dep_1_1 {
+    use crate::deps::windows::{self as keys, VIRTUAL_KEY};
+    use crate::mirror::make1::Make1Code;
+    include!("generated.WinVk_to_WinScan.rs");
   }
 }
 
@@ -123,38 +186,6 @@ mod generated_enigodep_to_cg {
     use crate::mirror::macos::KeyCode;
     use crate::mirror::macos_ext::{CGKeyCode, KeyCodeExt};
     include!("generated.EnigoDep_to_CG.rs");
-  }
-}
-
-mod generated_winput_to_cg {
-  #[cfg(all(mirror_winput_vk, any(dep_macos, mirror_macos)))]
-  mod mirror_to_mirror_1_1 {
-    use crate::mirror::winput::Vk;
-    #[cfg(dep_macos)]
-    use crate::deps::macos::KeyCode;
-    #[cfg(not(dep_macos))]
-    #[cfg(mirror_macos)]
-    use crate::mirror::macos::KeyCode;
-    use crate::mirror::macos_ext::{CGKeyCode, KeyCodeExt};
-    include!("generated.Winput_to_CG.rs");
-  }
-}
-
-mod generated_winput_to_keysym {
-  #[cfg(all(mirror_winput_vk, dep_xkeysym))]
-  mod mirror_to_dep_1_1 {
-    use crate::mirror::winput::Vk;
-    use crate::deps::xkeysym::Keysym;
-    include!("generated.Winput_to_Keysym.rs");
-  }
-}
-
-mod generated_winput_to_winscan {
-  #[cfg(all(mirror_winput_vk, dep_make1))]
-  mod mirror_to_dep_1_1 {
-    use crate::mirror::winput::Vk;
-    use crate::mirror::make1::Make1Code;
-    include!("generated.Winput_to_WinScan.rs");
   }
 }
 
