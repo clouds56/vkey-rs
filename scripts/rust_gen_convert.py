@@ -1,4 +1,5 @@
 # %% import and const def
+from dataclasses import dataclass
 from pathlib import Path
 import polars as pl
 
@@ -388,20 +389,33 @@ with open(workspace_dir / 'scripts/example_gen_numeric.rs', 'w', newline='\n') a
 # %% load and check *_value from cache/numeric/*.txt
 df = load_csv(csv_filename)
 
+@dataclass
+class CodeDef:
+  col_key: str
+  col_value: str
+  filename: str # relative to workspace_dir / "scripts/cache/numeric"
+  na: list[str] | None = None
+
+  @property
+  def filepath(self):
+    return workspace_dir / "scripts/cache/numeric" / self.filename
+
 numeric_dict = [
-  ("hut", "hut_value", "scripts/cache/numeric/hut_04.txt"),
-  ("vk", "vk_value", "scripts/cache/numeric/windows.txt"),
-  ("keysym", "keysym_value", "scripts/cache/numeric/keysym.txt"),
-  ("cg", "cg_value", "scripts/cache/numeric/macos.txt"),
-  ("vk_value", "make1_value", "scripts/cache/numeric/win_makecode1.txt"),
+  CodeDef("hut", "hut_value", "hut_04.txt"),
+  CodeDef("vk", "vk_value", "windows.txt"),
+  CodeDef("keysym", "keysym_value", "keysym.txt"),
+  CodeDef("cg", "cg_value", "macos.txt"),
+  CodeDef("vk_value", "make1_value", "win_makecode1.txt", na=["0x00"]),
 ]
 
-def load_code(col_key: str, col_value: str, filename: str):
-  df_code = pl.read_csv(filename, has_header=False)
+def load_code(cdef: CodeDef):
+  df_code = pl.read_csv(cdef.filepath, has_header=False)
   df_code = df_code.select([
-    pl.col('column_1').str.strip_chars(' ').alias(col_key),
-    pl.col('column_2').str.strip_chars(' ').alias(col_value),
+    pl.col('column_1').str.strip_chars(' ').alias(cdef.col_key),
+    pl.col('column_2').str.strip_chars(' ').alias(cdef.col_value),
   ])
+  if cdef.na is not None:
+    df_code = df_as_null(df_code, na_list=cdef.na, columns=[cdef.col_value])
   return df_code
 
 def check_row_eq(df_left: pl.DataFrame, df_right: pl.DataFrame, col_key: str):
@@ -431,9 +445,9 @@ def insert_or_check(df: pl.DataFrame, df_code: pl.DataFrame, after: str | None =
   else:
     df.insert_column(df.get_column_index(col_key) + 1, df_code[col_code])
 
-for col_key, col_code, filename in numeric_dict:
-  df_code = load_code(col_key, col_code, workspace_dir / filename)
-  insert_or_check(df, df_code, after=col_key)
+for cdef in numeric_dict:
+  df_code = load_code(cdef)
+  insert_or_check(df, df_code, after=cdef.col_key)
 
 df = df_as_null(df, na_list=["0x00"], columns=["make1_value"])
 save_csv(df, csv_filename)
