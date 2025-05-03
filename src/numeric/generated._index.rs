@@ -37,6 +37,15 @@ mod generated_winvk {
 }
 
 #[allow(unused_imports)]
+mod generated_winscan {
+  #[cfg(dep_make1)]
+  mod dep_1 {
+    use crate::mirror::make1::Make1Code;
+    include!("generated.WinScan.rs");
+  }
+}
+
+#[allow(unused_imports)]
 mod generated_keysym {
   #[cfg(dep_xkeysym)]
   mod dep_1 {

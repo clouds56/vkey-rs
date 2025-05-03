@@ -9,6 +9,7 @@ struct Line<S> {
   pub winput: S,
   pub vk: S,
   pub vk_code: S,
+  pub win_make1code: S,
   pub enigo: S,
   pub enigo_attr: S,
   pub keysym: S,
@@ -26,6 +27,7 @@ impl<T> From<Vec<T>> for Line<T> {
       winput: v.next().unwrap(),
       vk: v.next().unwrap(),
       vk_code: v.next().unwrap(),
+      win_make1code: v.next().unwrap(),
       enigo: v.next().unwrap(),
       enigo_attr: v.next().unwrap(),
       keysym: v.next().unwrap(),
@@ -37,6 +39,8 @@ impl<T> From<Vec<T>> for Line<T> {
 }
 
 mod filters {
+  use super::RustExpr;
+
   pub fn pad_right<T: std::fmt::Display>(s: T, _: &dyn askama::Values, len: usize) -> askama::Result<String> {
     let mut s = s.to_string();
     while s.len() < len {
@@ -47,6 +51,10 @@ mod filters {
 
   pub fn hex<T: std::fmt::Display + std::fmt::UpperHex>(s: T, _: &dyn askama::Values) -> askama::Result<String> {
     Ok(format!("0x{:02X}", s))
+  }
+
+  pub fn apply_expr<T: std::fmt::Display>(s: T, _: &dyn askama::Values, expr: &RustExpr) -> askama::Result<String> {
+    Ok(expr.apply(&s.to_string()))
   }
 }
 
@@ -72,7 +80,7 @@ pub fn {{from | lower}}_to_{{to | lower}}(value: {{from}}) -> Option<{{to}}> {
     {% if let Some(attr) = entry.attr_v -%}
     {{ attr | indent(4) }}
     {% endif -%}
-    {{ entry.k | pad_right(*k_len) }} => {{prefix}}{{ entry.v | pad_right(*v_len) }}{{suffix}},
+    {{ entry.k | pad_right(*k_len) | apply_expr(key_expr) }} => {{ entry.v | pad_right(*v_len) | apply_expr(value_expr) }},
     {% endfor -%}
     _ => return None,
   };
@@ -88,22 +96,22 @@ impl crate::convert::Convert<{{from}}, {{to}}> for crate::convert::Converter {
 pub struct ConvertImplTemplate<'a> {
   pub from: &'a str,
   pub to: &'a str,
-  pub prefix: &'a str,
-  pub suffix: &'a str,
+  pub key_expr: RustExpr,
+  pub value_expr: RustExpr,
   pub entries: Vec<Entry<'a, Cow<'a, str>>>,
   pub k_len: usize,
   pub v_len: usize,
 }
 
 impl<'a> ConvertImplTemplate<'a> {
-  pub fn create(from: &'a str, to: &'a str, prefix: Option<&'a str>, suffix: Option<&'a str>) -> Self {
-    let prefix = prefix.unwrap_or("");
-    let suffix = suffix.unwrap_or("");
+  pub fn create(from: &'a str, to: &'a str, key_expr: Option<RustExpr>, value_expr: Option<RustExpr>) -> Self {
+    let value_expr = value_expr.unwrap_or_else(RustExpr::default);
+    let key_expr = key_expr.unwrap_or_else(RustExpr::default);
     Self {
       from,
       to,
-      prefix,
-      suffix,
+      key_expr,
+      value_expr,
       entries: vec![],
       k_len: 0,
       v_len: 0,
@@ -179,82 +187,63 @@ pub struct ConvertImport1Template {
 #[template(ext = "txt", source = r#"// This file is auto-generated. Do not edit manually.
 
 
-pub fn {{ty|lower}}_to_{{code_ty|lower}}(value: &{{ty}}) -> {{code_ty}} {
-  {%- if const_check %}
+pub fn {{ty|lower}}_to_{{code.ty|lower}}(value: &{{ty}}) -> {{code.ty}} {
+  {%- if code.can_const_check %}
   #[allow(unused_parens)]
   const {
     {%- for entry in entries %}
-    assert!({{to_code_expr.0}}(&{{"{" ~ value_prefix}}{{ entry.0 | pad_right(*k_len) }}{{value_suffix ~ "}"}}){{to_code_expr.1}} == {{entry.1 | hex}});
+    assert!({{ ("(&{" ~ entry.0 | pad_right(*k_len) | apply_expr(value_expr) ~ "})") | apply_expr(code.unwrap_expr) }} == {{entry.1 | hex}});
     {%- endfor %}
   }
   {%- endif %}
-  {{to_code_expr.0}}value{{to_code_expr.1}}
+  {{ "value" | apply_expr(code.unwrap_expr) }}
 }
 
 impl crate::numeric::AsCode<{{ty}}> for crate::numeric::Coder {
-  type Code = {{code_ty}};
+  type Code = {{code.ty}};
   fn as_code(value: &{{ty}}) -> Self::Code {
-    {{ty|lower}}_to_{{code_ty|lower}}(value)
+    {{ty|lower}}_to_{{code.ty|lower}}(value)
   }
   #[allow(unreachable_patterns)]
   fn from_code(code: Self::Code) -> Option<{{ty}}> {
     match code {
       {%- for entry in entries|unique %}
-      {{entry.1 | hex}} => Some({{value_prefix}}{{ entry.0 | pad_right(*k_len) }}{{value_suffix}}),
+      {{entry.1 | hex}} => Some({{ entry.0 | pad_right(*k_len) | apply_expr(value_expr) }}),
       {%- endfor %}
       _ => None,
     }
   }
-  {%- if let Some(from_code_expr) = from_code_expr %}
+  {%- if let Some(wrap_expr) = code.wrap_expr %}
   unsafe fn from_code_unchecked(code: Self::Code) -> {{ty}} {
-    {{from_code_expr.0}}code{{from_code_expr.1}}
+    {{ "code" | apply_expr(wrap_expr) }}
   }
   {%- endif %}
 }
 
-{% if !const_check -%}
+{% if !code.can_const_check -%}
 #[test]
 #[allow(unused_parens)]
 fn test_code() {
   {%- for entry in entries %}
-  assert!({{to_code_expr.0}}(&{{"{" ~ value_prefix}}{{ entry.0 | pad_right(*k_len) }}{{value_suffix ~ "}"}}){{to_code_expr.1}} == {{entry.1 | hex}});
+  assert!({{ ("(&{" ~ entry.0 | pad_right(*k_len) | apply_expr(value_expr) ~ "})") | apply_expr(code.unwrap_expr) }} == {{entry.1 | hex}});
   {%- endfor %}
 }
 {% endif -%}
 "#)]
 pub struct AsCodeImplTemplate<'a> {
   pub ty: &'a str,
-  pub code_ty: &'a str,
-  pub from_code_expr: Option<(&'a str, &'a str)>,
-  pub to_code_expr: (&'a str, &'a str),
-  pub const_check: bool,
-  pub value_prefix: &'a str,
-  pub value_suffix: &'a str,
+  pub code: KeyCodeInfo,
+  pub value_expr: RustExpr,
   pub k_len: usize,
   pub entries: Vec<(Cow<'a, str>, u64)>,
 }
 impl<'a> AsCodeImplTemplate<'a> {
-  fn split_expr(s: &'a str) -> (&'a str, &'a str) {
-    if s.contains("{}") {
-      s.split_once("{}").unwrap()
-    } else {
-      ("", s)
-    }
-  }
-  pub fn create(from: &'a str, to: &'a str, const_check: bool, from_code_expr: Option<&'a str>, to_code_expr: Option<&'a str>, prefix: Option<&'a str>, suffix: Option<&'a str>) -> Self {
-    let prefix = prefix.unwrap_or("");
-    let suffix = suffix.unwrap_or("");
-    let to_code_expr = to_code_expr.unwrap_or("{}");
-    let to_code_expr = Self::split_expr(to_code_expr);
-    let from_code_expr = from_code_expr.map(Self::split_expr);
+  pub fn create(from: &'a str, to: KeyCodeInfo, value_expr: Option<RustExpr>) -> Self {
+    let value_expr = value_expr.unwrap_or_else(RustExpr::default);
     Self {
       ty: from,
-      code_ty: to,
-      const_check,
-      from_code_expr,
-      to_code_expr,
-      value_prefix: prefix,
-      value_suffix: suffix,
+      code: to,
+      value_expr,
       entries: vec![],
       k_len: 0,
     }
@@ -272,7 +261,7 @@ impl<'a> AsCodeImplTemplate<'a> {
 #[expect(unused)]
 #[derive(Debug, Clone, Copy)]
 enum KeyType {
-  HUT, Winput, WinVk, Enigo, Keysym, CG,
+  HUT, Winput, WinVk, WinScan, Enigo, Keysym, CG,
   EnigoDep, EnigoMirror,
 }
 
@@ -285,6 +274,7 @@ impl KeyType {
       KeyType::HUT => "Usage",
       KeyType::Winput => "Vk",
       KeyType::WinVk => "VIRTUAL_KEY",
+      KeyType::WinScan => "Make1Code",
       KeyType::Enigo | KeyType::EnigoDep | KeyType::EnigoMirror => "Enigo",
       KeyType::Keysym => "Keysym",
       KeyType::CG => "CGKeyCode",
@@ -320,6 +310,9 @@ impl KeyType {
       KeyType::WinVk => vec![
         ConvertImportEntry::new("dep_windows_vk", "use crate::deps::windows::{self as keys, VIRTUAL_KEY};"),
       ],
+      KeyType::WinScan => vec![
+        ConvertImportEntry::new("dep_make1", "use crate::mirror::make1::Make1Code;"),
+      ],
       KeyType::EnigoDep => vec![ConvertImportEntry::new("dep_enigo", "use crate::deps::enigo::Key as Enigo;")],
       KeyType::Keysym => vec![
         ConvertImportEntry::new("dep_xkeysym", "use crate::deps::xkeysym::Keysym;"),
@@ -333,6 +326,7 @@ impl KeyType {
       KeyType::HUT => line.hut,
       KeyType::Winput => line.winput,
       KeyType::WinVk => line.vk,
+      KeyType::WinScan => line.win_make1code,
       KeyType::Enigo | KeyType::EnigoDep | KeyType::EnigoMirror => line.enigo,
       KeyType::Keysym => line.keysym,
       KeyType::CG => line.cg,
@@ -351,70 +345,32 @@ impl KeyType {
       KeyType::HUT => line.hut_code,
       KeyType::Winput => line.vk_code,
       KeyType::WinVk => line.vk_code,
+      KeyType::WinScan => line.win_make1code,
       KeyType::Keysym => line.keysym_code,
       KeyType::CG => line.cg_code,
       _ => return None,
     }.into()
   }
 
-  pub fn as_value_prefix(self) -> Option<&'static str> {
+  pub fn as_key_expr(self) -> Option<RustExpr> {
+    match (self, self.as_value_expr()) {
+      (KeyType::HUT, Some(v)) | (KeyType::WinVk, Some(v)) => Some(RustExpr::new(format!("k if k == {}", v.0))),
+      (_, v) => v,
+    }
+  }
+
+  pub fn as_value_expr(self) -> Option<RustExpr> {
     match self {
-      KeyType::WinVk => Some("keys::"),
-      KeyType::CG => Some("CGKeyCode( "),
+      KeyType::HUT => Some(RustExpr::new("{}.usage()")),
+      KeyType::WinVk => Some(RustExpr::new("keys::{}")),
+      KeyType::CG => Some(RustExpr::new("CGKeyCode( {} )")),
+      KeyType::WinScan => Some(RustExpr::new("Make1Code( {} )")),
       _ => None,
     }
   }
 
-  pub fn as_value_suffix(self) -> Option<&'static str> {
-    match self {
-      KeyType::HUT => Some(".usage()"),
-      KeyType::CG => Some(" )"),
-      _ => None
-    }
-  }
-
-  pub fn as_to_code_expr(self) -> Option<&'static str> {
-    match self {
-      KeyType::HUT => Some("AsUsage::usage_value({})"),
-      KeyType::Winput => Some("*{} as u8"),
-      KeyType::WinVk => Some("{}.0"),
-      KeyType::Keysym => Some("{}.raw()"),
-      KeyType::CG => Some("{}.0"),
-      _ => None,
-    }
-  }
-
-  pub fn as_from_code_expr(self) -> Option<&'static str> {
-    match self {
-      KeyType::HUT => None,
-      KeyType::Winput => Some("unsafe { std::mem::transmute({}) }"),
-      KeyType::WinVk => Some("VIRTUAL_KEY({})"),
-      KeyType::Keysym => Some("Keysym::new({})"),
-      KeyType::CG => Some("CGKeyCode({})"),
-      _ => None,
-    }
-  }
-
-  pub fn as_code_type(self) -> Option<&'static str> {
-    match self {
-      KeyType::HUT => Some("u32"),
-      KeyType::Winput => Some("u8"),
-      KeyType::WinVk => Some("u16"),
-      KeyType::Keysym => Some("u32"),
-      KeyType::CG => Some("u16"),
-      _ => None,
-    }
-  }
-
-  pub fn can_const_check(self) -> bool {
-    match self {
-      KeyType::HUT => false,
-      KeyType::Winput => true,
-      KeyType::WinVk => true,
-      KeyType::Keysym => true,
-      KeyType::CG => true,
-      _ => true,
-    }
+  pub fn as_code_info(self) -> Option<KeyCodeInfo> {
+    self.try_into().ok()
   }
 
   pub fn is_valid<S: AsRef<str>>(self, s: S) -> bool {
@@ -449,6 +405,62 @@ impl KeyType {
   }
 }
 
+#[derive(Debug, Clone)]
+pub struct RustExpr(pub String);
+impl RustExpr {
+  pub fn new<S: ToString>(s: S) -> Self {
+    Self(s.to_string())
+  }
+  pub fn default() -> Self {
+    Self::new("{}")
+  }
+  pub fn apply(&self, s: &str) -> String {
+    // let (prefix, suffix) = split_expr(self.0);
+    // format!("{}{}{}", prefix, s, suffix)
+    self.0.replace("{}", s)
+  }
+}
+
+#[derive(Debug, Clone)]
+pub struct KeyCodeInfo {
+  pub ty: &'static str,
+  pub can_const_check: bool,
+  pub wrap_expr: Option<RustExpr>,
+  pub unwrap_expr: RustExpr,
+}
+
+impl KeyCodeInfo {
+  /// `from == ""` means None
+  pub fn new(ty: &'static str, wrap: &'static str, unwrap: &'static str) -> Self {
+    assert_ne!(unwrap, "");
+    Self {
+      ty,
+      can_const_check: true,
+      wrap_expr: if wrap.is_empty() { None } else { Some(RustExpr::new(wrap)) },
+      unwrap_expr: RustExpr::new(unwrap),
+    }
+  }
+  pub fn set_can_const_check(mut self, can_const_check: bool) -> Self {
+    self.can_const_check = can_const_check;
+    self
+  }
+}
+
+impl TryFrom<KeyType> for KeyCodeInfo {
+  type Error = ();
+
+  fn try_from(ty: KeyType) -> Result<Self, Self::Error> {
+    match ty {
+      KeyType::HUT => Ok(KeyCodeInfo::new("u32", "", "{}.usage_value()").set_can_const_check(false)),
+      KeyType::Winput => Ok(KeyCodeInfo::new("u8", "unsafe { std::mem::transmute({}) }", "*{} as u8")),
+      KeyType::WinVk => Ok(KeyCodeInfo::new("u16", "VIRTUAL_KEY({})", "{}.0")),
+      KeyType::WinScan => Ok(KeyCodeInfo::new("u32", "Make1Code({})", "{}.0")),
+      KeyType::Keysym => Ok(KeyCodeInfo::new("u32", "Keysym::new({})", "{}.raw()")),
+      KeyType::CG => Ok(KeyCodeInfo::new("u16", "CGKeyCode({})", "{}.0")),
+      _ => Err(()),
+    }
+  }
+}
 
 #[derive(Debug, Clone, Copy)]
 struct Gen(KeyType, KeyType);
@@ -485,7 +497,7 @@ impl Gen {
     let from = self.0;
     let to = self.1;
     let map = self.build_kv(csv);
-    ConvertImplTemplate::create(from.name(), to.name(), to.as_value_prefix(), to.as_value_suffix())
+    ConvertImplTemplate::create(from.name(), to.name(), from.as_key_expr(), to.as_value_expr())
       .build(map)
   }
 
@@ -560,18 +572,18 @@ impl Gen {
   pub fn build_as_code(self, csv: &[Line<&str>]) -> String {
     let from = self.0;
     let to = self.1;
-    let Some(to_type) = to.as_code_type() else {
+    let Some(code_info) = to.as_code_info() else {
       return String::new();
     };
     let map = csv.iter().filter_map(|line| {
       let k = from.get_line(line);
-      let v = to.get_code(line)?;
+      let v = to.get_code(line).unwrap();
       if !self.kv_is_valid(&(k, v)) {
         return None;
       }
       Some((from.parse_content_unchecked(k), to.parse_code_unchecked(v)))
     }).collect::<Vec<_>>();
-    AsCodeImplTemplate::create(from.name(), to_type, from.can_const_check(), to.as_from_code_expr(), to.as_to_code_expr(), from.as_value_prefix(), from.as_value_suffix())
+    AsCodeImplTemplate::create(from.name(), code_info, from.as_value_expr())
       .build(map)
   }
 }
@@ -639,9 +651,18 @@ pub fn main() {
 
   let mut index_mod = String::new();
   for (from, to) in [
+    (KeyType::HUT, KeyType::Winput),
+
     (KeyType::Winput, KeyType::HUT),
     (KeyType::Winput, KeyType::EnigoMirror),
     (KeyType::Winput, KeyType::EnigoDep),
+
+    (KeyType::Winput, KeyType::CG),
+    (KeyType::Winput, KeyType::Keysym),
+
+    (KeyType::Winput, KeyType::WinScan),
+    (KeyType::WinVk, KeyType::WinScan),
+
     (KeyType::EnigoMirror, KeyType::Winput),
     (KeyType::EnigoDep, KeyType::Winput),
     (KeyType::EnigoMirror, KeyType::WinVk),
@@ -650,8 +671,6 @@ pub fn main() {
     (KeyType::EnigoDep, KeyType::Keysym),
     (KeyType::EnigoMirror, KeyType::CG),
     (KeyType::EnigoDep, KeyType::CG),
-    (KeyType::Winput, KeyType::CG),
-    (KeyType::Winput, KeyType::Keysym),
   ] {
     let filename = format!("generated.{from:?}_to_{to:?}.rs");
     let content = Gen(from, to).build_convert_impl(&csv);
@@ -664,7 +683,7 @@ pub fn main() {
   save_file(format!("{output_path}/generated._index.rs"), index_mod).expect("failed to write index.rs");
 
   let mut index_mod = String::new();
-  for ty in [KeyType::HUT, KeyType::Winput, KeyType::WinVk, KeyType::Keysym, KeyType::CG] {
+  for ty in [KeyType::HUT, KeyType::Winput, KeyType::WinVk, KeyType::WinScan, KeyType::Keysym, KeyType::CG] {
     let filename = format!("generated.{ty:?}.rs");
     let content = Gen(ty, ty).build_as_code(&csv);
     save_file(format!("{output_path2}/{filename}"), content)

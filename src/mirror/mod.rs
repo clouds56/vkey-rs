@@ -8,4 +8,8 @@ pub mod windows;
 pub mod winit;
 #[cfg(mirror_macos)]
 pub mod macos;
+#[cfg(any(mirror_macos, dep_macos))]
 pub mod macos_ext;
+
+#[cfg(dep_make1)]
+pub mod make1;
