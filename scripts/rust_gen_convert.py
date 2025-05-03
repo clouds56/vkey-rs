@@ -19,6 +19,7 @@ columns = [
   ("winput",     "winput::Vk"             , "na!(Vk)"),
   ("vk",         "windows::VIRTUAL_KEY"   , "todo!(VK_)"),
   ("vk_value",   "vkcode"                 , ""),
+  ("make1_value","make1code"            , ""),
   ("enigo",      "enigo::Key"             , "todo!(Enigo)"),
   ("enigo_attr", "#[cfg(enigo::Key)]"     , ""),
   ("keysym",     "xkeysym::Keysym"        , "todo!(Keysym)"),
@@ -53,6 +54,7 @@ def save_csv(df: pl.DataFrame, filename: Path):
       return pl.col(col).str.pad_start(length - 1 if length >= 10 else length - 2).str.pad_end(length)
     return pl.col(col).str.pad_end(length - 1 if length >= 10 else length - 2).str.pad_start(length)
   filename = str(filename) + ".new"
+  df = df_fill_na(df)
   max_col_lengths = df.select([
     pl.col(col).str.len_chars().max().alias(col) for col in df.columns
   ]).to_dicts()[0]
@@ -162,7 +164,7 @@ def df_fill_na(df: pl.DataFrame):
     pl.col(col).fill_null(pl.lit(col_default.get(col, f"todo!({col})"))).alias(col) for col in df.columns
   ])
 
-def df_as_null(df: pl.DataFrame, na_list = None):
+def df_as_null(df: pl.DataFrame, na_list = None, columns: list[str] | None = None):
   if na_list is None:
     na_list = ["todo!", "na!", "n!", "none!"]
   def make_cond(col: str, na_list: list[str]):
@@ -170,10 +172,16 @@ def df_as_null(df: pl.DataFrame, na_list = None):
     for na in na_list:
       cond = cond.or_(pl.col(col).str.starts_with(na))
     return cond
+  if columns is None:
+    columns = df.columns
+  for col in columns:
+    df.get_column_index(col)
   return df.select([
     pl.when(
       make_cond(col, na_list)
-    ).then(None).otherwise(pl.col(col)).alias(col) for col in df.columns
+    ).then(None).otherwise(pl.col(col)).alias(col)
+    if col in columns else pl.col(col)
+    for col in df.columns
   ])
 
 attr_map = {
@@ -342,7 +350,25 @@ main_lines.append(f"""
   print_{name}(&mut std::io::stdout(), false).ok();
 """)
 
-with open(workspace_dir / 'scripts/example_gen_numeric.rs', 'w') as f:
+name = "win_makecode1"
+lines.append(f"""
+#[cfg(windows)]
+fn print_{name}(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()> {{
+  {"use vkey::deps::windows::{MapVirtualKeyExW, MAPVK_VK_TO_VSC_EX};"}
+  {"let makecode = |vkey| unsafe { MapVirtualKeyExW(vkey, MAPVK_VK_TO_VSC_EX, None) };"}
+  {build_code(df_test, "vk_value", "0x{:02X}", value_prefix="makecode(", value_suffix=")")}
+  Ok(())
+}}
+""")
+main_lines.append(f"""
+  #[cfg(windows)] {{
+  println!("\\n\\n============== {name.upper().replace("_", " ")} ===============");
+  print_{name}(&mut file("{name}.txt"), true).ok();
+  print_{name}(&mut std::io::stdout(), false).ok();
+  }}
+""")
+
+with open(workspace_dir / 'scripts/example_gen_numeric.rs', 'w', newline='\n') as f:
   f.write("fn main() {\n")
   for line in main_lines:
     f.write(line + "\n")
@@ -367,6 +393,7 @@ numeric_dict = [
   ("vk", "vk_value", "scripts/cache/numeric/windows.txt"),
   ("keysym", "keysym_value", "scripts/cache/numeric/keysym.txt"),
   ("cg", "cg_value", "scripts/cache/numeric/macos.txt"),
+  ("vk_value", "make1_value", "scripts/cache/numeric/win_makecode1.txt"),
 ]
 
 def load_code(col_key: str, col_value: str, filename: str):
@@ -408,6 +435,7 @@ for col_key, col_code, filename in numeric_dict:
   df_code = load_code(col_key, col_code, workspace_dir / filename)
   insert_or_check(df, df_code, after=col_key)
 
+df = df_as_null(df, na_list=["0x00"], columns=["make1_value"])
 save_csv(df, csv_filename)
 # %%
 

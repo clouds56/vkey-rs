@@ -23,6 +23,13 @@ fn main() {
   print_macos(&mut file("macos.txt"), true).ok();
   print_macos(&mut std::io::stdout(), false).ok();
 
+
+  #[cfg(windows)] {
+  println!("\n\n============== WIN MAKECODE1 ===============");
+  print_win_makecode1(&mut file("win_makecode1.txt"), true).ok();
+  print_win_makecode1(&mut std::io::stdout(), false).ok();
+  }
+
 }
 
 
@@ -1219,6 +1226,307 @@ fn print_macos(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()> {
   if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
   if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
   if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
+  Ok(())
+}
+
+
+#[cfg(windows)]
+fn print_win_makecode1(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()> {
+  use vkey::deps::windows::{MapVirtualKeyExW, MAPVK_VK_TO_VSC_EX};
+  let makecode = |vkey| unsafe { MapVirtualKeyExW(vkey, MAPVK_VK_TO_VSC_EX, None) };
+          writeln!(w, "{:5}, 0x{:02X},", "0x01", makecode(0x01))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x02", makecode(0x02))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x04", makecode(0x04))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x05", makecode(0x05))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x06", makecode(0x06))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xA6", makecode(0xA6))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xAB", makecode(0xAB))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xA7", makecode(0xA7))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xAC", makecode(0xAC))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xA8", makecode(0xA8))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xAA", makecode(0xAA))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xA9", makecode(0xA9))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xB4", makecode(0xB4))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xB5", makecode(0xB5))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xAD", makecode(0xAD))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xB3", makecode(0xB3))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xB0", makecode(0xB0))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xB1", makecode(0xB1))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xB2", makecode(0xB2))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xAE", makecode(0xAE))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xAF", makecode(0xAF))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x5F", makecode(0x5F))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x30", makecode(0x30))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x31", makecode(0x31))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x32", makecode(0x32))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x33", makecode(0x33))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x34", makecode(0x34))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x35", makecode(0x35))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x36", makecode(0x36))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x37", makecode(0x37))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x38", makecode(0x38))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x39", makecode(0x39))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x41", makecode(0x41))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x5D", makecode(0x5D))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x42", makecode(0x42))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xDC", makecode(0xDC))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x43", makecode(0x43))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x03", makecode(0x03))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x14", makecode(0x14))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x0C", makecode(0x0C))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xBC", makecode(0xBC))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x44", makecode(0x44))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xBD", makecode(0xBD))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x08", makecode(0x08))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x2E", makecode(0x2E))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x28", makecode(0x28))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x45", makecode(0x45))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x23", makecode(0x23))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xBB", makecode(0xBB))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x1B", makecode(0x1B))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x2B", makecode(0x2B))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x46", makecode(0x46))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x70", makecode(0x70))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x79", makecode(0x79))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x7A", makecode(0x7A))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x7B", makecode(0x7B))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x7C", makecode(0x7C))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x7D", makecode(0x7D))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x7E", makecode(0x7E))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x7F", makecode(0x7F))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x80", makecode(0x80))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x81", makecode(0x81))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x82", makecode(0x82))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x71", makecode(0x71))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x83", makecode(0x83))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x84", makecode(0x84))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x85", makecode(0x85))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x86", makecode(0x86))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x87", makecode(0x87))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x72", makecode(0x72))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x73", makecode(0x73))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x74", makecode(0x74))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x75", makecode(0x75))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x76", makecode(0x76))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x77", makecode(0x77))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x78", makecode(0x78))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xBF", makecode(0xBF))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x47", makecode(0x47))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xC0", makecode(0xC0))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x48", makecode(0x48))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x2F", makecode(0x2F))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x24", makecode(0x24))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x49", makecode(0x49))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x2D", makecode(0x2D))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x4A", makecode(0x4A))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x4B", makecode(0x4B))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x4C", makecode(0x4C))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xA4", makecode(0xA4))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x12", makecode(0x12))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x12", makecode(0x12))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xDE", makecode(0xDE))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x25", makecode(0x25))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xDB", makecode(0xDB))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x11", makecode(0x11))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xA2", makecode(0xA2))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x5B", makecode(0x5B))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x5B", makecode(0x5B))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x5B", makecode(0x5B))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x5B", makecode(0x5B))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x5B", makecode(0x5B))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xA0", makecode(0xA0))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x10", makecode(0x10))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x4D", makecode(0x4D))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x4E", makecode(0x4E))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xE2", makecode(0xE2))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x4F", makecode(0x4F))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x50", makecode(0x50))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x22", makecode(0x22))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x21", makecode(0x21))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x13", makecode(0x13))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xBE", makecode(0xBE))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x2C", makecode(0x2C))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x2C", makecode(0x2C))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x51", makecode(0x51))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x52", makecode(0x52))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x0D", makecode(0x0D))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xA5", makecode(0xA5))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xA5", makecode(0xA5))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x27", makecode(0x27))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xDD", makecode(0xDD))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xA3", makecode(0xA3))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x5C", makecode(0x5C))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x5C", makecode(0x5C))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xA1", makecode(0xA1))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x53", makecode(0x53))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x91", makecode(0x91))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x91", makecode(0x91))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x29", makecode(0x29))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xBA", makecode(0xBA))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x20", makecode(0x20))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x54", makecode(0x54))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x09", makecode(0x09))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x55", makecode(0x55))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x26", makecode(0x26))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x56", makecode(0x56))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x57", makecode(0x57))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x58", makecode(0x58))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x59", makecode(0x59))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x5A", makecode(0x5A))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x60", makecode(0x60))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x61", makecode(0x61))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x62", makecode(0x62))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x63", makecode(0x63))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x64", makecode(0x64))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x65", makecode(0x65))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x66", makecode(0x66))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x67", makecode(0x67))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x68", makecode(0x68))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x69", makecode(0x69))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x6D", makecode(0x6D))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x6F", makecode(0x6F))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x90", makecode(0x90))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x6E", makecode(0x6E))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x6B", makecode(0x6B))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x6A", makecode(0x6A))?;
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+          writeln!(w, "{:5}, 0x{:02X},", "0xFF", makecode(0xFF))?;
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+  if any { writeln!(w, "{:5}, {},", "None", "    ")?; }
+          writeln!(w, "{:5}, 0x{:02X},", "0xC1", makecode(0xC1))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xC2", makecode(0xC2))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xF6", makecode(0xF6))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xF7", makecode(0xF7))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xF0", makecode(0xF0))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xFA", makecode(0xFA))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xF4", makecode(0xF4))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xFC", makecode(0xFC))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xFD", makecode(0xFD))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xF8", makecode(0xF8))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xF7", makecode(0xF7))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xF9", makecode(0xF9))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xF2", makecode(0xF2))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xF1", makecode(0xF1))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xFB", makecode(0xFB))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xF6", makecode(0xF6))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xF5", makecode(0xF5))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xF3", makecode(0xF3))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xF9", makecode(0xF9))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xF8", makecode(0xF8))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xC3", makecode(0xC3))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xC4", makecode(0xC4))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xCC", makecode(0xCC))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xCD", makecode(0xCD))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xCE", makecode(0xCE))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xCB", makecode(0xCB))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xC8", makecode(0xC8))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xD1", makecode(0xD1))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xD4", makecode(0xD4))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xD6", makecode(0xD6))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xD5", makecode(0xD5))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xD3", makecode(0xD3))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xC9", makecode(0xC9))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xCF", makecode(0xCF))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xC7", makecode(0xC7))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xD2", makecode(0xD2))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xD8", makecode(0xD8))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xDA", makecode(0xDA))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xD9", makecode(0xD9))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xD7", makecode(0xD7))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xCA", makecode(0xCA))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xD0", makecode(0xD0))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xC5", makecode(0xC5))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xC6", makecode(0xC6))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xE4", makecode(0xE4))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xE6", makecode(0xE6))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xE3", makecode(0xE3))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x8E", makecode(0x8E))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x8F", makecode(0x8F))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x8B", makecode(0x8B))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x8C", makecode(0x8C))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x89", makecode(0x89))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x8D", makecode(0x8D))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x8A", makecode(0x8A))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x88", makecode(0x88))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xFC", makecode(0xFC))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xDF", makecode(0xDF))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xF0", makecode(0xF0))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xF3", makecode(0xF3))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xE1", makecode(0xE1))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xF5", makecode(0xF5))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xFE", makecode(0xFE))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xF2", makecode(0xF2))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xEF", makecode(0xEF))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xF4", makecode(0xF4))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xF1", makecode(0xF1))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x92", makecode(0x92))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x95", makecode(0x95))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x93", makecode(0x93))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x96", makecode(0x96))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x94", makecode(0x94))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xEA", makecode(0xEA))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x92", makecode(0x92))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xEB", makecode(0xEB))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xEC", makecode(0xEC))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xED", makecode(0xED))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xE9", makecode(0xE9))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xEE", makecode(0xEE))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xFD", makecode(0xFD))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xE7", makecode(0xE7))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xFA", makecode(0xFA))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xE5", makecode(0xE5))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xFB", makecode(0xFB))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x1E", makecode(0x1E))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x1C", makecode(0x1C))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x18", makecode(0x18))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x1A", makecode(0x1A))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x16", makecode(0x16))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x17", makecode(0x17))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x15", makecode(0x15))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x15", makecode(0x15))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x15", makecode(0x15))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x19", makecode(0x19))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x19", makecode(0x19))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x1F", makecode(0x1F))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x1D", makecode(0x1D))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x2A", makecode(0x2A))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0x6C", makecode(0x6C))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xB6", makecode(0xB6))?;
+          writeln!(w, "{:5}, 0x{:02X},", "0xB7", makecode(0xB7))?;
   Ok(())
 }
 
