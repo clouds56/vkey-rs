@@ -2,31 +2,33 @@ fn main() {
   let path = &std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("scripts/cache/numeric");
   let file = |name: &str| std::fs::File::create(path.join(name)).unwrap();
   std::fs::create_dir_all(path).unwrap();
-  println!("
 
-============== HUT 04 ===============");
+
+  println!("\n\n============== HUT 04 ===============");
   print_hut_04(&mut file("hut_04.txt"), true).ok();
   print_hut_04(&mut std::io::stdout(), false).ok();
-  println!("
 
-============== WINDOWS ===============");
+
+  println!("\n\n============== WINDOWS ===============");
   print_windows(&mut file("windows.txt"), true).ok();
   print_windows(&mut std::io::stdout(), false).ok();
-  println!("
 
-============== KEYSYM ===============");
+
+  println!("\n\n============== KEYSYM ===============");
   print_keysym(&mut file("keysym.txt"), true).ok();
   print_keysym(&mut std::io::stdout(), false).ok();
-  println!("
 
-============== MACOS ===============");
+
+  println!("\n\n============== MACOS ===============");
   print_macos(&mut file("macos.txt"), true).ok();
   print_macos(&mut std::io::stdout(), false).ok();
+
 }
 
 
-fn print_hut_04(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()>{
-  use hut_04::{AsUsage, Button, Consumer, GenericDesktop, KeyboardKeypad};
+
+fn print_hut_04(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()> {
+  use vkey::deps::hut::{AsUsage, Button, Consumer, GenericDesktop, KeyboardKeypad};
           writeln!(w, "{:52}, 0x{:X},", "Button::Button(1)", Button::Button(1).usage_value())?;
           writeln!(w, "{:52}, 0x{:X},", "Button::Button(2)", Button::Button(2).usage_value())?;
           writeln!(w, "{:52}, 0x{:X},", "Button::Button(3)", Button::Button(3).usage_value())?;
@@ -324,7 +326,7 @@ fn print_hut_04(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()>{
 }
 
 
-fn print_windows(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()>{
+fn print_windows(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()> {
   use vkey::mirror::windows as keys;
           writeln!(w, "{:35}, 0x{:02X},", "VK_LBUTTON", keys::VK_LBUTTON.0)?;
           writeln!(w, "{:35}, 0x{:02X},", "VK_RBUTTON", keys::VK_RBUTTON.0)?;
@@ -623,7 +625,7 @@ fn print_windows(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()>{
 }
 
 
-fn print_keysym(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()>{
+fn print_keysym(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()> {
   use vkey::deps::xkeysym::Keysym;
   if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
   if any { writeln!(w, "{:30}, {},", "None", "    ")?; }
@@ -922,7 +924,7 @@ fn print_keysym(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()>{
 }
 
 
-fn print_macos(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()>{
+fn print_macos(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()> {
   use vkey::mirror::{macos::KeyCode, macos_ext::{CGKeyCode, KeyCodeExt}};
   if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
   if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
@@ -1219,5 +1221,4 @@ fn print_macos(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()>{
   if any { writeln!(w, "{:36}, {},", "None", "    ")?; }
   Ok(())
 }
-
 

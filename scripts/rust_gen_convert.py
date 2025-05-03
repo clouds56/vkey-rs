@@ -1,4 +1,4 @@
-# %%
+# %% import and const def
 from pathlib import Path
 import polars as pl
 
@@ -12,7 +12,7 @@ enigo__macos_impl_rs = workspace_dir / 'scripts/cache/enigo-0.3.0' / 'raw.github
 # https://github.com/microsoft/windows-rs/blob/63/crates/libs/sys/src/Windows/Win32/UI/Input/KeyboardAndMouse/mod.rs
 windows__keyboard_and_mouse = workspace_dir / 'scripts/cache/windows-63' / 'raw.githubusercontent.com--microsoft--windows-rs--refs--tags--63--crates--libs--sys--src--Windows--Win32--UI--Input--KeyboardAndMouse--mod.rs'
 
-# %%
+# %% functions
 columns = [
   ("hut",        ";hut::HUT"              , "todo!(HUT)"),
   ("hut_value",  "hkcode"                 , ""),
@@ -134,7 +134,7 @@ def df_check_key_map(df: pl.DataFrame, df_map: pl.DataFrame):
     pl.col(col_key).str.strip_chars('*').alias("_key"),
   ).join(df_map, left_on="_key", right_on=col_key, how="right", nulls_equal=True).select([col_key, col_value, col_key_right, col_value_right]).filter(pl.col(col_value).eq_missing(pl.col(col_value_right)).not_())
   if not mismatched_keys.is_empty():
-    print(f"Mismatch found in {col_key} -> {col_value} mapping:")
+    print(f"Mismatch found in {col_key} => {col_value} mapping:")
     print(mismatched_keys)
   return mismatched_keys
 
@@ -162,6 +162,20 @@ def df_fill_na(df: pl.DataFrame):
     pl.col(col).fill_null(pl.lit(col_default.get(col, f"todo!({col})"))).alias(col) for col in df.columns
   ])
 
+def df_as_null(df: pl.DataFrame, na_list = None):
+  if na_list is None:
+    na_list = ["todo!", "na!", "n!", "none!"]
+  def make_cond(col: str, na_list: list[str]):
+    cond = pl.col(col).str.strip_chars(' ').str.len_chars().eq(0)
+    for na in na_list:
+      cond = cond.or_(pl.col(col).str.starts_with(na))
+    return cond
+  return df.select([
+    pl.when(
+      make_cond(col, na_list)
+    ).then(None).otherwise(pl.col(col)).alias(col) for col in df.columns
+  ])
+
 attr_map = {
   '#[cfg(target_os = "windows")]': 'windows',
   # '#[cfg(target_os = "linux")]': 'linux',
@@ -170,11 +184,11 @@ attr_map = {
   '#[cfg(any(target_os = "windows", all(unix, not(target_os = "macos"))))]': 'windows|linux'
 }
 
-# %%
+# %% load csv
 df = load_csv(csv_filename)
 save_csv(df, csv_filename)
 
-# %%
+# %% load and check vk => vk_value from windows__keyboard_and_mouse
 with open(windows__keyboard_and_mouse) as rsfile:
   content = rsfile.read()
 
@@ -187,7 +201,7 @@ df_map_vk_values = pl.DataFrame({
 df = df_insert_key_map(df, df_map_vk_values, after="vk", force=True)
 df_check_key_map(df, df_map_vk_values)
 
-# %%
+# %% load and check enigo => enigo_attr from enigo__keycodes_rs
 with open(enigo__keycodes_rs) as rsfile:
   content = rsfile.read()
 enigo_attrs = parse_rs_attr(content, blocking=("pub enum Key {", "}"))
@@ -201,7 +215,7 @@ df = df_fill_na(df.join(df_map_enigo_attrs.select('enigo'), on="enigo", coalesce
 df = df_insert_key_map(df, df_map_enigo_attrs, after="enigo")
 df_check_key_map(df, df_map_enigo_attrs)
 
-# %%
+# %% load and check enigo => [keysym, vk, cg] from enigo__keycodes_rs/enigo__macos_impl_rs
 with open(enigo__keycodes_rs) as rsfile:
   content = rsfile.read()
 
@@ -244,18 +258,9 @@ df_check_key_map(df, df_map_enigo_cg)
 # %%
 save_csv(df, csv_filename)
 
-# %%
+# %% generating example_gen_numeric.rs
 # set all columns starts with 'todo!', 'na!', 'n!' or 'none!' to None
-df_test = df.select([
-  pl.when(
-    pl.col(col).str.strip_chars(' ').str.len_chars().eq(0).or_(
-      pl.col(col).str.starts_with("todo!")).or_(
-      pl.col(col).str.starts_with("na!")).or_(
-      pl.col(col).str.starts_with("n!")).or_(
-      pl.col(col).str.starts_with("none!"))
-  ).then(None).otherwise(pl.col(col)).alias(col) for col in df.columns
-])
-
+df_test = df_as_null(df)
 def build_code(df: pl.DataFrame, col: str, format: str, value_prefix: str = "", value_suffix: str = "", default: str | None = "    ", max_len: int | None = None):
   result = []
   max_len = df[col].str.len_chars().max() + 1 if max_len is None else max_len
@@ -269,55 +274,73 @@ def build_code(df: pl.DataFrame, col: str, format: str, value_prefix: str = "", 
       result.append(f'  if any {{ writeln!(w, "{{:{max_len}}}, {{}},", "{i}", "{default}")?; }}')
     else:
       result.append("  if any {" + line + "}")
-  return result
+  return "\n".join(result).removeprefix("  ")
 
 output_all = False
 
 lines = []
 main_lines = []
-main_lines.append('  let path = &std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("scripts/cache/numeric");')
-main_lines.append('  let file = |name: &str| std::fs::File::create(path.join(name)).unwrap();')
-main_lines.append('  std::fs::create_dir_all(path).unwrap();')
+main_lines.append("""
+  let path = &std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("scripts/cache/numeric");
+  let file = |name: &str| std::fs::File::create(path.join(name)).unwrap();
+  std::fs::create_dir_all(path).unwrap();
+""".removeprefix("\n"))
 
 name = "hut_04"
-lines.append(f"fn print_{name}(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()>" + "{")
-lines.append("  use hut_04::{AsUsage, Button, Consumer, GenericDesktop, KeyboardKeypad};")
-lines.extend(build_code(df_test, "hut", "0x{:X}", value_suffix=".usage_value()"))
-lines.append("  Ok(())")
-lines.append("}\n\n")
-main_lines.append(f'  println!("\n\n============== {name.upper().replace("_", " ")} ===============");')
-main_lines.append(f'  print_{name}(&mut file("{name}.txt"), true).ok();')
-main_lines.append(f'  print_{name}(&mut std::io::stdout(), false).ok();')
+lines.append(f"""
+fn print_{name}(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()> {{
+  {"use vkey::deps::hut::{AsUsage, Button, Consumer, GenericDesktop, KeyboardKeypad};"}
+  {build_code(df_test, "hut", "0x{:X}", value_suffix=".usage_value()")}
+  Ok(())
+}}
+""")
+main_lines.append(f"""
+  println!("\\n\\n============== {name.upper().replace("_", " ")} ===============");
+  print_{name}(&mut file("{name}.txt"), true).ok();
+  print_{name}(&mut std::io::stdout(), false).ok();
+""")
 
 name = "windows"
-lines.append(f"fn print_{name}(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()>" + "{")
-lines.append("  use vkey::mirror::windows as keys;")
-lines.extend(build_code(df_test, "vk", "0x{:02X}", value_prefix="keys::", value_suffix=".0"))
-lines.append("  Ok(())")
-lines.append("}\n\n")
-main_lines.append(f'  println!("\n\n============== {name.upper().replace("_", " ")} ===============");')
-main_lines.append(f'  print_{name}(&mut file("{name}.txt"), true).ok();')
-main_lines.append(f'  print_{name}(&mut std::io::stdout(), false).ok();')
+lines.append(f"""
+fn print_{name}(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()> {{
+  {"use vkey::mirror::windows as keys;"}
+  {build_code(df_test, "vk", "0x{:02X}", value_prefix="keys::", value_suffix=".0")}
+  Ok(())
+}}
+""")
+main_lines.append(f"""
+  println!("\\n\\n============== {name.upper().replace("_", " ")} ===============");
+  print_{name}(&mut file("{name}.txt"), true).ok();
+  print_{name}(&mut std::io::stdout(), false).ok();
+""")
 
 name = "keysym"
-lines.append(f"fn print_{name}(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()>" + "{")
-lines.append("  use vkey::deps::xkeysym::Keysym;")
-lines.extend(build_code(df_test, "keysym", "0x{:04X}", value_suffix=".raw()"))
-lines.append("  Ok(())")
-lines.append("}\n\n")
-main_lines.append(f'  println!("\n\n============== {name.upper().replace("_", " ")} ===============");')
-main_lines.append(f'  print_{name}(&mut file("{name}.txt"), true).ok();')
-main_lines.append(f'  print_{name}(&mut std::io::stdout(), false).ok();')
+lines.append(f"""
+fn print_{name}(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()> {{
+  {"use vkey::deps::xkeysym::Keysym;"}
+  {build_code(df_test, "keysym", "0x{:04X}", value_suffix=".raw()")}
+  Ok(())
+}}
+""")
+main_lines.append(f"""
+  println!("\\n\\n============== {name.upper().replace("_", " ")} ===============");
+  print_{name}(&mut file("{name}.txt"), true).ok();
+  print_{name}(&mut std::io::stdout(), false).ok();
+""")
 
 name = "macos"
-lines.append(f"fn print_{name}(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()>" + "{")
-lines.append("  use vkey::mirror::{macos::KeyCode, macos_ext::{CGKeyCode, KeyCodeExt}};")
-lines.extend(build_code(df_test, "cg", "0x{:02X}", value_prefix="CGKeyCode::from(", value_suffix=").0"))
-lines.append("  Ok(())")
-lines.append("}\n\n")
-main_lines.append(f'  println!("\n\n============== {name.upper().replace("_", " ")} ===============");')
-main_lines.append(f'  print_{name}(&mut file("{name}.txt"), true).ok();')
-main_lines.append(f'  print_{name}(&mut std::io::stdout(), false).ok();')
+lines.append(f"""
+fn print_{name}(w: &mut dyn std::io::Write, any: bool) -> std::io::Result<()> {{
+  {"use vkey::mirror::{macos::KeyCode, macos_ext::{CGKeyCode, KeyCodeExt}};"}
+  {build_code(df_test, "cg", "0x{:02X}", value_prefix="CGKeyCode::from(", value_suffix=").0")}
+  Ok(())
+}}
+""")
+main_lines.append(f"""
+  println!("\\n\\n============== {name.upper().replace("_", " ")} ===============");
+  print_{name}(&mut file("{name}.txt"), true).ok();
+  print_{name}(&mut std::io::stdout(), false).ok();
+""")
 
 with open(workspace_dir / 'scripts/example_gen_numeric.rs', 'w') as f:
   f.write("fn main() {\n")
@@ -336,7 +359,7 @@ with open(workspace_dir / 'scripts/example_gen_numeric.rs', 'w') as f:
 
 # %%
 """
-# %%
+# %% load and check *_value from cache/numeric/*.txt
 df = load_csv(csv_filename)
 
 numeric_dict = [
@@ -346,11 +369,46 @@ numeric_dict = [
   ("cg", "cg_value", "scripts/cache/numeric/macos.txt"),
 ]
 
-for col_key, col_code, filename in numeric_dict:
-  code = pl.read_csv(workspace_dir / filename, has_header=False)['column_2'].str.strip_chars(' ').alias(col_code)
+def load_code(col_key: str, col_value: str, filename: str):
+  df_code = pl.read_csv(filename, has_header=False)
+  df_code = df_code.select([
+    pl.col('column_1').str.strip_chars(' ').alias(col_key),
+    pl.col('column_2').str.strip_chars(' ').alias(col_value),
+  ])
+  return df_code
+
+def check_row_eq(df_left: pl.DataFrame, df_right: pl.DataFrame, col_key: str):
+  df_left = df_left.select(pl.col(col_key))
+  df_right = df_right.select(pl.col(col_key))
+  df_left = df_left.hstack(df_as_null(df_left.select(_key=col_key)))
+  df_right = df_right.hstack(df_as_null(df_right.select(_key=col_key), na_list=["None"]))
+
+  mismatched = df_left.hstack(df_right.select(
+    pl.col(col).alias(f"{col}_right") for col in df_right.columns
+  )).filter(pl.col("_key").eq_missing(pl.col("_key_right")).not_())
+  if not mismatched.is_empty():
+    print(f"Mismatch found in {col_key} row:")
+    print(mismatched)
+  return mismatched
+
+def insert_or_check(df: pl.DataFrame, df_code: pl.DataFrame, after: str | None = None, force: bool = False):
+  col_key = df_code.columns[0]
+  col_code = df_code.columns[1]
+  after = col_key if after is None else after
+
+  check_row_eq(df, df_code, col_key)
   if col_code in df.columns:
-    df.replace_column(df.get_column_index(col_code), code)
+    check_row_eq(df, df_code, col_code)
+    if force:
+      df.replace_column(df.get_column_index(col_code), df_code[col_code])
   else:
-    df.insert_column(df.get_column_index(col_key) + 1, code)
+    df.insert_column(df.get_column_index(col_key) + 1, df_code[col_code])
+
+for col_key, col_code, filename in numeric_dict:
+  df_code = load_code(col_key, col_code, workspace_dir / filename)
+  insert_or_check(df, df_code, after=col_key)
+
 save_csv(df, csv_filename)
+# %%
+
 # %%
