@@ -149,3 +149,12 @@ mod generated_winput_to_keysym {
   }
 }
 
+mod generated_winput_to_winscan {
+  #[cfg(all(mirror_winput_vk, dep_make1))]
+  mod mirror_to_dep_1_1 {
+    use crate::mirror::winput::Vk;
+    use crate::mirror::make1::Make1Code;
+    include!("generated.Winput_to_WinScan.rs");
+  }
+}
+

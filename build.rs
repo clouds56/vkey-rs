@@ -26,6 +26,7 @@ fn main() {
     dep_enigo_macos: { all(target_os = "macos", feature = "enigo") },
     dep_enigo_linux: { all(target_os = "linux", feature = "enigo") },
     dep_windows_vk: { all(target_os = "windows", feature = "windows") },
+    dep_make1: { feature = "make1" },
     dep_macos: { all(target_os = "macos", feature = "macos") },
     dep_linux: { all(target_os = "linux", feature = "linux") },
     dep_hut_03: { feature = "hut_03" },

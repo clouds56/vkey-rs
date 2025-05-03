@@ -274,7 +274,7 @@ impl<'a> AsCodeImplTemplate<'a> {
 #[expect(unused)]
 #[derive(Debug, Clone, Copy)]
 enum KeyType {
-  HUT, Winput, WinVk, Enigo, Keysym, CG,
+  HUT, Winput, WinVk, WinScan, Enigo, Keysym, CG,
   EnigoDep, EnigoMirror,
 }
 
@@ -287,6 +287,7 @@ impl KeyType {
       KeyType::HUT => "Usage",
       KeyType::Winput => "Vk",
       KeyType::WinVk => "VIRTUAL_KEY",
+      KeyType::WinScan => "Make1Code",
       KeyType::Enigo | KeyType::EnigoDep | KeyType::EnigoMirror => "Enigo",
       KeyType::Keysym => "Keysym",
       KeyType::CG => "CGKeyCode",
@@ -322,6 +323,9 @@ impl KeyType {
       KeyType::WinVk => vec![
         ConvertImportEntry::new("dep_windows_vk", "use crate::deps::windows::{self as keys, VIRTUAL_KEY};"),
       ],
+      KeyType::WinScan => vec![
+        ConvertImportEntry::new("dep_make1", "use crate::mirror::make1::Make1Code;"),
+      ],
       KeyType::EnigoDep => vec![ConvertImportEntry::new("dep_enigo", "use crate::deps::enigo::Key as Enigo;")],
       KeyType::Keysym => vec![
         ConvertImportEntry::new("dep_xkeysym", "use crate::deps::xkeysym::Keysym;"),
@@ -335,6 +339,7 @@ impl KeyType {
       KeyType::HUT => line.hut,
       KeyType::Winput => line.winput,
       KeyType::WinVk => line.vk,
+      KeyType::WinScan => line.win_make1code,
       KeyType::Enigo | KeyType::EnigoDep | KeyType::EnigoMirror => line.enigo,
       KeyType::Keysym => line.keysym,
       KeyType::CG => line.cg,
@@ -353,6 +358,7 @@ impl KeyType {
       KeyType::HUT => line.hut_code,
       KeyType::Winput => line.vk_code,
       KeyType::WinVk => line.vk_code,
+      KeyType::WinScan => line.win_make1code,
       KeyType::Keysym => line.keysym_code,
       KeyType::CG => line.cg_code,
       _ => return None,
@@ -363,6 +369,7 @@ impl KeyType {
     match self {
       KeyType::WinVk => Some("keys::"),
       KeyType::CG => Some("CGKeyCode( "),
+      KeyType::WinScan => Some("Make1Code( "),
       _ => None,
     }
   }
@@ -371,6 +378,7 @@ impl KeyType {
     match self {
       KeyType::HUT => Some(".usage()"),
       KeyType::CG => Some(" )"),
+      KeyType::WinScan => Some(" )"),
       _ => None
     }
   }
@@ -380,6 +388,7 @@ impl KeyType {
       KeyType::HUT => Some("AsUsage::usage_value({})"),
       KeyType::Winput => Some("*{} as u8"),
       KeyType::WinVk => Some("{}.0"),
+      KeyType::WinScan => Some("{}.0"),
       KeyType::Keysym => Some("{}.raw()"),
       KeyType::CG => Some("{}.0"),
       _ => None,
@@ -391,6 +400,7 @@ impl KeyType {
       KeyType::HUT => None,
       KeyType::Winput => Some("unsafe { std::mem::transmute({}) }"),
       KeyType::WinVk => Some("VIRTUAL_KEY({})"),
+      KeyType::WinScan => Some("Make1Code({})"),
       KeyType::Keysym => Some("Keysym::new({})"),
       KeyType::CG => Some("CGKeyCode({})"),
       _ => None,
@@ -402,6 +412,7 @@ impl KeyType {
       KeyType::HUT => Some("u32"),
       KeyType::Winput => Some("u8"),
       KeyType::WinVk => Some("u16"),
+      KeyType::WinScan => Some("u32"),
       KeyType::Keysym => Some("u32"),
       KeyType::CG => Some("u16"),
       _ => None,
@@ -413,6 +424,7 @@ impl KeyType {
       KeyType::HUT => false,
       KeyType::Winput => true,
       KeyType::WinVk => true,
+      KeyType::WinScan => true,
       KeyType::Keysym => true,
       KeyType::CG => true,
       _ => true,
@@ -567,7 +579,7 @@ impl Gen {
     };
     let map = csv.iter().filter_map(|line| {
       let k = from.get_line(line);
-      let v = to.get_code(line)?;
+      let v = to.get_code(line).unwrap();
       if !self.kv_is_valid(&(k, v)) {
         return None;
       }
@@ -644,6 +656,7 @@ pub fn main() {
     (KeyType::Winput, KeyType::HUT),
     (KeyType::Winput, KeyType::EnigoMirror),
     (KeyType::Winput, KeyType::EnigoDep),
+
     (KeyType::EnigoMirror, KeyType::Winput),
     (KeyType::EnigoDep, KeyType::Winput),
     (KeyType::EnigoMirror, KeyType::WinVk),
@@ -652,8 +665,12 @@ pub fn main() {
     (KeyType::EnigoDep, KeyType::Keysym),
     (KeyType::EnigoMirror, KeyType::CG),
     (KeyType::EnigoDep, KeyType::CG),
+
     (KeyType::Winput, KeyType::CG),
     (KeyType::Winput, KeyType::Keysym),
+
+    (KeyType::Winput, KeyType::WinScan),
+    // (KeyType::WinVk, KeyType::WinScan),
   ] {
     let filename = format!("generated.{from:?}_to_{to:?}.rs");
     let content = Gen(from, to).build_convert_impl(&csv);
@@ -666,7 +683,7 @@ pub fn main() {
   save_file(format!("{output_path}/generated._index.rs"), index_mod).expect("failed to write index.rs");
 
   let mut index_mod = String::new();
-  for ty in [KeyType::HUT, KeyType::Winput, KeyType::WinVk, KeyType::Keysym, KeyType::CG] {
+  for ty in [KeyType::HUT, KeyType::Winput, KeyType::WinVk, KeyType::WinScan, KeyType::Keysym, KeyType::CG] {
     let filename = format!("generated.{ty:?}.rs");
     let content = Gen(ty, ty).build_as_code(&csv);
     save_file(format!("{output_path2}/{filename}"), content)
